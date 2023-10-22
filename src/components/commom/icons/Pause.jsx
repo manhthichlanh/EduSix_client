@@ -1,18 +1,29 @@
-
 /* eslint-disable react/prop-types */
 export default function Pause({ width, height, ...props }) {
-    return (
-        <svg
-            className=""
-            width={width}
-            height={height}
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            {...props}
-        >
-            <path d="M10.652 19.11V4.89C10.652 3.54 10.082 3 8.64195 3H5.01195C3.57195 3 3.00195 3.54 3.00195 4.89V19.11C3.00195 20.46 3.57195 21 5.01195 21H8.64195C10.082 21 10.652 20.46 10.652 19.11Z" fill="black" />
-            <path d="M20.9991 19.11V4.89C20.9991 3.54 20.4291 3 18.9891 3H15.3591C13.9291 3 13.3491 3.54 13.3491 4.89V19.11C13.3491 20.46 13.9191 21 15.3591 21H18.9891C20.4291 21 20.9991 20.46 20.9991 19.11Z" fill="black" />
-        </svg>
-    );
+  return (
+    <svg
+      className=""
+      width={width}
+      height={height}
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <path
+        d="M10.65 19.11V4.89C10.65 3.54 10.08 3 8.64 3H5.01C3.57 3 3 3.54 3 4.89V19.11C3 20.46 3.57 21 5.01 21H8.64C10.08 21 10.65 20.46 10.65 19.11Z"
+        stroke="none"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M21 19.11V4.89C21 3.54 20.43 3 18.99 3H15.36C13.93 3 13.35 3.54 13.35 4.89V19.11C13.35 20.46 13.92 21 15.36 21H18.99C20.43 21 21 20.46 21 19.11Z"
+        stroke="none"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
 }

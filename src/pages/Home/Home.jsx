@@ -1,17 +1,79 @@
-import Star from "../../components/commom/icons/Star";
-import StarHalf from "../../components/commom/icons/StarHalf";
-import StarFill from "../../components/commom/icons/StarFill";
-import VideoPlay from "../../components/commom/icons/VideoPlay";
-import Pause from "../../components/commom/icons/Pause";
+import classNames from "classnames";
+import Card from "../../components/Card/Card";
+import Dropdown from "../../components/Dropdown";
+
+const data = [
+  {
+    image: "/course.png",
+    category: "Marketing",
+    cateId: 1,
+    price: 299000,
+    name: "Khóa học Thiết kế đồ họa cơ bản",
+    rating: 4.5,
+    joiner: 150,
+  },
+  {
+    image: "/course.png",
+    category: "Lập trình",
+    cateId: 2,
+    price: 499000,
+    name: "Khóa học Lập trình web JavaScript",
+    rating: 4.8,
+    joiner: 200,
+  },
+  {
+    image: "/course.png",
+    category: "Thiết kế đồ họa",
+    cateId: 3,
+    price: 0,
+    name: "Khóa học Quản lý doanh nghiệp",
+    rating: 4.2,
+    joiner: 120,
+  },
+  {
+    image: "/course.png",
+    category: "Ngôn ngữ",
+    cateId: 4,
+    price: 799000,
+    name: "Khóa học Quản lý doanh nghiệp",
+    rating: 4.2,
+    joiner: 120,
+  },
+  {
+    image: "/course.png",
+    category: "Tài chính",
+    cateId: 5,
+    price: 799000,
+    name: "Khóa học Quản lý doanh nghiệp",
+    rating: 4.2,
+    joiner: 120,
+  },
+  {
+    image: "/course.png",
+    category: "Photography",
+    cateId: 6,
+    price: 0,
+    name: "Khóa học Quản lý doanh nghiệp",
+    rating: 4.2,
+    joiner: 120,
+  },
+];
 export default function Home() {
   return (
     <>
-      <h1 className="text-3xl font-bold underline">Hello world!</h1>
-      <div className="flex items-center justify-center">
-        <Star height="40" width={40}></Star>
-        <StarHalf height={30} width={30}></StarHalf>
-        <StarFill height={50} width={50}></StarFill>
-        <VideoPlay width={40} height={40}></VideoPlay>
+      <div className="flex items-center justify-center py-4">
+        <Dropdown></Dropdown>
+      </div>
+      <div
+        className={classNames(
+          "grid grid-cols-1 gap-4 px-4 my-4",
+          "sm:grid-cols-2 sm:gap-3 sm:px-4",
+          "lg:grid-cols-4 lg:gap-4 lg:px-6"
+        )}
+      >
+        {data.map((item, index) => (
+          <Card key={index} {...item} />
+        ))}
       </div>
     </>
   );
