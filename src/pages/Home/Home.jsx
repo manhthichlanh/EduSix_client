@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import Card from "../../components/Card/Card";
 import Dropdown from "../../components/Dropdown";
-
+import Header from "../../components/header/Header"
 const data = [
   {
     image: "/course.png",
@@ -58,9 +58,10 @@ const data = [
     joiner: 120,
   },
 ];
-export default function Home() {
+export default function Home(props) {
   return (
     <>
+      <Header></Header>
       <div className="flex items-center justify-center py-4">
         <Dropdown></Dropdown>
       </div>
