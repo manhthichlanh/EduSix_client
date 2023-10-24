@@ -1,7 +1,5 @@
 import classNames from "classnames";
 import Card from "../../components/Card/Card";
-// import Dropdown from "../../components/Dropdown";
-import Header from "../../components/header/Header";
 import { includes, times, cloneDeep, isEmpty } from "lodash";
 import { useState } from "react";
 import Arcordition from "../../components/Dropdown/Arcordition";

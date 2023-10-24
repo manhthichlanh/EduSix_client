@@ -1,9 +1,8 @@
-
 import Instagram from '../components/commom/icons/Instagram'
 import Facebook from '../components/commom/icons/Facebook'
 import Linkedin from '../components/commom/icons/Linkedin'
 import Twitter from '../components/commom/icons/Twitter'
-export default function Footera(props) {
+export default function Footer(props) {
     return (
         <>
             <footer className="px-20 py-14 bg-base-200 text-base-content">
