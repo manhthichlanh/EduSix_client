@@ -1,15 +1,15 @@
 // /* eslint-disable react/no-unescaped-entities */
 import { Disclosure } from "@headlessui/react";
-import ChevronUp from "./commom/icons/ChevronUp";
+import ChevronUp from "../commom/icons/ChevronUp";
 import classNames from "classnames";
-import PlayCircleFill from "./commom/icons/PlayCircleFill";
-import Vector from "./commom/icons/Vector";
-import Pause from "./commom/icons/Pause";
-import Lock from "./commom/icons/Lock";
+import PlayCircleFill from "../commom/icons/PlayCircleFill";
+import Vector from "../commom/icons/Vector";
+import Pause from "../commom/icons/Pause";
+import Lock from "../commom/icons/Lock";
 
 export default function Dropdown() {
   return (
-    <div className="w-full max-w-sm mx-auto">
+    <div className="w-full max-w-sm mx-5">
       <Disclosure>
         {({ open }) => (
           <>
