@@ -36,12 +36,7 @@ const Card = (props) => {
           {category}
         </Link>
         <p className="text-base font-semibold text-[#FF6636]">
-          {price === 0
-            ? "Miễn phí"
-            : price.toLocaleString("vi-VN", {
-                style: "currency",
-                currency: "VND",
-              })}
+          {price === 0 ? "Miễn phí" : price.toLocaleString("vi-VN") + "đ"}
         </p>
       </div>
       {/* name */}
@@ -59,8 +54,8 @@ const Card = (props) => {
         <div className="flex items-center gap-1">
           <StarFill
             className=" stroke-[#FD8E1F] fill-[#FD8E1F]"
-            height={20}
-            width={20}
+            height={16}
+            width={16}
           />
           <span className="font-medium text-normal leading-20 tracking-[1%] text-slate-500">
             {rating}
