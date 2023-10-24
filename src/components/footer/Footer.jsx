@@ -1,8 +1,7 @@
-
-import Instagram from '../components/commom/icons/Instagram'
-import Facebook from '../components/commom/icons/Facebook'
-import Linkedin from '../components/commom/icons/Linkedin'
-import Twitter from '../components/commom/icons/Twitter'
+import Instagram from '../commom/icons/Instagram'
+import Facebook from '../commom/icons/Facebook'
+import Linkedin from '../commom/icons/Linkedin'
+import Twitter from '../commom/icons/Twitter'
 export default function Footera(props) {
     return (
         <>

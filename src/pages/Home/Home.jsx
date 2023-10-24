@@ -2,6 +2,10 @@ import classNames from "classnames";
 import Card from "../../components/Card/Card";
 import Dropdown from "../../components/Dropdown";
 import Header from "../../components/header/Header"
+import Footer from "../../components/footer/Footer"
+// import Marketing from "../../components/commom/icons";
+import Marketing from "../../components/commom/icons/Marketing";
+import Button from "../../components/button/Button";
 const data = [
   {
     image: "/course.png",
@@ -61,15 +65,12 @@ const data = [
 export default function Home(props) {
   return (
     <>
-      <Header></Header>
-      <div className="flex items-center justify-center py-4">
-        <Dropdown></Dropdown>
-      </div>
+      
       <div
         className={classNames(
           "grid grid-cols-1 gap-4 px-4 my-4",
           "sm:grid-cols-2 sm:gap-3 sm:px-4",
-          "lg:grid-cols-4 lg:gap-4 lg:px-6"
+          "lg:grid-cols-4 lg:gap-4 lg:px-0"
         )}
       >
         {data.map((item, index) => (
