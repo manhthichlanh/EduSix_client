@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import Card from "../../components/Card/Card";
 // import Dropdown from "../../components/Dropdown";
-import Header from "../../components/header/Header";
+// import Header from "../../components/header/Header";
 import { includes, times, cloneDeep, isEmpty } from "lodash";
 import { useState } from "react";
 import Arcordition from "../../components/Dropdown/Arcordition";
@@ -142,7 +142,7 @@ export default function Home(props) {
   return (
     <>
       <div className="w-full ">
-        <div className="w-full px-6 py-4 ">
+        <div className="w-full py-4 ">
           <p className="mb-2 text-xl font-bold text-black">Nội dung khóa học</p>
           <div className="flex items-center justify-between">
             <div
@@ -193,9 +193,9 @@ export default function Home(props) {
       </div>
       <div
         className={classNames(
-          "grid grid-cols-1 gap-4 px-4 my-4",
-          "sm:grid-cols-2 sm:gap-3 sm:px-4",
-          "lg:grid-cols-4 lg:gap-4 lg:px-0"
+          "grid grid-cols-1 gap-4 my-4",
+          "sm:grid-cols-2 sm:gap-3",
+          "lg:grid-cols-4 lg:gap-4"
         )}
       >
         {data.map((item, index) => (

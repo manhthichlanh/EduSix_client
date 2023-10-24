@@ -11,7 +11,7 @@ export default function Arcordition({
 }) {
   const isAccordionOpen = isOpen;
   return (
-    <div className="w-full px-6">
+    <div className="w-full">
       <div
         className={classNames(
           "flex gap-2 items-center mt-2 py-3 px-5 rounded-md border border-[#EBEBEB] bg-[#F5F5F5]",

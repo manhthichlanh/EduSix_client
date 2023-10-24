@@ -4,15 +4,14 @@ import Footer from "./Footer";
 import "./Layout.css";
 export default function Layout() {
   return (
-    <div className="bg-white overflow-hidden ">
-      <div className="z-10 fixed w-full">
+    <div className="overflow-hidden bg-white ">
+      <div className="fixed z-50 w-full ">
         <Header></Header>
       </div>
-      <div className="px-6 md:px-6 lg:px-20 overflow-y-auto" >
+      <div className="px-6 pt-20 overflow-y-auto md:px-12 lg:px-20 xs:px-8">
         <Outlet></Outlet>
       </div>
       <Footer></Footer>
-
     </div>
   );
 }
