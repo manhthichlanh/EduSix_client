@@ -3,6 +3,11 @@
 =======
 import classNames from "classnames";
 import Card from "../../components/Card/Card";
+<<<<<<< HEAD
+=======
+// import Dropdown from "../../components/Dropdown";
+// import Header from "../../components/header/Header";
+>>>>>>> d3b202c119e8ce0d458103cba8a03623abcbbacf
 import { includes, times, cloneDeep, isEmpty } from "lodash";
 import { useState } from "react";
 import Arcordition from "../../components/Dropdown/Arcordition";
@@ -120,9 +125,72 @@ import CourseSlide from "../../components/Swiper/CourseSlide";
 export default function Home() {
   return (
     <>
+<<<<<<< HEAD
       <ArcordionItem></ArcordionItem>
       <CourseSlide></CourseSlide>
       {/* <Card></Card> */}
+=======
+      <div className="w-full ">
+        <div className="w-full py-4 ">
+          <p className="mb-2 text-xl font-bold text-black">Nội dung khóa học</p>
+          <div className="flex items-center justify-between">
+            <div
+              className={classNames(
+                "gap-2 flex flex-wrap items-center md:gap-4",
+                "text-black font-medium text-opacity-80"
+              )}
+            >
+              <p>{section} Chương</p>
+              <div className="hidden w-1 h-1 mt-1 bg-black rounded-full sm:block"></div>
+              <p>{totalSection} Bài học</p>
+              <div className="hidden w-1 h-1 mt-1 bg-black rounded-full sm:block "></div>
+              <p>Thời lượng {formattedTotalDuration}</p>
+            </div>
+            <button
+              className="text-[#FF6636] font-normal whitespace-nowrap"
+              onClick={() => {
+                const newArrays = times(1000, (i) => i);
+                setActive(isEmpty(active) ? newArrays : []);
+              }}
+            >
+              {isEmpty(active) ? "Mở tất cả" : "Đóng tất cả"}
+            </button>
+          </div>
+        </div>
+        {course?.map(({ title, content, lessons }, index) => {
+          return (
+            <Arcordition
+              key={index}
+              title={title}
+              content={content}
+              lessons={lessons}
+              isOpen={includes(active, index)}
+              onClick={() => {
+                const currentIndex = active?.findIndex((it) => index === it);
+                if (currentIndex !== -1) {
+                  const newActive = cloneDeep(active);
+                  newActive.splice(currentIndex, 1);
+                  setActive(newActive);
+                } else {
+                  setActive([...active, index]);
+                }
+              }}
+            />
+          );
+        })}
+      </div>
+      <div
+        className={classNames(
+          "grid grid-cols-1 gap-4 my-4",
+          "sm:grid-cols-2 sm:gap-3",
+          "lg:grid-cols-4 lg:gap-4"
+        )}
+      >
+        {data.map((item, index) => (
+          <Card key={index} {...item} />
+        ))}
+      </div>
+>>>>>>> d3b202c119e8ce0d458103cba8a03623abcbbacf
     </>
   );
 }

@@ -1,4 +1,7 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> d3b202c119e8ce0d458103cba8a03623abcbbacf
 import Instagram from "../components/commom/icons/Instagram";
 import Facebook from "../components/commom/icons/Facebook";
 import Linkedin from "../components/commom/icons/Linkedin";
@@ -45,6 +48,7 @@ export default function Footer(props) {
                 </a>
                 <a className="link link-hover text-[#898E95]">Cài đặt Cookie</a>
               </nav>
+<<<<<<< HEAD
 =======
 import Instagram from '../components/commom/icons/Instagram'
 import Facebook from '../components/commom/icons/Facebook'
@@ -80,6 +84,8 @@ export default function Footer(props) {
                                 <a className="link link-hover">Giới thiệu</a>
                             </nav>
 >>>>>>> 25b6712a5d6e73c2e36b7d5b6630d5d6b49c7a16
+=======
+>>>>>>> d3b202c119e8ce0d458103cba8a03623abcbbacf
 
               <nav className="flex flex-col gap-2">
                 <header className="footer-title text-[#1F2937]">
