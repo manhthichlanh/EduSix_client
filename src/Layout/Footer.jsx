@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import Instagram from "../components/commom/icons/Instagram";
 import Facebook from "../components/commom/icons/Facebook";
 import Linkedin from "../components/commom/icons/Linkedin";
@@ -44,6 +45,41 @@ export default function Footer(props) {
                 </a>
                 <a className="link link-hover text-[#898E95]">Cài đặt Cookie</a>
               </nav>
+=======
+import Instagram from '../components/commom/icons/Instagram'
+import Facebook from '../components/commom/icons/Facebook'
+import Linkedin from '../components/commom/icons/Linkedin'
+import Twitter from '../components/commom/icons/Twitter'
+export default function Footer(props) {
+    return (
+        <>
+            <footer className="px-20 py-14 bg-base-200 text-base-content">
+                <div className="grid grid-cols-1 gap-4 lg:grid-cols-12 lg:gap-4">
+                    <aside className="col-span-5 mb-4">
+                        <img className="w-40 mb-2" src="/images/logo.png" alt="" />
+                        <p className="max-w-[400px] mb-4">
+                            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Excepturi
+                            quam saepe vitae sequi incidunt ex, soluta totam exercitationem
+                            eveniet quidem eius a odio velit. Cupiditate, optio! Iusto facilis
+                            incidunt praesentium!
+                        </p>
+                        <div className="flex items-center gap-4">
+                            <Instagram className="mr-2" width={32} height={32}></Instagram>
+                            <Facebook className="mr-2" width={32} height={32}></Facebook>
+                            <Linkedin className="mr-2" width={32} height={32}></Linkedin>
+                            <Twitter width={32} height={32}></Twitter>
+                        </div>
+                    </aside>
+                    <div className="col-span-7">
+                        <div className="grid gap-3 grid-col-1 lg:grid-cols-4 sm:grid-cols-2">
+                            <nav className="flex flex-col gap-2">
+                                <header className="footer-title">Về Edusix</header>
+                                <a className="link link-hover">Trang chủ</a>
+                                <a className="link link-hover">Khóa học</a>
+                                <a className="link link-hover">Blog</a>
+                                <a className="link link-hover">Giới thiệu</a>
+                            </nav>
+>>>>>>> 25b6712a5d6e73c2e36b7d5b6630d5d6b49c7a16
 
               <nav className="flex flex-col gap-2">
                 <header className="footer-title text-[#1F2937]">
