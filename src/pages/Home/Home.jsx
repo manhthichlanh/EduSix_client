@@ -1,206 +1,147 @@
-import classNames from "classnames";
-import Card from "../../components/Card/Card";
-// import Dropdown from "../../components/Dropdown";
-// import Header from "../../components/header/Header";
-import { includes, times, cloneDeep, isEmpty } from "lodash";
-import { useState } from "react";
-import Arcordition from "../../components/Dropdown/Arcordition";
-const data = [
-  {
-    image: "/course.png",
-    category: "Marketing",
-    cateId: 1,
-    price: 299000,
-    name: "Khóa học Thiết kế đồ họa cơ bản",
-    rating: 4.5,
-    joiner: 150,
-  },
-  {
-    image: "/course.png",
-    category: "Lập trình",
-    cateId: 2,
-    price: 499000,
-    name: "Khóa học Lập trình web JavaScript",
-    rating: 4.8,
-    joiner: 200,
-  },
-  {
-    image: "/course.png",
-    category: "Thiết kế đồ họa",
-    cateId: 3,
-    price: 0,
-    name: "Khóa học Quản lý doanh nghiệp",
-    rating: 4.2,
-    joiner: 120,
-  },
-  {
-    image: "/course.png",
-    category: "Ngôn ngữ",
-    cateId: 4,
-    price: 799000,
-    name: "Khóa học Quản lý doanh nghiệp",
-    rating: 4.2,
-    joiner: 120,
-  },
-  {
-    image: "/course.png",
-    category: "Tài chính",
-    cateId: 5,
-    price: 799000,
-    name: "Khóa học Quản lý doanh nghiệp",
-    rating: 4.2,
-    joiner: 120,
-  },
-  {
-    image: "/course.png",
-    category: "Photography",
-    cateId: 6,
-    price: 0,
-    name: "Khóa học Quản lý doanh nghiệp",
-    rating: 4.2,
-    joiner: 120,
-  },
-];
-const course = [
-  {
-    title: "1. Giới thiệu",
-    content: [
-      {
-        title: "Em những lúc say anh hay thường nghĩ ",
-        duration: "20:50",
-      },
-      {
-        title: "Day 1 Goals: what we will make by the end of the day",
-        duration: "40:10",
-      },
-    ],
-    totalLesson: {},
-  },
-  {
-    title: "2. Giới thiệu",
-    content: [
-      {
-        title: "Giới thiệu khoá học",
-        duration: "10:26",
-      },
-    ],
-  },
-  {
-    title: "3. Giới thiệu",
-    content: [
-      {
-        title: "Giới thiệu khoá học",
-        duration: "01:12:12",
-      },
-    ],
-  },
-  {
-    title: "4. Giới thiệu",
-    content: [
-      {
-        title: "Giới thiệu khoá học",
-        duration: "40:10",
-      },
-    ],
-  },
-];
-course.map((item) => {
-  item.lessons = item.content.length;
-});
-const totalSection = course.reduce((total, item) => {
-  return total + item.content.length;
-}, 0);
-const section = course.length;
-
-let totalDurationInSeconds = 0;
-
-course.map((item) => {
-  item.content.map((lesson) => {
-    if (lesson.duration) {
-      const durationParts = lesson.duration.split(":");
-      if (durationParts.length === 2) {
-        const minutes = parseInt(durationParts[0], 10);
-        const seconds = parseInt(durationParts[1], 10);
-        totalDurationInSeconds += minutes * 60 + seconds;
-      }
-    }
-  });
-});
-function formatDuration(totalSeconds) {
-  const hours = Math.floor(totalSeconds / 3600);
-  const minutes = Math.floor((totalSeconds % 3600) / 60);
-  const seconds = totalSeconds % 60;
-
-  const formattedDuration = `${hours} giờ ${minutes} phút ${seconds} giây`;
-  return formattedDuration;
-}
-
-const formattedTotalDuration = formatDuration(totalDurationInSeconds);
-
-export default function Home(props) {
-  const [active, setActive] = useState([]);
+import Button from "../../components/button/Button";
+import CourseSlide from "../../components/Swiper/CourseSlide";
+import BlogCard from "../../components/Card/BlogCard" 
+export default function Home() {
   return (
     <>
-      <div className="w-full ">
-        <div className="w-full py-4 ">
-          <p className="mb-2 text-xl font-bold text-black">Nội dung khóa học</p>
-          <div className="flex items-center justify-between">
-            <div
-              className={classNames(
-                "gap-2 flex flex-wrap items-center md:gap-4",
-                "text-black font-medium text-opacity-80"
-              )}
-            >
-              <p>{section} Chương</p>
-              <div className="hidden w-1 h-1 mt-1 bg-black rounded-full sm:block"></div>
-              <p>{totalSection} Bài học</p>
-              <div className="hidden w-1 h-1 mt-1 bg-black rounded-full sm:block "></div>
-              <p>Thời lượng {formattedTotalDuration}</p>
+      <div className="grid grid-cols-12 gap-6 place-content-center bg-[#F6F7FE] px-20 py-20">
+        <div className="col-span-6 ">
+          <div className="text-[48px] font-bold">
+            <p className="pb-6">Khóa học trực tuyến chất lượng cao tại <span className="text-[#FF6636]">Edusix</span></p>
+            <p className="text-[16px] font-medium text-[#8d8d8d]">Khóa học của chúng tôi được thiết kế để phù hợp với mọi người, vì vậy dù bạn là người mới bắt đầu hay đã có kinh nghiệm, bạn đều có thể tìm thấy khóa học phù hợp với mình.</p>
+          </div>
+          <div className="flex pt-10">
+            <Button
+              text="Bạn muốn học gì?"
+              Class={"text-[18px] text-gray-400 font-medium border-2 border-[#333333] py-[14px] px-6 rounded-[8px] leading-6"}
+            ></Button>
+            <Button
+              text="Xem thêm"
+              Class={"text-[18px] ml-6 text-white font-medium border-2 bg-[#333333] py-[14px] px-8 rounded-[8px] leading-6"}
+            ></Button>
+          </div>
+          <div className="pt-10">
+            <div className="flex pb-6">
+              <Button
+                text="MARKETING"
+                Class={"text-[13px  mr-6 font-medium text-[#333333] py-3 bg-white px-4 rounded-[8px] leading-4"}
+              ></Button>
+              <Button
+                text="LẬP TRÌNH"
+                Class={"text-[13px mr-6 font-medium text-[#333333] py-3 bg-white px-4 rounded-[8px] leading-4"}
+              ></Button>
+              <Button
+                text="PHOTOGRAPHY"
+                Class={"text-[13px font-medium text-[#333333] py-3 bg-white px-4 rounded-[8px] leading-4"}
+              ></Button>
             </div>
-            <button
-              className="text-[#FF6636] font-normal whitespace-nowrap"
-              onClick={() => {
-                const newArrays = times(1000, (i) => i);
-                setActive(isEmpty(active) ? newArrays : []);
-              }}
-            >
-              {isEmpty(active) ? "Mở tất cả" : "Đóng tất cả"}
-            </button>
+            <div className="flex">
+              <Button
+                text="NGÔN NGỮ"
+                Class={"text-[13px mr-6 font-medium text-[#333333] py-3 bg-white px-4 rounded-[8px] leading-4"}
+              ></Button>
+              <Button
+                text="THIẾT KẾ ĐỒ HỌA"
+                Class={"text-[13px mr-6 font-medium text-[#333333] py-3 bg-white px-4 rounded-[8px] leading-4"}
+              ></Button>
+              <Button
+                text="TÀI CHÍNH"
+                Class={"text-[13px font-medium text-[#333333] py-3 bg-white px-4 rounded-[8px] leading-4"}
+              ></Button>
+            </div>
+          </div>
+
+        </div>
+        <div className="col-span-6">
+          <img className="" src="images/banner-home.png" alt="" />
+        </div>
+      </div>
+      <div className="px-20">
+        <div className="lg:col-span-4 md:col-span-12 my-20">
+          <div className="flex justify-between items-end py-10 ">
+            <p className="font-semibold text-[24px]">KHÓA HỌC NỔI BẬT</p>
+            <Button
+              text="Xem thêm"
+              Class={"text-sm font-medium py-2 px-8 rounded-[4px] shadow-md leading-6 hover:shadow-xl"}
+            ></Button>
+          </div>
+          <div className="">
+            <CourseSlide />
           </div>
         </div>
-        {course?.map(({ title, content, lessons }, index) => {
-          return (
-            <Arcordition
-              key={index}
-              title={title}
-              content={content}
-              lessons={lessons}
-              isOpen={includes(active, index)}
-              onClick={() => {
-                const currentIndex = active?.findIndex((it) => index === it);
-                if (currentIndex !== -1) {
-                  const newActive = cloneDeep(active);
-                  newActive.splice(currentIndex, 1);
-                  setActive(newActive);
-                } else {
-                  setActive([...active, index]);
-                }
-              }}
-            />
-          );
-        })}
+        <div className="lg:col-span-4 md:col-span-12 my-20">
+          <div className="flex justify-between items-end py-10 ">
+            <p className="font-semibold text-[24px]">KHÓA HỌC NỔI BẬT</p>
+            <Button
+              text="Xem thêm"
+              Class={"text-sm font-medium py-2 px-8 rounded-[4px] shadow-md leading-6 hover:shadow-xl"}
+            ></Button>
+          </div>
+          <div className="gap-6 flex w-full">
+            <div className="rounded-xl shadow-md py-10 w-full">
+              <img className="pb-6 mx-auto" src="images/01.png" alt="" />
+              <p className="text-4 text-center font-medium">Marketing</p>
+            </div>
+            <div className="rounded-xl shadow-md py-10 w-full">
+              <img className="pb-6 mx-auto" src="images/02.png" alt="" />
+              <p className="text-4 text-center font-medium">Marketing</p>
+            </div>
+            <div className="rounded-xl shadow-md py-10 w-full">
+              <img className="pb-6 mx-auto" src="images/03.png" alt="" />
+              <p className="text-4 text-center font-medium">Marketing</p>
+            </div>
+            <div className="rounded-xl shadow-md py-10 w-full">
+              <img className="pb-6 mx-auto" src="images/04.png" alt="" />
+              <p className="text-4 text-center font-medium">Marketing</p>
+            </div>
+            <div className="rounded-xl shadow-md py-10 w-full">
+              <img className="pb-6 mx-auto" src="images/05.png" alt="" />
+              <p className="text-4 text-center font-medium">Marketing</p>
+            </div>
+            <div className="rounded-xl shadow-md py-10 w-full">
+              <img className="pb-6 mx-auto" src="images/06.png" alt="" />
+              <p className="text-4 text-center font-medium">Marketing</p>
+            </div>
+          </div>
+        </div>
+        <div className="lg:col-span-4 md:col-span-12 my-20">
+          <div className="flex justify-between items-end py-10 ">
+            <p className="font-semibold text-[24px]">KHÓA HỌC MỚI NHẤT</p>
+            <Button
+              text="Xem thêm"
+              Class={"text-sm font-medium py-2 px-8 rounded-[4px] shadow-md leading-6 hover:shadow-xl"}
+            ></Button>
+          </div>
+          <div className="">
+            <CourseSlide />
+          </div>
+        </div>
+        <div className="lg:col-span-4 md:col-span-12 my-20">
+          <div className="flex justify-between items-end py-10 ">
+            <p className="font-semibold text-[24px]">KHÓA HỌC <span className="text-[#ff6636]">PHOTOGAPHY</span></p>
+            <Button
+              text="Xem thêm"
+              Class={"text-sm font-medium py-2 px-8 rounded-[4px] shadow-md leading-6 hover:shadow-xl"}
+            ></Button>
+          </div>
+          <div className="">
+            <CourseSlide />
+          </div>
+        </div>
+        <div className="lg:col-span-4 md:col-span-12 my-20">
+          <div className="flex justify-between items-end py-10 ">
+            <p className="font-semibold text-[24px]">BÀI VIẾT NỔI BẬT</p>
+            <Button
+              text="Xem thêm"
+              Class={"text-sm font-medium py-2 px-8 rounded-[4px] shadow-md leading-6 hover:shadow-xl"}
+            ></Button>
+          </div>
+          <div className="">
+            {/* Blog  */}
+          </div>
+        </div>
       </div>
-      <div
-        className={classNames(
-          "grid grid-cols-1 gap-4 my-4",
-          "sm:grid-cols-2 sm:gap-3",
-          "lg:grid-cols-4 lg:gap-4"
-        )}
-      >
-        {data.map((item, index) => (
-          <Card key={index} {...item} />
-        ))}
-      </div>
+
     </>
   );
 }

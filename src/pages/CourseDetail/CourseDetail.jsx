@@ -5,8 +5,8 @@ import { includes, times, cloneDeep, isEmpty } from "lodash";
 import DetailCart from "../../components/Card/DetailCard"
 import Vecter from "../../components/commom/icons/Vector"
 import Button from "../../components/button/Button";
-import Arcordition from "../../components/Dropdown/Arcordition";
-
+import Arcordition from "../../components/Dropdown/Arcordion";
+import CourseSlide from "../../components/Swiper/CourseSlide";
 const data = [
     {
         image: "/course.png",
@@ -197,61 +197,17 @@ export default function CourseDetail(props) {
                                 giúp các bạn có nền tảng vững chắc để chinh phục con đường trở thành một lập trình viên.
                             </p>
                         </div>
-                        <div className="w-full ">
-                            <div className="w-full py-4 ">
-                                <p className="mb-2 text-xl font-bold text-black">Nội dung khóa học</p>
-                                <div className="flex items-center justify-between">
-                                    <div
-                                        className={classNames(
-                                            "gap-2 flex flex-wrap items-center md:gap-4",
-                                            "text-black font-medium text-opacity-80"
-                                        )}
-                                    >
-                                        <p>{section} Chương</p>
-                                        <div className="hidden w-1 h-1 mt-1 bg-black rounded-full sm:block"></div>
-                                        <p>{totalSection} Bài học</p>
-                                        <div className="hidden w-1 h-1 mt-1 bg-black rounded-full sm:block "></div>
-                                        <p>Thời lượng {formattedTotalDuration}</p>
-                                    </div>
-                                    <button
-                                        className="text-[#FF6636] font-normal whitespace-nowrap"
-                                        onClick={() => {
-                                            const newArrays = times(1000, (i) => i);
-                                            setActive(isEmpty(active) ? newArrays : []);
-                                        }}
-                                    >
-                                        {isEmpty(active) ? "Mở tất cả" : "Đóng tất cả"}
-                                    </button>
-                                </div>
-                            </div>
-                            {course?.map(({ title, content, lessons }, index) => {
-                                return (
-                                    <Arcordition
-                                        key={index}
-                                        title={title}
-                                        content={content}
-                                        lessons={lessons}
-                                        isOpen={includes(active, index)}
-                                        onClick={() => {
-                                            const currentIndex = active?.findIndex((it) => index === it);
 
-                                            if (currentIndex !== -1) {
-                                                const newActive = cloneDeep(active);
-                                                newActive.splice(currentIndex, 1);
-                                                setActive(newActive);
-                                            } else {
-                                                setActive([...active, index]);
-                                            }
-                                        }}
-                                    />
-                                );
-                            })}
+                        <div className="w-full">
+                            <div className="flex items-center justify-between">
+                                <Arcordition />
+                            </div>
                         </div>
+
                     </div>
                     <div id="box"
-                        className={`${
-                            isBoxCro ? 'pt-[60px] fixed right-20 bottom-[-20]' : 'pt-[60px] absolute right-0 bottom-0 ' 
-                          }`} >
+                        className={`${isBoxCro ? 'pt-[60px] fixed right-20 bottom-[-20]' : 'pt-[60px] absolute right-0 bottom-0 '
+                            }`} >
                         <DetailCart></DetailCart>
                     </div>
                 </div>
@@ -263,16 +219,8 @@ export default function CourseDetail(props) {
                             Class={"text-sm font-medium py-2 px-8 rounded-[4px] shadow-md leading-6"}
                         ></Button>
                     </div>
-                    <div
-                        className={classNames(
-                            "grid grid-cols-1 gap-4 f",
-                            "sm:grid-cols-2 sm:gap-3",
-                            "lg:grid-cols-4 lg:gap-4"
-                        )}
-                    >
-                        {data.slice(0, 4).map((item, index) => (
-                            <Card key={index} {...item} />
-                        ))}
+                    <div className="">
+                        <CourseSlide />
                     </div>
                 </div>
             </div >
