@@ -5,66 +5,10 @@ import { Navigation } from "swiper/modules";
 import classNames from "classnames";
 import Button from "../button/Button";
 import ChevronRight from "./../commom/icons/ChevronRight";
+import { map } from "lodash";
 
 // eslint-disable-next-line react/prop-types
-export default function CourseSlide({ prefixAction }) {
-  const data = [
-    {
-      image: "/course.png",
-      category: "Marketing",
-      cateId: 1,
-      price: 299000,
-      name: "Khóa học Thiết kế đồ họa cơ bản",
-      rating: 4.5,
-      joiner: 150,
-    },
-    {
-      image: "/course.png",
-      category: "Lập trình",
-      cateId: 2,
-      price: 499000,
-      name: "Khóa học Lập trình web JavaScript",
-      rating: 4.8,
-      joiner: 200,
-    },
-    {
-      image: "/course.png",
-      category: "Thiết kế đồ họa",
-      cateId: 3,
-      price: 0,
-      name: "Khóa học Quản lý doanh nghiệp",
-      rating: 4.2,
-      joiner: 120,
-    },
-    {
-      image: "/course.png",
-      category: "Ngôn ngữ",
-      cateId: 4,
-      price: 799000,
-      name: "Khóa học Quản lý doanh nghiệp",
-      rating: 4.2,
-      joiner: 120,
-    },
-    {
-      image: "/course.png",
-      category: "Tài chính",
-      cateId: 5,
-      price: 799000,
-      name: "Khóa học Quản lý doanh nghiệp",
-      rating: 4.2,
-      joiner: 120,
-    },
-    {
-      image: "/course.png",
-      category: "Photography",
-      cateId: 6,
-      price: 0,
-      name: "Khóa học Quản lý doanh nghiệp",
-      rating: 4.2,
-      joiner: 120,
-    },
-  ];
-
+export default function CourseSlide({ prefixAction, data }) {
   return (
     <div className={`relative group ${prefixAction}`}>
       <Swiper
@@ -91,9 +35,17 @@ export default function CourseSlide({ prefixAction }) {
           nextEl: `.${prefixAction} > .${prefixAction}-next`,
         }}
       >
-        {data.map((course, index) => (
+        {map(data, (item, index) => (
           <SwiperSlide key={index}>
-            <Card {...course} />
+            <Card
+              image={item.image}
+              category={item.category}
+              cateId={item.cateId}
+              price={item.price}
+              name={item.name}
+              rating={item.rating}
+              joiner={item.joiner}
+            />
           </SwiperSlide>
         ))}
       </Swiper>

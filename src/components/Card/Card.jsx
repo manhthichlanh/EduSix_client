@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-// import StarFill from "../../common/icons/StarFill";
 import StarFill from "./../commom/icons/StarFill";
 
 function Card(props) {

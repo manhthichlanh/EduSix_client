@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 function Input({ type, className, placeholder, value, onChange, disabled }) {
   return (
-    <div className="">
+    <div className="w-full">
       <input
         type={type}
         className={className}

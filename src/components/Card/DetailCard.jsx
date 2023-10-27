@@ -8,7 +8,7 @@ import Monitor from "../commom/icons/Monitor";
 const DetailCard = (props) => {
   //   const { price, discountPrice, time, totalLesson } = props;
   return (
-    <div className="rounded-lg w-full max-w-[430px] border border-[#e8e8e8] px-8 py-6 select-none">
+    <div className="rounded-lg w-full max-w-[430px] shadow-xl px-8 py-6 select-none">
       <div className="flex flex-col items-center gap-3">
         <p className="text-xl font-bold text-black">Gói cao cấp</p>
         <div className="flex items-center gap-2">

@@ -84,8 +84,7 @@ function ArcordionItem() {
     return total + item.content.length;
   }, 0);
   return (
-    <div className="w-full">
-      <div className="w-full py-4">
+      <div className="w-full">
         <p className="mb-2 text-xl font-bold text-black">Nội dung khóa học</p>
         <div className="flex items-center justify-between">
           <div
@@ -131,7 +130,6 @@ function ArcordionItem() {
           />
         ))}
       </div>
-    </div>
   );
 }
 
