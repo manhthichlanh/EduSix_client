@@ -136,8 +136,8 @@ export default function CourseDetail() {
             id="box"
             className={`${
               isBoxCro
-                ? "pt-[60px] fixed right-20 bottom-[-20]"
-                : "pt-[60px] absolute right-0 bottom-0 "
+                ? "pt-[60px] fixed col-span-4 right-20 bottom-[-20]"
+                : "pt-[60px] absolute col-span-4 right-0 bottom-0 "
             }`}
           >
             <DetailCart></DetailCart>

@@ -124,7 +124,7 @@ export default function Home() {
   return (
     <>
       <div className="w-full">
-        <div className="grid grid-cols-12 bg-[#F6F7FE] px-20 pt-5 gap-4">
+        <div className="grid grid-cols-12 bg-[#F6F7FE] px-20 py-10 gap-4">
           <div className="col-span-12 md:col-span-6">
             <div className="text-[48px] font-bold">
               <p className="pb-6">
@@ -137,22 +137,22 @@ export default function Home() {
                 đều có thể tìm thấy khóa học phù hợp với mình.
               </p>
             </div>
-            <div className="w-full pt-6">
+            <div className="w-full pt-10">
               <div className="flex gap-6">
                 <Input
                   type={"text"}
-                  className="w-full px-6 py-4 text-[13px] bg-white border border-black rounded outline-none leading-24"
+                  className="w-full px-6 py-3 text-[18px] bg-white border border-black rounded-lg outline-none leading-24"
                   placeholder={"Bạn muốn học gì?"}
                 ></Input>
                 <Button
-                  text="Xem thêm"
+                  text="Tìm kiếm"
                   Class={
                     "text-[18px] text-white font-medium bg-[#333333] px-6 py-3 rounded-[8px] leading- whitespace-nowrap"
                   }
                 ></Button>
               </div>
             </div>
-            <div className="flex flex-wrap gap-2 pt-4">
+            <div className="flex flex-wrap gap-6 pt-10">
               {cate?.map((cate, index) => (
                 <div className="" key={index}>
                   <Button
@@ -241,6 +241,23 @@ export default function Home() {
               ></Button>
             </div>
             <BlogCard data={blog}></BlogCard>
+          </div>
+        </div>
+        <div className="grid grid-cols-12 gap-6 px-20 py-20  bg-[url('images/bg.png')]">
+          <div className="col-span-7 my-auto">
+            <div className="pb-10">
+              <p className="text-[40px] font-semibold leading-[48px] pb-4">Tham gia khóa học <span className="text-[#85A0FE]">miễn phí</span> tại nền tảng của chúng tôi</p>
+              <p className="text-[#333333]">Khóa học của chúng tôi được thiết kế để phù hợp với mọi người, vì vậy dù bạn là người mới bắt đầu hay đã có kinh nghiệm, bạn đều có thể tìm thấy khóa học phù hợp với mình.</p>
+            </div>
+
+            <Button
+              text="Đăng kí ngay"
+              Class={"text-[-18px] font-medium bg-[#ff6636] px-8 py-4 text-white rounded-lg"}
+            />
+          </div>
+          <div className="col-span-1"></div>
+          <div className="col-span-4">
+            <img className="" src="images/Saly.png" alt="" />
           </div>
         </div>
       </div>
