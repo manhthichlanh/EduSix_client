@@ -5,8 +5,8 @@ import Twitter from "../components/commom/icons/Twitter";
 export default function Footer(props) {
   return (
     <>
-      <footer className="px-20 pb-10 bg-[#f2f2f2] pt-14 ">
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-12 lg:gap-4">
+      <footer className="px-20 pb-10 bg-[#f2f2f2] pt-14 w-full">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-12 lg:gap-4 w-full">
           <aside className="col-span-5 mb-4">
             <img className="w-40 mb-2" src="/images/logo.png" alt="" />
             <p className="max-w-[400px] mb-4 text-[#898E95]">
@@ -74,7 +74,7 @@ export default function Footer(props) {
             </div>
           </div>
         </div>
-        <div className="mt-4">
+        <div className="mt-4 w-full">
           <p className="w-full h-[1px] bg-[#898E95]"></p>
           <p className="mt-4 text-[#898E95]">@2023 All right reserve</p>
         </div>

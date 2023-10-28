@@ -1,11 +1,24 @@
 import { useState } from 'react';
 
-
+const cate = [
+    {
+        total: 1,
+        category: "Marketing",
+    },
+    {
+        total: 2,
+        category: "Lập trình",
+    },
+    {
+        total: 3,
+        category: "Thiết kế đồ họa",
+    },
+];
 export default function DropdownCheckbox() {
     const [isList, setIsList] = useState(false);
     return (<>
         <div>
-            <div onClick={() => setIsList(!isList)} className="p-4 shadow rounded bg-white text-sm font-medium leading-none text-gray-800 flex items-center justify-between cursor-pointer">
+            <div onClick={() => setIsList(!isList)} className="p-4 shadow rounded bg-white text-[18px] font-medium leading-none text-gray-800 flex items-center justify-between cursor-pointer">
                 Danh mục
                 <div>
                     {isList ? (
@@ -40,7 +53,7 @@ export default function DropdownCheckbox() {
                                 <p className="text-sm leading-normal ml-2 text-gray-800">Facebook</p>
                             </div>
                         </div>
-                        <p className="w-8 text-xs leading-3 text-right text-[#ff6636]">2,381</p>
+                        <p className="w-8 text-sm leading-3 text-right text-[#ff6636]">2,381</p>
                     </div>
                     <div>
                         <div className="flex items-center justify-between mt-4">
@@ -58,7 +71,7 @@ export default function DropdownCheckbox() {
                                     <p className="text-sm leading-normal ml-2 text-gray-800">Twitter</p>
                                 </div>
                             </div>
-                            <p className="w-8 text-xs leading-3 text-right text-[#ff6636]">3,521</p>
+                            <p className="w-8 text-sm leading-3 text-right text-[#ff6636]">3,521</p>
                         </div>
                     </div>
                     <div>
@@ -77,7 +90,7 @@ export default function DropdownCheckbox() {
                                     <p className="text-sm leading-normal ml-2 text-gray-800">Instagram</p>
                                 </div>
                             </div>
-                            <p className="w-8 text-xs leading-3 text-right text-[#ff6636]">5,142</p>
+                            <p className="w-8 text-sm leading-3 text-right text-[#ff6636]">5,142</p>
                         </div>
                     </div>
                 </div>

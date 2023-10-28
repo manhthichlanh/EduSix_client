@@ -7,6 +7,7 @@ import Home from "./pages/Home/Home";
 import Layout from "./Layout/Layout";
 import NoPage from "./pages/NoPage/NoPage";
 import CourseDetail from "./pages/CourseDetail/CourseDetail"
+import CourseVideo from "./pages/CourseVideo/CourseVideo"
 import Course from "./pages/Course/Course"
 //||Components
 function App() {
@@ -22,6 +23,7 @@ function App() {
             <Route path="/course-detail" element={<CourseDetail />} />
             <Route path="/course" element={<Course />} />
           </Route>
+          <Route path="/course-video" element={<CourseVideo />} />
         </Routes>
       </BrowserRouter>
   )
