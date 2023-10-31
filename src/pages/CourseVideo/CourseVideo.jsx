@@ -7,7 +7,8 @@ import Check from "../../components/commom/icons/Check";
 import Messages from "../../components/commom/icons/Messages";
 import Dropdown from "../../components/Dropdown/Dropdown";
 import Button from "../../components/button/Button";
-import Footer from "../../Layout/Footer";
+// import Footer from "../../Layout/Footer";
+import styled from 'styled-components';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
 
@@ -16,11 +17,44 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import ReactPlayer from 'react-player';
 // import CommentReply from './CommentReply';
+const VideoWrapper = styled.div`
+  position: relative; 
+  width: 100%;
+  padding-bottom: 56.25%;
+  
+  max-height: 1080px; // Chiều cao tối đa là 1080px
+
+  > div {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+
+    max-width: 100%;
+    max-height: 100%; 
+  }
+`;
 const CourseVideo = () => {
     const [isAnHienSubMenu1, setIsAnHienSubMenu1] = useState(false);
     const [isAnHienSubMenu, setIsAnHienSubMenu] = useState(
         window.innerWidth > 1000
       );
+
+
+      const benefit =[
+        {content: "Biết cách cài đặt và tùy biến Windows Terminal"},
+        {content: "Biết cách cài đặt và tùy biến Windows Terminal"},
+        {content: "Biết cách cài đặt và tùy biến Windows Terminal"},
+        {content: "Biết cách cài đặt và tùy biến Windows Terminal"},
+        {content: "Biết cách cài đặt và tùy biến Windows Terminal"},
+        {content: "Biết cách cài đặt và tùy biến Windows Terminal"},
+        {content: "Biết cách cài đặt và tùy biến Windows Terminal"},
+        {content: "Biết cách cài đặt và tùy biến Windows Terminal"},
+      ]
+
+
+
       const comments = [
     {
       name: 'Phạm Đạt',
@@ -129,16 +163,19 @@ const CourseVideo = () => {
 
                     <div className="CourseVideo_Left">
                         <div className="video">
-
-                        <ReactPlayer
-        url="https://fb.watch/n-swn_aCKm/"
-        width="100%"
-        height="100%"
-        controls={true}
-        style={{ aspectRatio: 'unset' }}
-    />
+                        <VideoWrapper>
+      <div>  
+        <ReactPlayer  
+          url="https://www.facebook.com/SPX.Entertainment.Official/videos/693495775869841"
+          width="100%"
+          height="100%"
+          controls={true}
+        />  
+      </div>
+    </VideoWrapper>
 
                         </div>
+                        <div className="scrollBar">
                         <div className="mini_menu">
                             <NavLink onClick={handleScrollToOverview}>
                                 <p>Tổng quan</p>
@@ -162,67 +199,20 @@ const CourseVideo = () => {
                             <div className="question_CourseVideo" id="question-section">
                                 <h2>Bạn sẽ học được gì?</h2>
                                 <div className="questionsmall">
-                                    <div className="eachquestion">
+                                {benefit.map((benefit, benefitIndex) => (
+                                    <div key={benefitIndex} className="eachquestion">
                                         <div className="icon_Check">
                                             <div className="icon_Check_1">
                                                 <Check width={20} height={20} fill="#fff" />
                                             </div>
                                         </div>
                                         <div className="content_question">
-                                            <p>Biết cách cài đặt và tùy biến Windows Terminal</p>
+                                            <p>{benefit.content}</p>
                                         </div>
                                     </div>
-                                    <div className="eachquestion">
-                                        <div className="icon_Check">
-                                            <div className="icon_Check_1">
-                                                <Check width={20} height={20} fill="#fff" />
-                                            </div>
-                                        </div>
-                                        <div className="content_question">
-                                            <p>Biết cách cài đặt và tùy biến Windows Terminal</p>
-                                        </div>
-                                    </div>
-                                    <div className="eachquestion">
-                                        <div className="icon_Check">
-                                            <div className="icon_Check_1">
-                                                <Check width={20} height={20} fill="#fff" />
-                                            </div>
-                                        </div>
-                                        <div className="content_question">
-                                            <p>Biết cách cài đặt và tùy biến Windows Terminal</p>
-                                        </div>
-                                    </div>
-                                    <div className="eachquestion">
-                                        <div className="icon_Check">
-                                            <div className="icon_Check_1">
-                                                <Check width={20} height={20} fill="#fff" />
-                                            </div>
-                                        </div>
-                                        <div className="content_question">
-                                            <p>Biết cách cài đặt và tùy biến Windows Terminal</p>
-                                        </div>
-                                    </div>
-                                    <div className="eachquestion">
-                                        <div className="icon_Check">
-                                            <div className="icon_Check_1">
-                                                <Check width={20} height={20} fill="#fff" />
-                                            </div>
-                                        </div>
-                                        <div className="content_question">
-                                            <p>Biết cách cài đặt và tùy biến Windows Terminal</p>
-                                        </div>
-                                    </div>
-                                    <div className="eachquestion">
-                                        <div className="icon_Check">
-                                            <div className="icon_Check_1">
-                                                <Check width={20} height={20} fill="#fff" />
-                                            </div>
-                                        </div>
-                                        <div className="content_question">
-                                            <p>Biết cách cài đặt và tùy biến Windows Terminal</p>
-                                        </div>
-                                    </div>
+                                    ))}
                                 </div>
+                              
                             </div>
                             <div className="comment" id="comments-section">
                                 <h2>Bình Luận</h2>
@@ -305,24 +295,27 @@ const CourseVideo = () => {
                             </div>
 
                         </div>
-
+                        </div>
                     </div>
                     {isAnHienSubMenu && (
                       <>
                       <div className="background_Black" onClick={toggleAnHienSubMenu1}></div>
                     <div className="CourseVideo_Right">
                         <div className="menu_CourseVideo_Right">
-                            <Dropdown />
+                        <h2 className="text-lg font-semibold py-4">Nội dung khóa học</h2>
+                        <div className="dropdownMenu">
+                        <Dropdown />
+                        </div>
                         </div>
                     </div>
                     </> 
                     )}
-                </div>
-
+                
+</div>
             </div>
-            <div className="footer">
+            {/* <div className="footer">
                 <Footer></Footer>
-            </div>
+            </div> */}
             <div className="sub_menu">
            <div className="course_content">
            <button onClick={toggleAnHienSubMenu}>
