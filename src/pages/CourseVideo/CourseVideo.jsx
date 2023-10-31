@@ -8,6 +8,7 @@ import Messages from "../../components/commom/icons/Messages";
 import Dropdown from "../../components/Dropdown/Dropdown";
 import Button from "../../components/button/Button";
 // import Footer from "../../Layout/Footer";
+import styled from 'styled-components';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
 
@@ -16,6 +17,24 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import ReactPlayer from 'react-player';
 // import CommentReply from './CommentReply';
+const VideoWrapper = styled.div`
+  position: relative; 
+  width: 100%;
+  padding-bottom: 56.25%;
+  
+  max-height: 1080px; // Chiều cao tối đa là 1080px
+
+  > div {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+
+    max-width: 100%;
+    max-height: 100%; 
+  }
+`;
 const CourseVideo = () => {
     const [isAnHienSubMenu1, setIsAnHienSubMenu1] = useState(false);
     const [isAnHienSubMenu, setIsAnHienSubMenu] = useState(
@@ -144,14 +163,16 @@ const CourseVideo = () => {
 
                     <div className="CourseVideo_Left">
                         <div className="video">
-
-                        <ReactPlayer
-        url="https://fb.watch/n-swn_aCKm/"
-        width="100%"
-        height="100%"
-        controls={true}
-        style={{ aspectRatio: 'unset' }}
-    />
+                        <VideoWrapper>
+      <div>  
+        <ReactPlayer  
+          url="https://www.facebook.com/SPX.Entertainment.Official/videos/693495775869841"
+          width="100%"
+          height="100%"
+          controls={true}
+        />  
+      </div>
+    </VideoWrapper>
 
                         </div>
                         <div className="scrollBar">

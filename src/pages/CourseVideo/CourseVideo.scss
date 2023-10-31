@@ -48,17 +48,19 @@
             // background-color: #e0e0e0;
            
             .video {
-                max-width: 100%;
+                
                 width: 100%;
                 position: sticky;
-                // max-height: 520px;
+                max-height: 580px;
                 background-color: #8D8D8D;
                 border-radius: 5px;
                 top: 50px;
                 padding: 8px;
+                overflow: auto;
                 .custom-video {
                     width: 100%;
                 }
+                
             }
             .scrollBar{
                 background-color: #fff;
