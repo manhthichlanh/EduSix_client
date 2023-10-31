@@ -21,6 +21,21 @@ const CourseVideo = () => {
     const [isAnHienSubMenu, setIsAnHienSubMenu] = useState(
         window.innerWidth > 1000
       );
+
+
+      const benefit =[
+        {content: "Biết cách cài đặt và tùy biến Windows Terminal"},
+        {content: "Biết cách cài đặt và tùy biến Windows Terminal"},
+        {content: "Biết cách cài đặt và tùy biến Windows Terminal"},
+        {content: "Biết cách cài đặt và tùy biến Windows Terminal"},
+        {content: "Biết cách cài đặt và tùy biến Windows Terminal"},
+        {content: "Biết cách cài đặt và tùy biến Windows Terminal"},
+        {content: "Biết cách cài đặt và tùy biến Windows Terminal"},
+        {content: "Biết cách cài đặt và tùy biến Windows Terminal"},
+      ]
+
+
+
       const comments = [
     {
       name: 'Phạm Đạt',
@@ -139,6 +154,7 @@ const CourseVideo = () => {
     />
 
                         </div>
+                        <div className="scrollBar">
                         <div className="mini_menu">
                             <NavLink onClick={handleScrollToOverview}>
                                 <p>Tổng quan</p>
@@ -162,67 +178,20 @@ const CourseVideo = () => {
                             <div className="question_CourseVideo" id="question-section">
                                 <h2>Bạn sẽ học được gì?</h2>
                                 <div className="questionsmall">
-                                    <div className="eachquestion">
+                                {benefit.map((benefit, benefitIndex) => (
+                                    <div key={benefitIndex} className="eachquestion">
                                         <div className="icon_Check">
                                             <div className="icon_Check_1">
                                                 <Check width={20} height={20} fill="#fff" />
                                             </div>
                                         </div>
                                         <div className="content_question">
-                                            <p>Biết cách cài đặt và tùy biến Windows Terminal</p>
+                                            <p>{benefit.content}</p>
                                         </div>
                                     </div>
-                                    <div className="eachquestion">
-                                        <div className="icon_Check">
-                                            <div className="icon_Check_1">
-                                                <Check width={20} height={20} fill="#fff" />
-                                            </div>
-                                        </div>
-                                        <div className="content_question">
-                                            <p>Biết cách cài đặt và tùy biến Windows Terminal</p>
-                                        </div>
-                                    </div>
-                                    <div className="eachquestion">
-                                        <div className="icon_Check">
-                                            <div className="icon_Check_1">
-                                                <Check width={20} height={20} fill="#fff" />
-                                            </div>
-                                        </div>
-                                        <div className="content_question">
-                                            <p>Biết cách cài đặt và tùy biến Windows Terminal</p>
-                                        </div>
-                                    </div>
-                                    <div className="eachquestion">
-                                        <div className="icon_Check">
-                                            <div className="icon_Check_1">
-                                                <Check width={20} height={20} fill="#fff" />
-                                            </div>
-                                        </div>
-                                        <div className="content_question">
-                                            <p>Biết cách cài đặt và tùy biến Windows Terminal</p>
-                                        </div>
-                                    </div>
-                                    <div className="eachquestion">
-                                        <div className="icon_Check">
-                                            <div className="icon_Check_1">
-                                                <Check width={20} height={20} fill="#fff" />
-                                            </div>
-                                        </div>
-                                        <div className="content_question">
-                                            <p>Biết cách cài đặt và tùy biến Windows Terminal</p>
-                                        </div>
-                                    </div>
-                                    <div className="eachquestion">
-                                        <div className="icon_Check">
-                                            <div className="icon_Check_1">
-                                                <Check width={20} height={20} fill="#fff" />
-                                            </div>
-                                        </div>
-                                        <div className="content_question">
-                                            <p>Biết cách cài đặt và tùy biến Windows Terminal</p>
-                                        </div>
-                                    </div>
+                                    ))}
                                 </div>
+                              
                             </div>
                             <div className="comment" id="comments-section">
                                 <h2>Bình Luận</h2>
@@ -305,7 +274,7 @@ const CourseVideo = () => {
                             </div>
 
                         </div>
-
+                        </div>
                     </div>
                     {isAnHienSubMenu && (
                       <>
@@ -317,8 +286,8 @@ const CourseVideo = () => {
                     </div>
                     </> 
                     )}
-                </div>
-
+                
+</div>
             </div>
             <div className="footer">
                 <Footer></Footer>

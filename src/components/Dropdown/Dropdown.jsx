@@ -9,7 +9,7 @@ import Lock from "../commom/icons/Lock";
 
 export default function Dropdown() {
   return (
-    <div className="w-full ">
+    <div className="w-full">
       <Disclosure>
         {({ open }) => (
           <>
