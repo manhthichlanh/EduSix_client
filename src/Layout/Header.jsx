@@ -4,10 +4,10 @@ import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import Button from "../components/button/Button";
 import Search from "../components/commom/icons/Search";
 const navigation = [
-  { name: "Trang chủ", href: "#", current: true },
-  { name: "Khóa học", href: "#", current: false },
-  { name: "Blog", href: "#", current: false },
-  { name: "Giới thiệu", href: "#", current: false },
+  { name: "Trang chủ", href: "/", current: true },
+  { name: "Khóa học", href: "/course", current: false },
+  { name: "Blog", href: "/blog", current: false },
+  { name: "Giới thiệu", href: "/about", current: false },
 ];
 
 function classNames(...classes) {

@@ -10,6 +10,7 @@ import Slider from "rc-slider";
 import ChecvronUp from "../../components/commom/icons/ChevronUp";
 import { useState } from "react";
 import StarFill from "../../components/commom/icons/StarFill";
+import Button from "../../components/button/Button";
 
 const data = [
   {
@@ -211,7 +212,7 @@ export default function CourseDetail() {
   return (
     <>
       <div className="w-full">
-        <div className="grid grid-cols-12 gap-6 bg-[url('images/bg.png')] px-6 lg:px-20 md:px-6 sm:px-6  ">
+        <div className="grid grid-cols-12 gap-6 bg-[url('images/bg.png')] px-10 lg:px-20 md:px-16 sm:px-10  ">
           <div className="col-span-12 py-10 md:col-span-6 sm:col-span-12">
             <div className="pb-6 text-sm breadcrumbs">
               <ul>
@@ -240,7 +241,7 @@ export default function CourseDetail() {
           </div>
         </div>
 
-        <div className="grid grid-cols-12 gap-6 px-20 pt-[100px]">
+        <div className="grid grid-cols-12 gap-6 pt-[100px] px-10 lg:px-20 md:px-16 sm:px-8">
           <div className="col-span-12 lg:col-span-6">
             <p className="text-[32px] font-semibold">
               Các khóa học tại <span className="text-[#f66636]">Edusix</span>
@@ -273,8 +274,8 @@ export default function CourseDetail() {
             </div>
           </div>
         </div>
-        <div className="h-[1px] mx-20 my-[30px] bg-[#E8E8E8]"></div>
-        <div className="grid grid-cols-12 gap-6 px-20">
+        <div className="h-[1px] mx-10 my-[30px] bg-[#E8E8E8]  lg:mx-20 md:mx-16 sm:mx-10"></div>
+        <div className="grid grid-cols-12 gap-6 px-10 lg:px-20 md:px-16 sm:px-10">
           <div className="h-full col-span-12 lg:col-span-3">
             <div className="grid grid-cols-12 lg:flex lg:flex-col gap-2.5 ">
               <div className="border border-[#E9EAF0] rounded-lg w-full col-span-12 md:col-span-4 h-fit">
@@ -294,15 +295,13 @@ export default function CourseDetail() {
                           </p>
                         </div>
                         <ChecvronUp
-                          className={`${
-                            open ? "rotate-180 transform" : ""
-                          } h-5 w-5`}
+                          className={`${open ? "rotate-180 transform" : ""
+                            } h-5 w-5`}
                         />
                       </Disclosure.Button>
                       <div
-                        className={`${
-                          open ? "block" : "hidden"
-                        } h-[1px] w-full bg-[#E9EAF0]`}
+                        className={`${open ? "block" : "hidden"
+                          } h-[1px] w-full bg-[#E9EAF0]`}
                       />
                       <Disclosure.Panel className="flex flex-col gap-6 py-4 mx-4">
                         <PriceSlider></PriceSlider>
@@ -325,22 +324,20 @@ export default function CourseDetail() {
                                 <label htmlFor={`checkbox-${index}`}>
                                   <span
                                     id=""
-                                    className={`ml-2 text-sm font-medium ${
-                                      checkboxes[index]
+                                    className={`ml-2 text-sm font-medium ${checkboxes[index]
                                         ? "text-[#FF6636] font-medium"
                                         : "text-[#4E5566] font-normal"
-                                    }`}
+                                      }`}
                                   >
                                     {label}
                                   </span>
                                 </label>
                               </div>
                               <div
-                                className={`text-xs font-medium ${
-                                  checkboxes[index]
+                                className={`text-xs font-medium ${checkboxes[index]
                                     ? "text-[#4E5566] font-medium"
                                     : "text-[#8C94A3] font-normal"
-                                }`}
+                                  }`}
                               >
                                 12345
                               </div>
@@ -370,15 +367,13 @@ export default function CourseDetail() {
                           </p>
                         </div>
                         <ChecvronUp
-                          className={`${
-                            open ? "rotate-180 transform" : ""
-                          } h-5 w-5`}
+                          className={`${open ? "rotate-180 transform" : ""
+                            } h-5 w-5`}
                         />
                       </Disclosure.Button>
                       <div
-                        className={`${
-                          open ? "block" : "hidden"
-                        } h-[1px] w-full bg-[#E9EAF0]`}
+                        className={`${open ? "block" : "hidden"
+                          } h-[1px] w-full bg-[#E9EAF0]`}
                       />
                       <Disclosure.Panel className="flex py-4 mx-4">
                         <div className=" flex flex-col gap-[10px]">
@@ -395,11 +390,10 @@ export default function CourseDetail() {
                                 onChange={() => handleCateChange(category.id)}
                               />
                               <span
-                                className={`text-sm font-medium ${
-                                  checkedItems[category.id]
+                                className={`text-sm font-medium ${checkedItems[category.id]
                                     ? "text-[#FF6636] font-medium"
                                     : "text-[#4E5566] font-normal"
-                                }`}
+                                  }`}
                               >
                                 {category.cateName}
                               </span>
@@ -429,15 +423,13 @@ export default function CourseDetail() {
                           </p>
                         </div>
                         <ChecvronUp
-                          className={`${
-                            open ? "rotate-180 transform" : ""
-                          } h-5 w-5`}
+                          className={`${open ? "rotate-180 transform" : ""
+                            } h-5 w-5`}
                         />
                       </Disclosure.Button>
                       <div
-                        className={`${
-                          open ? "block" : "hidden"
-                        } h-[1px] w-full bg-[#E9EAF0]`}
+                        className={`${open ? "block" : "hidden"
+                          } h-[1px] w-full bg-[#E9EAF0]`}
                       />
                       <Disclosure.Panel className="flex flex-col gap-[10px] pt-4 mx-4">
                         <div className=" flex flex-col gap-[10px] pb-11">
@@ -456,21 +448,19 @@ export default function CourseDetail() {
                                 />
                                 <StarFill width={20} height={20}></StarFill>
                                 <span
-                                  className={`text-sm font-medium ${
-                                    checkRating[index]
+                                  className={`text-sm font-medium ${checkRating[index]
                                       ? "text-[#FF6636] font-medium"
                                       : "text-[#4E5566] font-normal"
-                                  }`}
+                                    }`}
                                 >
                                   {label}
                                 </span>
                               </div>
                               <p
-                                className={`text-xs font-medium ${
-                                  checkRating[index]
+                                className={`text-xs font-medium ${checkRating[index]
                                     ? "text-[#4E5566] font-medium"
                                     : "text-[#8C94A3] font-normal"
-                                }`}
+                                  }`}
                               >
                                 12345
                               </p>
@@ -484,8 +474,7 @@ export default function CourseDetail() {
               </div>
             </div>
           </div>
-
-          <div className="col-span-12 lg:col-span-9">
+          <div className="col-span-12 lg:col-span-9 justify-between items-center flex flex-col">
             <div className="grid grid-cols-12 gap-6">
               {map(data, (item, index) => (
                 <div
@@ -504,6 +493,10 @@ export default function CourseDetail() {
                 </div>
               ))}
             </div>
+            <Button
+              text="Xem thêm"
+              Class={"text-[18px] leading-6 text-[#ff6636] font-medium mt-10 mb-[100px] bg-[#ffeee8] px-[42px] py-4 rounded-md"}
+            />
           </div>
         </div>
       </div>

@@ -124,7 +124,7 @@ export default function Home() {
   return (
     <>
       <div className="w-full">
-        <div className="grid grid-cols-12 bg-[#F6F7FE] px-20 py-10 gap-4">
+        <div className="grid grid-cols-12 bg-[#F6F7FE] px-10 lg:px-20 md:px-16 sm:px-10 py-10 gap-4">
           <div className="col-span-12 md:col-span-6">
             <div className="text-[48px] font-bold">
               <p className="pb-6">
@@ -171,7 +171,7 @@ export default function Home() {
             <img className="" src="images/banner-home.png" alt="" />
           </div>
         </div>
-        <div className="px-8 lg:px-20 md:px-16">
+        <div className="px-10 lg:px-20 md:px-16 sm:px-10">
           <div className="my-20 lg:col-span-4 md:col-span-12">
             <div className="flex items-end justify-between py-10 ">
               <p className="font-semibold text-[24px]">KHÓA HỌC NỔI BẬT</p>
@@ -243,8 +243,8 @@ export default function Home() {
             <BlogCard data={blog}></BlogCard>
           </div>
         </div>
-        <div className="grid grid-cols-12 gap-6 px-20 py-20  bg-[url('images/bg.png')]">
-          <div className="col-span-7 my-auto">
+        <div className="grid grid-cols-12 gap-6 py-20  px-10 lg:px-20 md:px-16 sm:px-10 bg-[url('images/bg.png')]">
+          <div className="lg:col-span-7 col-span-12 my-auto md:col-span-12 sm:col-span-12">
             <div className="pb-10">
               <p className="text-[40px] font-semibold leading-[48px] pb-4">Tham gia khóa học <span className="text-[#85A0FE]">miễn phí</span> tại nền tảng của chúng tôi</p>
               <p className="text-[#333333]">Khóa học của chúng tôi được thiết kế để phù hợp với mọi người, vì vậy dù bạn là người mới bắt đầu hay đã có kinh nghiệm, bạn đều có thể tìm thấy khóa học phù hợp với mình.</p>
@@ -256,7 +256,7 @@ export default function Home() {
             />
           </div>
           <div className="col-span-1"></div>
-          <div className="col-span-4">
+          <div className="hidden col-span-4 sm:block">
             <img className="" src="images/Saly.png" alt="" />
           </div>
         </div>
