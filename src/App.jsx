@@ -9,7 +9,7 @@ import NoPage from "./pages/NoPage/NoPage";
 import CourseDetail from "./pages/CourseDetail/CourseDetail"
 import CourseVideo from "./pages/CourseVideo/CourseVideo"
 import Course from "./pages/Course/Course"
-import Login from "./pages/Login/Login";
+// import Login from "./pages/Login/Login";
 //||Components
 function App() {
 
@@ -25,7 +25,7 @@ function App() {
             <Route path="/course" element={<Course />} />
           </Route>
           <Route path="/course-video" element={<CourseVideo />} />
-          <Route path="/login" element={<Login />} />
+          {/* <Route path="/login" element={<Login />} /> */}
         </Routes>
       </BrowserRouter>
   )
