@@ -63,7 +63,7 @@
             .scrollBar{
                 background-color: #fff;
                 position: relative;
-                padding-bottom: 20px;
+                padding-bottom: 60px;
 
             .mini_menu {
                 display: flex;
@@ -310,8 +310,10 @@
                 padding: 0px 10px;
                 width: 29%;
                 position: fixed;
-                max-height: 80vh;
-                overflow: auto;
+                .dropdownMenu{
+                    max-height: 70vh;
+                    overflow: auto;
+                }
 
             }
         }

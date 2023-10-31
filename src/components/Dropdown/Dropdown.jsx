@@ -13,7 +13,6 @@ export default function Dropdown() {
       <Disclosure>
         {({ open }) => (
           <>
-           <h2 className="text-lg font-semibold py-4">Nội dung khóa học</h2>
             <Disclosure.Button
               className={classNames(
                 "flex items-center justify-between w-full px-4 py-2 bg-[#F5F5F5] border-b",

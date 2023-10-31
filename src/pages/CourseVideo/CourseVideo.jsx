@@ -7,7 +7,7 @@ import Check from "../../components/commom/icons/Check";
 import Messages from "../../components/commom/icons/Messages";
 import Dropdown from "../../components/Dropdown/Dropdown";
 import Button from "../../components/button/Button";
-import Footer from "../../Layout/Footer";
+// import Footer from "../../Layout/Footer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
 
@@ -281,7 +281,10 @@ const CourseVideo = () => {
                       <div className="background_Black" onClick={toggleAnHienSubMenu1}></div>
                     <div className="CourseVideo_Right">
                         <div className="menu_CourseVideo_Right">
-                            <Dropdown />
+                        <h2 className="text-lg font-semibold py-4">Nội dung khóa học</h2>
+                        <div className="dropdownMenu">
+                        <Dropdown />
+                        </div>
                         </div>
                     </div>
                     </> 
@@ -289,9 +292,9 @@ const CourseVideo = () => {
                 
 </div>
             </div>
-            <div className="footer">
+            {/* <div className="footer">
                 <Footer></Footer>
-            </div>
+            </div> */}
             <div className="sub_menu">
            <div className="course_content">
            <button onClick={toggleAnHienSubMenu}>

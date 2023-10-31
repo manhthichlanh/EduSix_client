@@ -7,3 +7,8 @@ Mô tả các file
 - src/utils: Chứa các các hàm xử lý thời gian, chuỗi... Sử dụng dụng nhiều lần, nhiều nơi. Api hepers (Liên quan đến gọi API);
 - src/store: Nơi chứa các configture các reducer để cung cấp data cho provider (Redux ToolKit) -> Comming soon.
 - src/slice: Nơi chứa các slice để xử lý các dispatch các action, async action -> Comming soon.
+
+
+git add .  
+git commit -m
+git push origin datpham
