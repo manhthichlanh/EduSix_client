@@ -9,6 +9,7 @@ import NoPage from "./pages/NoPage/NoPage";
 import CourseDetail from "./pages/CourseDetail/CourseDetail"
 import CourseVideo from "./pages/CourseVideo/CourseVideo"
 import Course from "./pages/Course/Course"
+import CreateBLog from "./pages/CreateBlog/CreateBlog"
 // import Login from "./pages/Login/Login";
 //||Components
 function App() {
@@ -16,18 +17,18 @@ function App() {
 
   return (
 
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Layout />}>
-            <Route index element={<Home />} />
-            <Route path="*" element={<NoPage />} />
-            <Route path="/course-detail" element={<CourseDetail />} />
-            <Route path="/course" element={<Course />} />
-          </Route>
-          <Route path="/course-video" element={<CourseVideo />} />
-          {/* <Route path="/login" element={<Login />} /> */}
-        </Routes>
-      </BrowserRouter>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Home />} />
+          <Route path="*" element={<NoPage />} />
+          <Route path="/course-detail" element={<CourseDetail />} />
+          <Route path="/course" element={<Course />} />
+          <Route path="/create-bLog" element={<CreateBLog />} />
+        </Route>
+        <Route path="/course-video" element={<CourseVideo />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 
