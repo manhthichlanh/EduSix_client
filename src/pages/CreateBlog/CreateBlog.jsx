@@ -9,7 +9,7 @@ const CreateBlog = () => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [formCompleted, setFormCompleted] = useState(false);
-
+    const [selectedCategory, setSelectedCategory] = useState('');
     const handleImageUpload = (e) => {
         const file = e.target.files[0];
         const reader = new FileReader();
@@ -41,9 +41,13 @@ const CreateBlog = () => {
         setDescription(newContent);
     };
 
+    const handleCategoryChange = (event) => {
+        setSelectedCategory(event.target.value);
+      };
+
     const handlePublish = () => {
         // Kiểm tra nếu bất kỳ thông tin nào bị thiếu, hiển thị cảnh báo
-        if (!imageURL || !title || !description) {
+        if (!imageURL || !title || !description || !selectedCategory) {
             alert('Vui lòng điền đầy đủ thông tin cần thiết (hình ảnh, tiêu đề, mô tả) trước khi đăng bài');
             return;
         }
@@ -53,12 +57,12 @@ const CreateBlog = () => {
 
     useEffect(() => {
         // Kiểm tra xem tất cả các trường thông tin cần thiết đã được điền hay chưa
-        if (imageURL && title && description) {
+        if (imageURL && title && description && selectedCategory) {
             setFormCompleted(true); // Đặt trạng thái form thành true nếu đã điền đầy đủ thông tin
         } else {
             setFormCompleted(false); // Ngược lại, form chưa hoàn chỉnh
         }
-    }, [imageURL, title, description]);
+    }, [imageURL, title, description, selectedCategory ]);
 
     return (
         <div className="grid grid-cols-12 gap-6 pt-10 px-10 lg:px-20 md:px-16 sm:px-10">
@@ -72,6 +76,18 @@ const CreateBlog = () => {
                         <p className="max-w-md">Tải lên hình thu nhỏ bài viết của bạn ở đây. Nguyên tắc quan trọng: 1200x800 pixel hoặc Tỷ lệ 12:8. Định dạng được hỗ trợ: .jpg, .jpeg hoặc .png</p>
                         <input className='file:mr-2 file:px-4 file:py-2 file:rounded-md file:border-none file:bg-[#ff6636] file:text-white file:hover:bg-[#E75F37] ease-in-out transition' type="file" onChange={handleImageUpload} />
                     </div>
+                </div>
+            </div>
+            <div className="col-span-12 pb-10">
+                <p className='text-[18px] font-medium pb-4'>Chọn danh mục</p>
+                <div>
+                    <select id="category" name="category" value={selectedCategory} onChange={handleCategoryChange} className='px-4 py-3 w-full border-2 border-[#e8e8e8] rounded-lg'>
+                        <option value="">Chọn một danh mục</option>
+                        <option value="category1">Danh mục 1</option>
+                        <option value="category2">Danh mục 2</option>
+                        <option value="category3">Danh mục 3</option>
+                    </select>
+              
                 </div>
             </div>
             <div className="col-span-12 pb-10">
