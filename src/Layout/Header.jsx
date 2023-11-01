@@ -17,9 +17,9 @@ export default function Example() {
     { name: "Giới thiệu", href: "/about", current: false },
   ]);
   const handleMenuItemClick = (index) => {
-    const updatedMenuItems = menuItems.map((item, idx) => ({
+    const updatedMenuItems = menuItems.map((item, id) => ({
       ...item,
-      current: idx === index,
+      current: id === index,
     }));
     setMenuItems(updatedMenuItems);
   };

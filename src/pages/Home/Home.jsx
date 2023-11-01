@@ -3,8 +3,8 @@ import CateCard from "../../components/Card/CateCard";
 import CourseSlide from "../../components/Swiper/CourseSlide";
 import Input from "./../../components/input/Input";
 import classNames from "classnames";
-import BlogCard from "./../../components/Card/BlogCard";
-
+import BlogSlide from "../../components/Swiper/BlogSlide.";
+// import { v4 } from "uuid";
 const cate = [
   {
     id: 1,
@@ -103,6 +103,7 @@ const data = [
 
 const blog = [
   {
+    id: 1,
     cateId: 1,
     image: "/course.png",
     title: "thinking: faker",
@@ -110,6 +111,7 @@ const blog = [
     category: "Marketing",
   },
   {
+    id: 2,
     cateId: 2,
     image: "/course.png",
     title: "doing: fu*ker",
@@ -117,13 +119,39 @@ const blog = [
     category: "Lập trình",
   },
   {
+    id: 3,
     cateId: 3,
     image: "/course.png",
     title: "Marketing",
-    comment: 1,
+    comment: 6,
     category: "Thiết kế đồ họa",
   },
+  {
+    id: 4,
+    cateId: 4,
+    image: "/course.png",
+    title: "Marketing",
+    comment: 20,
+    category: "Ngôn ngữ",
+  },
+  {
+    id: 5,
+    cateId: 5,
+    image: "/course.png",
+    title: "Marketing",
+    comment: 10,
+    category: "Tài chính",
+  },
+  {
+    id: 6,
+    cateId: 6,
+    image: "/course.png",
+    title: "Marketing",
+    comment: 10,
+    category: "Photography",
+  },
 ];
+
 const filterPhography = data.filter((item) => item.cateId === 6);
 
 export default function Home() {
@@ -189,7 +217,7 @@ export default function Home() {
               ></Button>
             </div>
             <div className="">
-              <CourseSlide data={data} />
+              <CourseSlide prefixAction={"trending"} data={data} />
             </div>
           </div>
           <div className="my-[100px] lg:col-span-4 md:col-span-12 ">
@@ -217,7 +245,7 @@ export default function Home() {
               ></Button>
             </div>
             <div className="">
-              <CourseSlide data={data} />
+              <CourseSlide prefixAction={"newest"} data={data} />
             </div>
           </div>
           <div className="my-20 lg:col-span-4 md:col-span-12">
@@ -233,7 +261,10 @@ export default function Home() {
               ></Button>
             </div>
             <div className="">
-              <CourseSlide data={filterPhography} />
+              <CourseSlide
+                prefixAction={"photography"}
+                data={filterPhography}
+              />
             </div>
           </div>
           <div className="my-20 lg:col-span-4 md:col-span-12">
@@ -246,7 +277,8 @@ export default function Home() {
                 }
               ></Button>
             </div>
-            <BlogCard data={blog}></BlogCard>
+
+            <BlogSlide data={blog} prefixAction={"blog"}></BlogSlide>
           </div>
         </div>
         <div className="grid grid-cols-12 gap-6 py-20  px-10 lg:px-20 md:px-16 sm:px-10 bg-[url('images/bg.png')]">
