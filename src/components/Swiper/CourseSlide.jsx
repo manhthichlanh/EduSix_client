@@ -35,8 +35,8 @@ export default function CourseSlide({ prefixAction, data }) {
           nextEl: `.${prefixAction} > .${prefixAction}-next`,
         }}
       >
-        {map(data, (item, index) => (
-          <SwiperSlide key={index}>
+        {map(data, (item) => (
+          <SwiperSlide key={item.id}>
             <Card
               image={item.image}
               category={item.category}

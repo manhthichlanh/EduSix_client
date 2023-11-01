@@ -1,20 +1,29 @@
-// import { Fragment, useState } from "react";
 import { Disclosure } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import Button from "../components/button/Button";
 import Search from "../components/commom/icons/Search";
-const navigation = [
-  { name: "Trang chủ", href: "/", current: true },
-  { name: "Khóa học", href: "/course", current: false },
-  { name: "Blog", href: "/blog", current: false },
-  { name: "Giới thiệu", href: "/about", current: false },
-];
+import { useState } from "react";
+import { Link } from "react-router-dom";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function Example() {
+  const [menuItems, setMenuItems] = useState([
+    { name: "Trang chủ", href: "/", current: true },
+    { name: "Khóa học", href: "/course", current: false },
+    { name: "Blog", href: "/blog", current: false },
+    { name: "Giới thiệu", href: "/about", current: false },
+  ]);
+  const handleMenuItemClick = (index) => {
+    const updatedMenuItems = menuItems.map((item, idx) => ({
+      ...item,
+      current: idx === index,
+    }));
+    setMenuItems(updatedMenuItems);
+  };
+
   return (
     <Disclosure as="nav" className="bg-white">
       {({ open }) => (
@@ -43,10 +52,10 @@ export default function Example() {
                 </div>
                 <div className="hidden pl-4 lg:block">
                   <div className="flex gap-4">
-                    {navigation.map((item) => (
-                      <a
+                    {menuItems.map((item, index) => (
+                      <Link
                         key={item.name}
-                        href={item.href}
+                        to={item.href}
                         className={classNames(
                           item.current
                             ? "text-orange-500"
@@ -54,9 +63,10 @@ export default function Example() {
                           "rounded-md px-3 py-2 text-sm font-medium"
                         )}
                         aria-current={item.current ? "page" : undefined}
+                        onClick={() => handleMenuItemClick(index)}
                       >
                         {item.name}
-                      </a>
+                      </Link>
                     ))}
                   </div>
                 </div>
@@ -95,7 +105,7 @@ export default function Example() {
               <div className="flex justify-center py-2">
                 <img className="w-auto h-8" src="/images/logo.png" alt="Logo" />
               </div>
-              {navigation.map((item) => (
+              {menuItems.map((item) => (
                 <Disclosure.Button
                   key={item.name}
                   as="a"
