@@ -186,10 +186,10 @@
                                 position: relative;
 
                                 input {
-                                    padding: 10px 10px 10px 40px;
-                                    border: 1px solid #e3e3e3;
+                                    padding: 12px 10px 12px 40px;
+                                    // border: 1px solid #e3e3e3;
                                     width: 100%;
-                                    border-radius: 5px;
+                                    border-radius: 4px;
                                 }
 
                                 .icon_Messages {
@@ -202,9 +202,9 @@
 
                             .Button_Comment {
                                 .Button {
-                                    padding: 10px;
+                                    padding: 12px 20px;
                                     background-color: #FF6636;
-                                    border-radius: 5px;
+                                    border-radius: 4px;
                                     margin-left: 10px;
                                     color: #fff;
                                     transition: 0.3s ease-in-out;
