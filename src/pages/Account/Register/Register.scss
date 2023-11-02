@@ -1,0 +1,214 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.Register{
+    display: flex;
+    .RegisterLeft{
+        width: 50%;
+        background-color: #F6F7FE;
+        position: relative;
+        min-height: 100vh;
+        overflow: hidden;
+        .contentRegisterLeft{
+            min-height: 88.5vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            
+        }
+        .logo{
+            width: 20%;
+            margin: 20px;
+           
+        }
+        .content{
+            
+            h1{
+                font-size: 40px;
+                font-weight: 700;
+            }
+            h2{
+                font-size: 30px;
+                font-weight: 600;
+                span{
+                    color: #FF6636;
+                }
+            }
+            .questionRegister{
+                margin-top: 50px;
+                font-weight: 600;
+                span{
+                    color: #FF6636;
+                }
+            }
+        }
+    }
+    .RegisterRight{
+        width: 50%;
+        position: relative;
+        z-index: 2;
+        display: flex;
+        justify-content: center;
+        align-items: center; 
+        .BoxRegisterRight{
+            width: 60%;
+            // background-color: #ffffffc9;
+            // backdrop-filter: blur(10px);
+            padding: 10px;
+            p{
+                text-align: center;
+                margin: 20px 0px;
+                color: #B5B5B5;
+                font-weight: 550;
+            }
+            h2{
+                font-size: 30px;
+                font-weight: 600;
+                margin-bottom: 20px;
+            }
+            .InputRegisterRight{
+                .Input{
+                    width: 100%;
+                    padding: 15px;
+                    background-color: #ff653623;
+                    border-radius: 8px;
+                    margin: 13px 0px;
+                    border: 2px solid #ffffff;
+                }
+                .Input:focus{
+                    border: 2px solid #FF6636;
+                    outline: none;
+                }
+                .Input::placeholder{
+                    color: #FF6636;
+                }
+                .Password{
+                    position: relative;
+                    .Input{
+                        padding-right: 50px;
+                    }
+                    button{
+                        position: absolute;
+                        right: 20px;
+                        top: 50%;
+                        transform: translateY(-50%);
+                        color: #FF6636;
+                    }
+                }
+            }
+            .function{
+                display: flex;
+                justify-content: space-between;
+                color: #B5B5B5;
+                .rememberPassword{
+                    justify-content: start;
+                    
+                    input{
+                        margin-right: 5px;
+                    }
+                }
+                .forgotPassword{
+                    display: flex;
+                    justify-content: center;
+                   text-decoration: underline;
+                    
+                }
+            }
+            .buttonRegister{
+                margin-top: 20px;
+                .Button{
+                    color: #fff;
+                    background-color: #FF6636;
+                    width: 100%;
+                    padding: 16px 24px;
+                    border-radius: 8px;
+                    box-shadow: 0px 4px 60px 0px rgba(255, 102, 54, 0.40);
+                }
+            }
+            .anotherRegister{
+                display: flex;
+                gap: 20px;
+                justify-content: center;
+            }
+        }
+    }
+}
+.vectorShape{
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+    img{
+        width: 80%;
+    }
+}
+
+
+@media (max-width: 1300px) {
+    .Register{
+        display: block;
+        background-color: #F6F7FE;
+        overflow: auto;
+        min-height: 100vh;
+        .RegisterLeft{
+            width: 100%;
+            min-height: 20vh;
+            .contentRegisterLeft{
+                align-items: start;
+                min-height: 30vh;
+            }
+        }
+        .RegisterRight{
+            width: 100%;
+            .BoxRegisterRight{
+                max-width: 600px;
+                padding: 0px 24px;
+                h2{
+                    display: none;
+                }
+            }
+        }
+    }
+   
+    .vectorShape{
+        display: none;
+    }
+  }
+
+
+  @media (max-width: 768px) {
+    .Register{
+        display: block;
+        background-color: #F6F7FE;
+        overflow: hidden;
+        min-height: 100vh;
+        .RegisterLeft{
+            width: 100%;
+            min-height: 20vh;
+            .contentRegisterLeft{
+                align-items: start;
+                min-height: 30vh;
+            }
+            .logo{
+                width: 120px;
+            }
+        }
+        .RegisterRight{
+            width: 100%;
+            .BoxRegisterRight{
+               width: 100%;
+                h2{
+                    display: none;
+                }
+            }
+        }
+    }
+   
+    .vectorShape{
+        display: none;
+    }
+  }

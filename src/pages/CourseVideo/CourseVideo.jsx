@@ -31,8 +31,7 @@ const VideoWrapper = styled.div`
     height: 100%;
     width: 100%;
 
-    max-width: 100%;
-    max-height: 100%; 
+   
   }
 `;
 const CourseVideo = () => {
@@ -166,7 +165,7 @@ const CourseVideo = () => {
                         <VideoWrapper>
       <div>  
         <ReactPlayer  
-          url="https://www.facebook.com/SPX.Entertainment.Official/videos/693495775869841"
+          url="https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8"
           width="100%"
           height="100%"
           controls={true}
@@ -325,7 +324,7 @@ const CourseVideo = () => {
            </div>
             <div className="next_page">
                 <NavLink to="#" className="button_next_page">
-            <ChevronLeft width={20} height={20} fill="#fff" className="icon-link" />
+            <ChevronLeft width={20} height={20} fill="#656565" className="icon-link" />
                 <Button
                     text="Bài trước"
                     Class="Button"
@@ -337,7 +336,7 @@ const CourseVideo = () => {
                     text="Bài sau"
                     Class="Button"
                 ></Button>
-                  <ChevronRight width={20} height={20} fill="#fff" className="icon-link" />
+                  <ChevronRight width={20} height={20} fill="#656565" className="icon-link" />
                   </NavLink>
             </div>
             </div>
