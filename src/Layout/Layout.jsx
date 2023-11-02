@@ -8,7 +8,7 @@ export default function Layout() {
       <div className="fixed z-50 w-full ">
         <Header></Header>
       </div>
-      <div className="pt-20 overflow-y-auto ">
+      <div className="pt-20 overflow-y-auto">
         <Outlet></Outlet>
       </div>
       <Footer></Footer>

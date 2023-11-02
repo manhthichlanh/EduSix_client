@@ -3,8 +3,8 @@ import Input from "../../components/input/Input";
 import JoditEditor from "jodit-react";
 import Button from "../../components/button/Button";
 import BlogSlide from "../../components/Swiper/BlogSlide.";
-import { v4 as uuidv4 } from "uuid";
-const blogId = uuidv4();
+// import { v4 as uuidv4 } from "uuid";
+// const blogId = uuidv4();
 
 const blog = [
   {
@@ -187,7 +187,7 @@ const CreateBlog = () => {
           ></Button>
         </div>
         {/* <BlogCard data={blog}></BlogCard> */}
-        <BlogSlide data={blog} slideId={blogId}></BlogSlide>
+        <BlogSlide data={blog} slideId={"blog"}></BlogSlide>
       </div>
     </div>
   );
