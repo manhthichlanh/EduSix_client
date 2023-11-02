@@ -1,15 +1,11 @@
 import { Fragment, useState } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon, BellIcon } from "@heroicons/react/24/outline";
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import Button from "../components/button/Button";
 import Search from "../components/commom/icons/Search";
-const navigation = [
-  { name: "Trang chủ", href: "/", current: true },
-  { name: "Khóa học", href: "/course", current: false },
-  { name: "Blog", href: "/blog", current: false },
-  { name: "Giới thiệu", href: "/about", current: false },
-];
+
+
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -18,6 +14,20 @@ function classNames(...classes) {
 export default function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  const [menuItems, setMenuItems] = useState([
+    { name: "Trang chủ", href: "/", current: true },
+    { name: "Khóa học", href: "/course", current: false },
+    { name: "Blog", href: "/blog", current: false },
+    { name: "Giới thiệu", href: "/about", current: false },
+  ]);
+
+  const handleMenuItemClick = (index) => {
+    const updatedMenuItems = menuItems.map((item, idx) => ({
+      ...item,
+      current: idx === index,
+    }));
+    setMenuItems(updatedMenuItems);
+  };
   // Menu khi chưa đăng nhập
   const renderLoggedOutMenu = (
     <>
@@ -48,10 +58,10 @@ export default function Header() {
                   </div>
                   <div className="hidden pl-4 lg:block">
                     <div className="flex gap-4">
-                      {navigation.map((item) => (
-                        <a
+                      {menuItems.map((item, index) => (
+                        <Link
                           key={item.name}
-                          href={item.href}
+                          to={item.href}
                           className={classNames(
                             item.current
                               ? "text-orange-500"
@@ -59,17 +69,18 @@ export default function Header() {
                             "rounded-md px-3 py-2 text-sm font-medium"
                           )}
                           aria-current={item.current ? "page" : undefined}
+                          onClick={() => handleMenuItemClick(index)}
                         >
                           {item.name}
-                        </a>
+                        </Link>
                       ))}
                     </div>
                   </div>
                 </div>
                 <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                  <div class="relative text-gray-600 hidden max-w-md mx-auto md:block sm:block">
+                  <div className="relative text-gray-600 hidden max-w-md mx-auto md:block sm:block">
                     <input type="search" name="serch" placeholder="Tìm kiếm khóa học" className="bg-white h-10 px-4 pr-40 rounded-full border border-[#8d8d8d] text-sm focus:outline-none" />
-                    <button type="submit" class="absolute right-0 top-0 mt-2.5 mr-3">
+                    <button type="submit" className="absolute right-0 top-0 mt-2.5 mr-3">
                       <Search
                         width={20}
                         height={20}
@@ -96,23 +107,23 @@ export default function Header() {
                 <div className="flex justify-center py-2">
                   <img className="w-auto h-8" src="/images/logo.png" alt="Logo" />
                 </div>
-                {navigation.map((item) => (
-                  <Disclosure.Button
+                {menuItems.map((item, index) => (
+                  <Link
                     key={item.name}
-                    as="a"
-                    href={item.href}
+                    to={item.href}
                     className={classNames(
                       item.current
-                        ? "bg-[#ff6636] text-white"
-                        : "text-gray-400 hover:bg-[#FFEEE8] hover:text-[#ff6636]",
-                      "block rounded-md px-3 py-2 text-base font-medium"
+                        ? "text-orange-500"
+                        : "text-[#333333] hover:text-orange-500 font-medium text-sm hover:bg-transparent",
+                      "rounded-md px-3 py-2 text-sm font-medium"
                     )}
                     aria-current={item.current ? "page" : undefined}
+                    onClick={() => handleMenuItemClick(index)}
                   >
                     {item.name}
-                  </Disclosure.Button>
+                  </Link>
                 ))}
-                <div class="relative text-gray-600 mx-auto w-max sm:hidden pt-3 lg:pt-0 md:pt-0 sm:pt-3">
+                <div className="relative text-gray-600 mx-auto w-max sm:hidden pt-3 lg:pt-0 md:pt-0 sm:pt-3">
                   <input type="search" name="serch" placeholder="Tìm kiếm khóa học" className="bg-white h-10 px-4 pr-40 rounded-full border border-[#8d8d8d] text-sm focus:outline-none" />
                   <button type="submit" class="absolute right-0 top-0 mt-2.5 mr-3 pt-3 lg:pt-0 md:pt-0 sm:pt-3">
                     <Search
@@ -159,10 +170,10 @@ export default function Header() {
                   </div>
                   <div className="hidden pl-4 lg:block">
                     <div className="flex gap-4">
-                      {navigation.map((item) => (
-                        <a
+                      {menuItems.map((item, index) => (
+                        <Link
                           key={item.name}
-                          href={item.href}
+                          to={item.href}
                           className={classNames(
                             item.current
                               ? "text-orange-500"
@@ -170,15 +181,16 @@ export default function Header() {
                             "rounded-md px-3 py-2 text-sm font-medium"
                           )}
                           aria-current={item.current ? "page" : undefined}
+                          onClick={() => handleMenuItemClick(index)}
                         >
                           {item.name}
-                        </a>
+                        </Link>
                       ))}
                     </div>
                   </div>
                 </div>
                 <div className="absolute inset-y-0 right-0 flex items-center gap-4 pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                  <div class="relative text-gray-600 hidden max-w-md mx-auto md:block sm:block">
+                  <div className="relative text-gray-600 hidden max-w-md mx-auto md:block sm:block">
                     <input type="search" name="serch" placeholder="Tìm kiếm khóa học" className="bg-white h-10 px-4 pr-40 rounded-full border border-[#8d8d8d] text-sm focus:outline-none" />
                     <button type="submit" class="absolute right-0 top-0 mt-2.5 mr-3">
                       <Search
@@ -256,25 +268,25 @@ export default function Header() {
                 <div className="flex justify-center py-2">
                   <img className="w-auto h-8" src="/images/logo.png" alt="Logo" />
                 </div>
-                {navigation.map((item) => (
-                  <Disclosure.Button
+                {menuItems.map((item, index) => (
+                  <Link
                     key={item.name}
-                    as="a"
-                    href={item.href}
+                    to={item.href}
                     className={classNames(
                       item.current
-                        ? "bg-[#ff6636] text-white"
-                        : "text-gray-400 hover:bg-[#FFEEE8] hover:text-[#ff6636]",
-                      "block rounded-md px-3 py-2 text-base font-medium"
+                        ? "text-orange-500"
+                        : "text-[#333333] hover:text-orange-500 font-medium text-sm hover:bg-transparent",
+                      "rounded-md px-3 py-2 text-sm font-medium"
                     )}
                     aria-current={item.current ? "page" : undefined}
+                    onClick={() => handleMenuItemClick(index)}
                   >
                     {item.name}
-                  </Disclosure.Button>
+                  </Link>
                 ))}
-                 <div class="relative text-gray-600 mx-auto w-max sm:hidden pt-3 lg:pt-0 md:pt-0 sm:pt-3">
+                <div className="relative text-gray-600 mx-auto w-max sm:hidden pt-3 lg:pt-0 md:pt-0 sm:pt-3">
                   <input type="search" name="serch" placeholder="Tìm kiếm khóa học" className="bg-white h-10 px-4 pr-40 rounded-full border border-[#8d8d8d] text-sm focus:outline-none" />
-                  <button type="submit" class="absolute right-0 top-0 mt-2.5 mr-3 pt-3 lg:pt-0 md:pt-0 sm:pt-3">
+                  <button type="submit" className="absolute right-0 top-0 mt-2.5 mr-3 pt-3 lg:pt-0 md:pt-0 sm:pt-3">
                     <Search
                       width={20}
                       height={20}
@@ -289,10 +301,9 @@ export default function Header() {
     </>
   );
   return (
+
     <>
       {isLoggedIn ? renderLoggedInMenu : renderLoggedOutMenu}
     </>
   );
 }
-
-

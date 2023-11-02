@@ -11,6 +11,7 @@ import CourseVideo from "./pages/CourseVideo/CourseVideo"
 import Course from "./pages/Course/Course"
 import CreateBLog from "./pages/CreateBlog/CreateBlog"
 import BlogDetail from "./pages/BlogDetail/BlogDetail";
+import AccountProfile from "./pages/AccountProfile/AccountProfile";
 // import Login from "./pages/Login/Login";
 //||Components
 function App() {
@@ -27,6 +28,7 @@ function App() {
           <Route path="/course" element={<Course />} />
           <Route path="/create-bLog" element={<CreateBLog />} />
           <Route path="/bLog-detail" element={<BlogDetail />} />
+          <Route path="/account-profile" element={<AccountProfile />} />
         </Route>
         <Route path="/course-video" element={<CourseVideo />} />
       </Routes>
