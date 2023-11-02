@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useState, useRef, useEffect } from "react";
 import Input from "../../components/input/Input";
 import JoditEditor from "jodit-react";
@@ -63,7 +64,7 @@ const CreateBlog = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [formCompleted, setFormCompleted] = useState(false);
-
+  const [selectedCategory, setSelectedCategory] = useState("");
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     const reader = new FileReader();
@@ -91,13 +92,17 @@ const CreateBlog = () => {
     setTitle(e.target.value);
   };
 
+  const handleCategoryChange = (event) => {
+    setSelectedCategory(event.target.value);
+  };
+
   const handleDescriptionChange = (newContent) => {
     setDescription(newContent);
   };
 
   const handlePublish = () => {
     // Kiểm tra nếu bất kỳ thông tin nào bị thiếu, hiển thị cảnh báo
-    if (!imageURL || !title || !description) {
+    if (!imageURL || !title || !description || !selectedCategory) {
       alert(
         "Vui lòng điền đầy đủ thông tin cần thiết (hình ảnh, tiêu đề, mô tả) trước khi đăng bài"
       );
@@ -109,12 +114,12 @@ const CreateBlog = () => {
 
   useEffect(() => {
     // Kiểm tra xem tất cả các trường thông tin cần thiết đã được điền hay chưa
-    if (imageURL && title && description) {
+    if (imageURL && title && description && selectedCategory) {
       setFormCompleted(true); // Đặt trạng thái form thành true nếu đã điền đầy đủ thông tin
     } else {
       setFormCompleted(false); // Ngược lại, form chưa hoàn chỉnh
     }
-  }, [imageURL, title, description]);
+  }, [imageURL, title, description, selectedCategory]);
 
   return (
     <div className="grid grid-cols-12 gap-6 pt-10 px-10 lg:px-20 md:px-16 sm:px-10">
@@ -150,6 +155,23 @@ const CreateBlog = () => {
         </div>
       </div>
       <div className="col-span-12 pb-10">
+        <p className="text-[18px] font-medium pb-4">Chọn danh mục</p>
+        <div>
+          <select
+            id="category"
+            name="category"
+            value={selectedCategory}
+            onChange={handleCategoryChange}
+            className="px-4 py-3 w-full border-2 border-[#e8e8e8] rounded-lg"
+          >
+            <option value="">Chọn một danh mục</option>
+            <option value="category1">Danh mục 1</option>
+            <option value="category2">Danh mục 2</option>
+            <option value="category3">Danh mục 3</option>
+          </select>
+        </div>
+      </div>
+      <div className="col-span-12 pb-10">
         <p className="text-[18px] font-medium pb-4">Tiêu đề</p>
         <Input
           type={"text"}
@@ -169,24 +191,16 @@ const CreateBlog = () => {
           onChange={handleDescriptionChange} // Cập nhật giá trị cho mô tả
         />
       </div>
-      <Button
-        text="Đăng"
-        Class={`px-8 py-3 rounded-[4px] text-white text-[16px] font-medium ${
-          formCompleted ? "bg-[#ff6636]" : "bg-[#ccc]"
-        } ${formCompleted ? "" : "cursor-not-allowed"}`}
-        onClick={formCompleted ? handlePublish : null}
-      />
-      <div className="col-span-12 mb-20">
-        <div className="flex items-end justify-between py-10 ">
-          <p className="font-semibold text-[24px]">BÀI VIẾT NỔI BẬT</p>
-          <Button
-            text="Xem thêm"
-            Class={
-              "text-sm font-medium py-2 px-8 rounded-[4px] shadow-md leading-6 hover:shadow-xl"
-            }
-          ></Button>
-        </div>
-        {/* <BlogCard data={blog}></BlogCard> */}
+      <div className="col-span-12 pb-10">
+        <Button
+          text="Đăng"
+          Class={`px-8 py-3 rounded-[4px] text-white text-[16px] font-medium ${
+            formCompleted ? "bg-[#ff6636]" : "bg-[#ccc]"
+          } ${formCompleted ? "" : "cursor-not-allowed"}`}
+          onClick={formCompleted ? handlePublish : null}
+        />
+      </div>
+      <div className="col-span-12 pb-10">
         <BlogSlide data={blog} slideId={"blog"}></BlogSlide>
       </div>
     </div>

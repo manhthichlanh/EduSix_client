@@ -181,7 +181,7 @@ export default function Home() {
                 <Button
                   text="Tìm kiếm"
                   Class={
-                    "text-[18px] text-white font-medium bg-[#333333] px-6 py-3 rounded-[8px] leading- whitespace-nowrap"
+                    "text-[18px] text-white font-medium hover:shadow-xl bg-[#333333] px-6 py-3 rounded-[8px] leading- whitespace-nowrap"
                   }
                 ></Button>
               </div>
@@ -304,7 +304,7 @@ export default function Home() {
             />
           </div>
           <div className="col-span-1"></div>
-          <div className="hidden col-span-4 sm:block">
+          <div className="hidden col-span-4 lg:block">
             <img className="" src="images/Saly.png" alt="" />
           </div>
         </div>
