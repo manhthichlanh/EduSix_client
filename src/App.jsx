@@ -13,6 +13,7 @@ import CreateBLog from "./pages/CreateBlog/CreateBlog";
 import BlogDetail from "./pages/BlogDetail/BlogDetail";
 import AccountProfile from "./pages/AccountProfile/AccountProfile";
 import About from "./pages/About/About";
+import Blog from "./pages/Blog/Blog";
 // import Login from "./pages/Login/Login";
 //||Components
 function App() {
@@ -25,6 +26,7 @@ function App() {
           <Route path="/course-detail" element={<CourseDetail />} />
           <Route path="/course" element={<Course />} />
           <Route path="/about" element={<About />} />
+          <Route path="/blog" element={<Blog />} />
           <Route path="/create-bLog" element={<CreateBLog />} />
           <Route path="/blog-detail" element={<BlogDetail />} />
           <Route path="/account-profile" element={<AccountProfile />} />

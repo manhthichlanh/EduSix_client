@@ -107,8 +107,8 @@ export default function AccountProfile() {
             <p className="mb-6 px-3 py-[10px] border-l-4 border-[#ff6636] text-[16px] text-[#ff6636] font-medium leading-6">
               Thông tin
             </p>
-            <div className="flex gap-6 mb-6 ">
-              <div className=" w-full">
+            <div className="flex gap-6 mb-6">
+              <div className="w-full">
                 <p className="text-[16px] font-medium mb-2 ">Nickname</p>
                 <Input
                   type={"text"}
@@ -118,7 +118,7 @@ export default function AccountProfile() {
                   }
                 />
               </div>
-              <div className=" w-full">
+              <div className="w-full">
                 <p className="text-[16px] font-medium mb-2 ">Họ và tên</p>
                 <Input
                   type={"text"}
