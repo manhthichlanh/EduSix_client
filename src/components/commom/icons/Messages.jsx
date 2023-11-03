@@ -1,5 +1,5 @@
 // eslint-disable-next-line react/prop-types
-export default function CheckCircleFill({ width, height, ...props }) {
+export default function Messages({ width, height, ...props }) {
   return (
     <svg
       className=""

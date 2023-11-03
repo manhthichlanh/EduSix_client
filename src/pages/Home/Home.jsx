@@ -3,8 +3,8 @@ import CateCard from "../../components/Card/CateCard";
 import CourseSlide from "../../components/Swiper/CourseSlide";
 import Input from "./../../components/input/Input";
 import classNames from "classnames";
-import BlogCard from "./../../components/Card/BlogCard";
-
+import BlogSlide from "../../components/Swiper/BlogSlide.";
+// import { v4 } from "uuid";
 const cate = [
   {
     id: 1,
@@ -40,6 +40,7 @@ const cate = [
 
 const data = [
   {
+    id: 1,
     image: "/course.png",
     category: "Marketing",
     cateId: 1,
@@ -49,6 +50,7 @@ const data = [
     joiner: 150,
   },
   {
+    id: 2,
     image: "/course.png",
     category: "Lập trình",
     cateId: 2,
@@ -58,6 +60,7 @@ const data = [
     joiner: 200,
   },
   {
+    id: 3,
     image: "/course.png",
     category: "Thiết kế đồ họa",
     cateId: 3,
@@ -67,6 +70,7 @@ const data = [
     joiner: 120,
   },
   {
+    id: 4,
     image: "/course.png",
     category: "Ngôn ngữ",
     cateId: 4,
@@ -76,6 +80,7 @@ const data = [
     joiner: 120,
   },
   {
+    id: 5,
     image: "/course.png",
     category: "Tài chính",
     cateId: 5,
@@ -85,6 +90,7 @@ const data = [
     joiner: 120,
   },
   {
+    id: 6,
     image: "/course.png",
     category: "Photography",
     cateId: 6,
@@ -97,6 +103,7 @@ const data = [
 
 const blog = [
   {
+    id: 1,
     cateId: 1,
     image: "/course.png",
     title: "thinking: faker",
@@ -104,6 +111,7 @@ const blog = [
     category: "Marketing",
   },
   {
+    id: 2,
     cateId: 2,
     image: "/course.png",
     title: "doing: fu*ker",
@@ -111,13 +119,39 @@ const blog = [
     category: "Lập trình",
   },
   {
+    id: 3,
     cateId: 3,
     image: "/course.png",
     title: "Marketing",
-    comment: 1,
+    comment: 6,
     category: "Thiết kế đồ họa",
   },
+  {
+    id: 4,
+    cateId: 4,
+    image: "/course.png",
+    title: "Marketing",
+    comment: 20,
+    category: "Ngôn ngữ",
+  },
+  {
+    id: 5,
+    cateId: 5,
+    image: "/course.png",
+    title: "Marketing",
+    comment: 10,
+    category: "Tài chính",
+  },
+  {
+    id: 6,
+    cateId: 6,
+    image: "/course.png",
+    title: "Marketing",
+    comment: 10,
+    category: "Photography",
+  },
 ];
+
 const filterPhography = data.filter((item) => item.cateId === 6);
 
 export default function Home() {
@@ -147,7 +181,7 @@ export default function Home() {
                 <Button
                   text="Tìm kiếm"
                   Class={
-                    "text-[18px] text-white font-medium bg-[#333333] px-6 py-3 rounded-[8px] leading- whitespace-nowrap"
+                    "text-[18px] text-white font-medium hover:shadow-xl bg-[#333333] px-6 py-3 rounded-[8px] leading- whitespace-nowrap"
                   }
                 ></Button>
               </div>
@@ -173,7 +207,7 @@ export default function Home() {
         </div>
         <div className="px-10 lg:px-20 md:px-16 sm:px-10">
           <div className="my-20 lg:col-span-4 md:col-span-12">
-            <div className="flex items-end justify-between py-10 ">
+            <div className="flex items-end justify-between py-10">
               <p className="font-semibold text-[24px]">KHÓA HỌC NỔI BẬT</p>
               <Button
                 text="Xem thêm"
@@ -183,7 +217,7 @@ export default function Home() {
               ></Button>
             </div>
             <div className="">
-              <CourseSlide data={data} />
+              <CourseSlide prefixAction={"trending"} data={data} />
             </div>
           </div>
           <div className="my-[100px] lg:col-span-4 md:col-span-12 ">
@@ -211,7 +245,7 @@ export default function Home() {
               ></Button>
             </div>
             <div className="">
-              <CourseSlide data={data} />
+              <CourseSlide prefixAction={"newest"} data={data} />
             </div>
           </div>
           <div className="my-20 lg:col-span-4 md:col-span-12">
@@ -227,7 +261,10 @@ export default function Home() {
               ></Button>
             </div>
             <div className="">
-              <CourseSlide data={filterPhography} />
+              <CourseSlide
+                prefixAction={"photography"}
+                data={filterPhography}
+              />
             </div>
           </div>
           <div className="my-20 lg:col-span-4 md:col-span-12">
@@ -240,23 +277,34 @@ export default function Home() {
                 }
               ></Button>
             </div>
-            <BlogCard data={blog}></BlogCard>
+
+            <BlogSlide data={blog} prefixAction={"blog"}></BlogSlide>
           </div>
         </div>
         <div className="grid grid-cols-12 gap-6 py-20  px-10 lg:px-20 md:px-16 sm:px-10 bg-[url('images/bg.png')]">
           <div className="lg:col-span-7 col-span-12 my-auto md:col-span-12 sm:col-span-12">
             <div className="pb-10">
-              <p className="text-[40px] font-semibold leading-[48px] pb-4">Tham gia khóa học <span className="text-[#85A0FE]">miễn phí</span> tại nền tảng của chúng tôi</p>
-              <p className="text-[#333333]">Khóa học của chúng tôi được thiết kế để phù hợp với mọi người, vì vậy dù bạn là người mới bắt đầu hay đã có kinh nghiệm, bạn đều có thể tìm thấy khóa học phù hợp với mình.</p>
+              <p className="text-[40px] font-semibold leading-[48px] pb-4">
+                Tham gia khóa học{" "}
+                <span className="text-[#85A0FE]">miễn phí</span> tại nền tảng
+                của chúng tôi
+              </p>
+              <p className="text-[#333333]">
+                Khóa học của chúng tôi được thiết kế để phù hợp với mọi người,
+                vì vậy dù bạn là người mới bắt đầu hay đã có kinh nghiệm, bạn
+                đều có thể tìm thấy khóa học phù hợp với mình.
+              </p>
             </div>
 
             <Button
               text="Đăng kí ngay"
-              Class={"text-[-18px] font-medium bg-[#ff6636] px-8 py-4 text-white rounded-lg"}
+              Class={
+                "text-[-18px] font-medium bg-[#ff6636] px-8 py-4 text-white rounded-lg"
+              }
             />
           </div>
           <div className="col-span-1"></div>
-          <div className="hidden col-span-4 sm:block">
+          <div className="hidden col-span-4 lg:block">
             <img className="" src="images/Saly.png" alt="" />
           </div>
         </div>

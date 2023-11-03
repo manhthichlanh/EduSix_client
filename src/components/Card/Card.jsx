@@ -6,8 +6,8 @@ function Card(props) {
   const { image, category, price, name, rating, joiner, cateId } = props;
   const categoryColors = {
     1: { backgroundColor: "#EFEFFD", color: "#5C59E8" },
-    2: { backgroundColor: "#F0F1F3", color: "#667085" },
-    3: { backgroundColor: "#FDF1E8", color: "#D3620F" },
+    2: { backgroundColor: "#FDF1E8", color: "#D3620F" },
+    3: { backgroundColor: "#F0F1F3", color: "#667085" },
     4: { backgroundColor: "#E7F4EE", color: "#15711F" },
     5: { backgroundColor: "#ECEFFF", color: "#4462FE" },
     6: { backgroundColor: "#FEEDEC", color: "#882929" },
