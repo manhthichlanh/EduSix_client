@@ -2,11 +2,11 @@
     clear: both;
 
     .Header {
+        background: #29303b;
         overflow: hidden;
         position: fixed;
         width: 100%;
         z-index: 2;
-        background-color: #333333;
 
         .directional {
             display: flex;
@@ -49,13 +49,13 @@
             .video {
                 
                 width: 100%;
-                position: sticky;
+                
                 max-height: 580px;
                 background-color: #8D8D8D;
                 border-radius: 5px;
                 top: 50px;
-                padding: 8px;
-                overflow: auto;
+                
+                
                 .custom-video {
                     width: 100%;
                 }
@@ -309,11 +309,12 @@
             border-left: 2px solid #f4f4f4;
             .menu_CourseVideo_Right {
                 padding: 0px 10px;
-                width: 29%;
+                width: 30%;
                 position: fixed;
                 .dropdownMenu{
-                    max-height: 70vh;
+                    max-height: 75vh;
                     overflow: auto;
+                    
                 }
 
             }
@@ -327,7 +328,7 @@
 }
 
 .sub_menu {
-    background-color: #ffffffd2;
+    background-color: #f0f0f0;
     width: 100%;
     padding: 10px;
     position: fixed;
@@ -342,9 +343,10 @@
 
         button {
             padding: 10px 20px;
-            background-color: #FF6636;
-            color: #fff;
-            border-radius: 4px;
+           border: 1px solid #FF6636;
+           background-color: #FF6636;
+            color: #ffffff;
+            border-radius: 5px;
         }
     }
 
@@ -353,21 +355,21 @@
         gap: 10px;
         justify-content: center;
 
-        // .button_next_page {
-        //     // display: flex;
-        //     // background-color: #FF6636;
-        //     // border-radius: 4px;
+        .button_next_page {
+            display: flex;
+            border-radius: 5px;
+            border: 2px solid #b0b0b0;
+            .icon-link {
+                margin-top: 10px;
+                margin-right: 8px;
+            }
 
-        //         // .icon-link {
-        //         //     margin-top: 12px;
-        //         //     margin-right: 12px;
-        //         // }
-
-        //     .Button {
-        //         // padding: 12px 12px;
-        //         color: #ffffff;
-        //     }
-        // }
+            .Button {
+                padding: 10px;
+                color: #656565;
+               
+            }
+        }
     }
 }
 
@@ -415,7 +417,10 @@
         margin: 0;
         border: none;
     }
-
+    // .CourseVideo .Content_CourseVideo .CourseVideo_Left .video{
+    //     width: 100%;
+    
+    // }
     .CourseVideo .Content_CourseVideo .CourseVideo_Right .menu_CourseVideo_Right {
         position: relative;
         max-height: 90vh;

@@ -14,7 +14,11 @@ import BlogDetail from "./pages/BlogDetail/BlogDetail";
 import AccountProfile from "./pages/AccountProfile/AccountProfile";
 import About from "./pages/About/About";
 import Blog from "./pages/Blog/Blog";
-// import Login from "./pages/Login/Login";
+import Login from "./pages/Account/Login/Login";
+import Register from "./pages/Account/Register/Register";
+import ForgotPassword from "./pages/Account/ForgotPassword/ForgotPassword";
+import ResetPassword from "./pages/Account/ResetPassword/ResetPassword";
+import ConfirmOtp from "./pages/Account/ConfirmOTP/ConfirmOTP";
 //||Components
 function App() {
   return (
@@ -32,6 +36,11 @@ function App() {
           <Route path="/account-profile" element={<AccountProfile />} />
         </Route>
         <Route path="/course-video" element={<CourseVideo />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/confirm-otp" element={<ConfirmOtp />} />
       </Routes>
     </BrowserRouter>
   );
