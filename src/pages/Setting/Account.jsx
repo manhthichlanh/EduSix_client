@@ -1,9 +1,7 @@
 import { useRef, useState } from "react";
-// import Button from '../../components/button/Button';
-import { Link } from "react-router-dom";
-import Input from "../../components/input/Input";
+import { Link, Outlet } from "react-router-dom";
 
-export default function AccountProfile() {
+export default function Account() {
   const inputFileRef = useRef(null);
   const imageRef = useRef(null);
   function classNames(...classes) {
@@ -22,13 +20,6 @@ export default function AccountProfile() {
     }
   };
 
-  const [menuItems, setMenuItems] = useState([
-    { name: "Thông tin", href: "#", current: true },
-    { name: "Khóa học", href: "#", current: false },
-    { name: "Blog", href: "#", current: false },
-    { name: "Lịch sử mua hàng", href: "#", current: false },
-  ]);
-
   const handleMenuItemClick = (index) => {
     const updatedMenuItems = menuItems.map((item, idx) => ({
       ...item,
@@ -36,6 +27,23 @@ export default function AccountProfile() {
     }));
     setMenuItems(updatedMenuItems);
   };
+  const [menuItems, setMenuItems] = useState([
+    {
+      name: "Thông tin",
+      href: "/account/profile",
+      current: false,
+    },
+    { name: "Khóa học", href: "/account/course", current: false },
+    { name: "Blog", href: "/account/blog", current: false },
+    {
+      name: "Lịch sử mua hàng",
+      href: "/account/purchase-history",
+      current: false,
+    },
+  ]);
+  const selectedMenuItem = menuItems.find(
+    (item) => item.href === location.pathname
+  );
   return (
     <>
       <div className="grid grid-cols-12 gap-6 px-20">
@@ -46,7 +54,7 @@ export default function AccountProfile() {
               className="w-[60px] h-[60px] rounded-full cursor-pointer"
               src="https://scontent.fsgn5-12.fna.fbcdn.net/v/t39.30808-6/398231042_289856434020365_193059190829890352_n.jpg?stp=dst-jpg_p843x403&_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_ohc=kZiuWP8Dy5cAX-aM_S_&_nc_ht=scontent.fsgn5-12.fna&oh=00_AfDGHf3OlWltUsFpGTUbm__WZ2zaslwiiCsnXG9F8yzXyw&oe=65483B6B"
               alt=""
-              onClick={() => inputFileRef.current.click()} // Mở cửa sổ chọn tệp khi nhấp vào ảnh
+              onClick={() => inputFileRef.current.click()}
             />
             <input
               type="file"
@@ -104,54 +112,16 @@ export default function AccountProfile() {
         </div>
         <div className="col-span-9">
           <div className="">
-            <p className="mb-6 px-3 py-[10px] border-l-4 border-[#ff6636] text-[16px] text-[#ff6636] font-medium leading-6">
-              Thông tin
-            </p>
-            <div className="flex gap-6 mb-6">
-              <div className="w-full">
-                <p className="text-[16px] font-medium mb-2 ">Nickname</p>
-                <Input
-                  type={"text"}
-                  placeholder={"Nickname"}
-                  className={
-                    "w-full py-3 px-4 bg-[#fafafa]  rounded-lg focus:border-[#FF6636] border-2 outline-none border-[#e8e8e8]"
-                  }
-                />
-              </div>
-              <div className="w-full">
-                <p className="text-[16px] font-medium mb-2 ">Họ và tên</p>
-                <Input
-                  type={"text"}
-                  placeholder={"Nickname"}
-                  className={
-                    "w-full py-3 px-4 bg-[#fafafa]  rounded-lg focus:border-[#FF6636] border-2 outline-none border-[#e8e8e8]"
-                  }
-                />
-              </div>
+            <div>
+              {selectedMenuItem && (
+                <p className="mb-6 px-3 py-[10px] border-l-4 border-[#ff6636] text-[16px] text-[#ff6636] font-medium leading-6">
+                  {selectedMenuItem.name}
+                </p>
+              )}
             </div>
-            <div className="flex gap-6">
-              <div className=" w-full">
-                <p className="text-[16px] font-medium mb-2 ">Email</p>
-                <Input
-                  type={"text"}
-                  placeholder={"Email"}
-                  className={
-                    "w-full py-3 px-4 bg-[#fafafa]  rounded-lg focus:border-[#FF6636] border-2 outline-none border-[#e8e8e8]"
-                  }
-                />
-              </div>
-              <div className=" w-full">
-                <p className="text-[16px] font-medium mb-2 ">Mật khẩu</p>
-                <Input
-                  type={"text"}
-                  placeholder={"Mật khẩu"}
-                  className={
-                    "w-full py-3 px-4 bg-[#fafafa]  rounded-lg focus:border-[#FF6636] border-2 outline-none border-[#e8e8e8]"
-                  }
-                />
-              </div>
-            </div>
+            <Outlet />
           </div>
+          <div></div>
         </div>
       </div>
     </>

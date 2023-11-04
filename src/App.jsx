@@ -16,7 +16,7 @@ import ConfirmOtp from "./pages/Account/ConfirmOTP/ConfirmOTP"
 import Course from "./pages/Course/Course";
 import CreateBLog from "./pages/CreateBlog/CreateBlog";
 import BlogDetail from "./pages/BlogDetail/BlogDetail";
-import AccountProfile from "./pages/AccountProfile/AccountProfile";
+import Account from "./pages/Setting/Account";
 import About from "./pages/About/About";
 import Blog from "./pages/Blog/Blog";
 // import Login from "./pages/Login/Login";
@@ -36,7 +36,7 @@ function App() {
           <Route path="/blog" element={<Blog />} />
           <Route path="/create-bLog" element={<CreateBLog />} />
           <Route path="/blog-detail" element={<BlogDetail />} />
-          <Route path="/account-profile" element={<AccountProfile />} />
+          <Route path="/account-profile" element={<Account />} />
           </Route>
           <Route path="/course-video" element={<CourseVideo />} />
           <Route path="/login" element={<Login />} />
