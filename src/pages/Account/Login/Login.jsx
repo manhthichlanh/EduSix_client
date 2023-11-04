@@ -47,7 +47,7 @@ const Login = () => {
                             />
                             <button onClick={togglePasswordVisibility}>
                                 <FontAwesomeIcon
-                                    icon={passwordVisible ? faEye : faEyeSlash}
+                                    icon={passwordVisible ? faEyeSlash : faEye}
                                 />
                             </button>
                             </div>
