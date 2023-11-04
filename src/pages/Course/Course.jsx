@@ -11,7 +11,8 @@ import ChecvronUp from "../../components/commom/icons/ChevronUp";
 import { useState } from "react";
 import StarFill from "../../components/commom/icons/StarFill";
 import Button from "../../components/button/Button";
-
+import { useQuery } from "react-query";
+import { apiServer } from "../../utils/http";
 const data = [
   {
     image: "/course.png",
@@ -209,6 +210,17 @@ export default function Course() {
       prevState.map((value, i) => (i === index ? !value : value))
     );
   };
+  const getCourseData = async () => {
+    try {
+      const response = await apiServer.get("/course");
+      return response.data;
+    } catch (error) {
+      throw new Error("Error fetching course data");
+    }
+  };
+
+  // Use React Query to fetch and manage course data
+  const { data: courseData, isLoading, isError } = useQuery("courseData", getCourseData);
   return (
     <>
       <div className="w-full">
@@ -487,16 +499,16 @@ export default function Course() {
           </div>
           <div className="col-span-12 lg:col-span-9 justify-between items-center flex flex-col">
             <div className="grid grid-cols-12 gap-6">
-              {map(data, (item) => (
+              {map(courseData, (item) => (
                 <div
                   className="col-span-12 lg:col-span-4 md:col-span-6"
-                  key={item.id}
+                  key={item?.course_id}
                 >
                   <Card
-                    image={item.image}
-                    category={item.category}
+                    thumbnail={item.thumbnail}
+                    category={item.category_id}
                     cateId={item.cateId}
-                    price={item.price}
+                    price={item.course_price}
                     name={item.name}
                     rating={item.rating}
                     joiner={item.joiner}

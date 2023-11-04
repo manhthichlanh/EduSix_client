@@ -3,7 +3,7 @@ import StarFill from "./../commom/icons/StarFill";
 
 function Card(props) {
   // eslint-disable-next-line react/prop-types
-  const { image, category, price, name, rating, joiner, cateId } = props;
+  const { thumbnail, category, price, name, rating, joiner, cateId } = props;
   const categoryColors = {
     1: { backgroundColor: "#EFEFFD", color: "#5C59E8" },
     2: { backgroundColor: "#FDF1E8", color: "#D3620F" },
@@ -18,7 +18,7 @@ function Card(props) {
     <div className="rounded-lg w-full border border-[#e8e8e8] p-2 pb-3 select-none">
       {/* thumbnail */}
       <Link to="/" className="block w-full mb-4 overflow-hidden rounded">
-        <img className="object-cover w-full h-full" src={image} alt="" />
+        <img className="object-cover w-full h-full" src={thumbnail} alt={thumbnail} />
       </Link>
       {/* meta */}
       <div className="flex items-center justify-between mb-2">

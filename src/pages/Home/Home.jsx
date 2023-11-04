@@ -4,6 +4,8 @@ import CourseSlide from "../../components/Swiper/CourseSlide";
 import Input from "./../../components/input/Input";
 import classNames from "classnames";
 import BlogSlide from "../../components/Swiper/BlogSlide.";
+import { useQuery } from "react-query";
+import { apiServer } from "../../utils/http";
 // import { v4 } from "uuid";
 const cate = [
   {
@@ -155,6 +157,17 @@ const blog = [
 const filterPhography = data.filter((item) => item.cateId === 6);
 
 export default function Home() {
+  const getCourseData = async () => {
+    try {
+      const response = await apiServer.get("/course");
+      return response.data;
+    } catch (error) {
+      throw new Error("Error fetching course data");
+    }
+  };
+
+  // Use React Query to fetch and manage course data
+  const { data: courseData, isLoading, isError } = useQuery("courseData", getCourseData);
   return (
     <>
       <div className="w-full">
