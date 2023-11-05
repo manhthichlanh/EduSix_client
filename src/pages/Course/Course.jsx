@@ -13,62 +13,67 @@ import StarFill from "../../components/commom/icons/StarFill";
 import Button from "../../components/button/Button";
 import { useQuery } from "react-query";
 import { apiServer } from "../../utils/http";
-const data = [
-  {
-    image: "/course.png",
-    category: "Marketing",
-    cateId: 1,
-    price: 299000,
-    name: "Khóa học Thiết kế đồ họa cơ bản",
-    rating: 4.5,
-    joiner: 150,
-  },
-  {
-    image: "/course.png",
-    category: "Lập trình",
-    cateId: 2,
-    price: 499000,
-    name: "Khóa học Lập trình web JavaScript",
-    rating: 4.8,
-    joiner: 200,
-  },
-  {
-    image: "/course.png",
-    category: "Thiết kế đồ họa",
-    cateId: 3,
-    price: 0,
-    name: "Khóa học Quản lý doanh nghiệp",
-    rating: 4.2,
-    joiner: 120,
-  },
-  {
-    image: "/course.png",
-    category: "Ngôn ngữ",
-    cateId: 4,
-    price: 799000,
-    name: "Khóa học Quản lý doanh nghiệp",
-    rating: 4.2,
-    joiner: 120,
-  },
-  {
-    image: "/course.png",
-    category: "Tài chính",
-    cateId: 5,
-    price: 799000,
-    name: "Khóa học Quản lý doanh nghiệp",
-    rating: 4.2,
-    joiner: 120,
-  },
-  {
-    image: "/course.png",
-    category: "Photography",
-    cateId: 6,
-    price: 0,
-    name: "Khóa học Quản lý doanh nghiệp",
-    rating: 4.2,
-    joiner: 120,
-  },
-];
+import { useEffect } from "react";
+
+// let someVariable = 1000;
+// console.log(someVariable?.toLocaleString());
+
+// const data = [
+//   {
+//     image: "/course.png",
+//     category: "Marketing",
+//     cateId: 1,
+//     price: 299000,
+//     name: "Khóa học Thiết kế đồ họa cơ bản",
+//     rating: 4.5,
+//     joiner: 150,
+//   },
+//   {
+//     image: "/course.png",
+//     category: "Lập trình",
+//     cateId: 2,
+//     price: 499000,
+//     name: "Khóa học Lập trình web JavaScript",
+//     rating: 4.8,
+//     joiner: 200,
+//   },
+//   {
+//     image: "/course.png",
+//     category: "Thiết kế đồ họa",
+//     cateId: 3,
+//     price: 0,
+//     name: "Khóa học Quản lý doanh nghiệp",
+//     rating: 4.2,
+//     joiner: 120,
+//   },
+//   {
+//     image: "/course.png",
+//     category: "Ngôn ngữ",
+//     cateId: 4,
+//     price: 799000,
+//     name: "Khóa học Quản lý doanh nghiệp",
+//     rating: 4.2,
+//     joiner: 120,
+//   },
+//   {
+//     image: "/course.png",
+//     category: "Tài chính",
+//     cateId: 5,
+//     price: 799000,
+//     name: "Khóa học Quản lý doanh nghiệp",
+//     rating: 4.2,
+//     joiner: 120,
+//   },
+//   {
+//     image: "/course.png",
+//     category: "Photography",
+//     cateId: 6,
+//     price: 0,
+//     name: "Khóa học Quản lý doanh nghiệp",
+//     rating: 4.2,
+//     joiner: 120,
+//   },
+// ];
 
 const cate = [
   {
@@ -181,7 +186,6 @@ const PriceSlider = () => {
 export default function Course() {
   const [checkboxes, setCheckboxes] = useState([false, false]);
   const checkboxLabels = ["Có phí", "Miễn phí"];
-
   const handlePriceChange = (index) => {
     setCheckboxes((prevState) =>
       prevState.map((value, i) => (i === index ? !value : value))
@@ -210,7 +214,9 @@ export default function Course() {
       prevState.map((value, i) => (i === index ? !value : value))
     );
   };
-  const getCourseData = async () => {
+
+   // course
+   const getCourseData = async () => {
     try {
       const response = await apiServer.get("/course");
       return response.data;
@@ -221,6 +227,12 @@ export default function Course() {
 
   // Use React Query to fetch and manage course data
   const { data: courseData, isLoading, isError } = useQuery("courseData", getCourseData);
+  
+  // useEffect(() => {
+  //   console.log(courseData);
+  // },[courseData])
+
+  
   return (
     <>
       <div className="w-full">
@@ -307,15 +319,13 @@ export default function Course() {
                           </p>
                         </div>
                         <ChecvronUp
-                          className={`${
-                            open ? "rotate-180 transform" : ""
-                          } h-5 w-5`}
+                          className={`${open ? "rotate-180 transform" : ""
+                            } h-5 w-5`}
                         />
                       </Disclosure.Button>
                       <div
-                        className={`${
-                          open ? "block" : "hidden"
-                        } h-[1px] w-full bg-[#E9EAF0]`}
+                        className={`${open ? "block" : "hidden"
+                          } h-[1px] w-full bg-[#E9EAF0]`}
                       />
                       <Disclosure.Panel className="flex flex-col gap-6 py-4 mx-4">
                         <PriceSlider></PriceSlider>
@@ -338,22 +348,20 @@ export default function Course() {
                                 <label htmlFor={`checkbox-${index}`}>
                                   <span
                                     id=""
-                                    className={`ml-2 text-sm font-medium ${
-                                      checkboxes[index]
+                                    className={`ml-2 text-sm font-medium ${checkboxes[index]
                                         ? "text-[#FF6636] font-medium"
                                         : "text-[#4E5566] font-normal"
-                                    }`}
+                                      }`}
                                   >
                                     {label}
                                   </span>
                                 </label>
                               </div>
                               <div
-                                className={`text-xs font-medium ${
-                                  checkboxes[index]
+                                className={`text-xs font-medium ${checkboxes[index]
                                     ? "text-[#4E5566] font-medium"
                                     : "text-[#8C94A3] font-normal"
-                                }`}
+                                  }`}
                               >
                                 12345
                               </div>
@@ -383,15 +391,13 @@ export default function Course() {
                           </p>
                         </div>
                         <ChecvronUp
-                          className={`${
-                            open ? "rotate-180 transform" : ""
-                          } h-5 w-5`}
+                          className={`${open ? "rotate-180 transform" : ""
+                            } h-5 w-5`}
                         />
                       </Disclosure.Button>
                       <div
-                        className={`${
-                          open ? "block" : "hidden"
-                        } h-[1px] w-full bg-[#E9EAF0]`}
+                        className={`${open ? "block" : "hidden"
+                          } h-[1px] w-full bg-[#E9EAF0]`}
                       />
                       <Disclosure.Panel className="flex py-4 mx-4">
                         <div className=" flex flex-col gap-[10px]">
@@ -408,11 +414,10 @@ export default function Course() {
                                 onChange={() => handleCateChange(category.id)}
                               />
                               <span
-                                className={`text-sm font-medium ${
-                                  checkedItems[category.id]
+                                className={`text-sm font-medium ${checkedItems[category.id]
                                     ? "text-[#FF6636] font-medium"
                                     : "text-[#4E5566] font-normal"
-                                }`}
+                                  }`}
                               >
                                 {category.cateName}
                               </span>
@@ -442,15 +447,13 @@ export default function Course() {
                           </p>
                         </div>
                         <ChecvronUp
-                          className={`${
-                            open ? "rotate-180 transform" : ""
-                          } h-5 w-5`}
+                          className={`${open ? "rotate-180 transform" : ""
+                            } h-5 w-5`}
                         />
                       </Disclosure.Button>
                       <div
-                        className={`${
-                          open ? "block" : "hidden"
-                        } h-[1px] w-full bg-[#E9EAF0]`}
+                        className={`${open ? "block" : "hidden"
+                          } h-[1px] w-full bg-[#E9EAF0]`}
                       />
                       <Disclosure.Panel className="flex flex-col gap-[10px] pt-4 mx-4">
                         <div className=" flex flex-col gap-[10px] pb-11">
@@ -469,21 +472,19 @@ export default function Course() {
                                 />
                                 <StarFill width={20} height={20}></StarFill>
                                 <span
-                                  className={`text-sm font-medium ${
-                                    checkRating[index]
+                                  className={`text-sm font-medium ${checkRating[index]
                                       ? "text-[#FF6636] font-medium"
                                       : "text-[#4E5566] font-normal"
-                                  }`}
+                                    }`}
                                 >
                                   {label}
                                 </span>
                               </div>
                               <p
-                                className={`text-xs font-medium ${
-                                  checkRating[index]
+                                className={`text-xs font-medium ${checkRating[index]
                                     ? "text-[#4E5566] font-medium"
                                     : "text-[#8C94A3] font-normal"
-                                }`}
+                                  }`}
                               >
                                 12345
                               </p>
@@ -507,7 +508,7 @@ export default function Course() {
                   <Card
                     thumbnail={item.thumbnail}
                     category={item.category_id}
-                    cateId={item.cateId}
+                    cateId={item.category_id}
                     price={item.course_price}
                     name={item.name}
                     rating={item.rating}

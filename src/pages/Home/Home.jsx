@@ -6,6 +6,8 @@ import classNames from "classnames";
 import BlogSlide from "../../components/Swiper/BlogSlide.";
 import { useQuery } from "react-query";
 import { apiServer } from "../../utils/http";
+import { map } from "lodash";
+import { useEffect } from "react";
 // import { v4 } from "uuid";
 const cate = [
   {
@@ -157,6 +159,7 @@ const blog = [
 const filterPhography = data.filter((item) => item.cateId === 6);
 
 export default function Home() {
+  // course
   const getCourseData = async () => {
     try {
       const response = await apiServer.get("/course");
@@ -168,6 +171,25 @@ export default function Home() {
 
   // Use React Query to fetch and manage course data
   const { data: courseData, isLoading, isError } = useQuery("courseData", getCourseData);
+
+  // cate
+  const getCategoryData = async () => {
+    try {
+      const response = await apiServer.get("/category");
+      return response.data;
+    } catch (error) {
+      throw new Error("Error fetching course data");
+    }
+  };
+
+  // Use React Query to fetch and manage course data
+  const { data: categoryData, isLoadingCategory, isErrorCategory } = useQuery("categoryData", getCategoryData)
+  useEffect(() => {
+    if (categoryData && categoryData.length > 0)
+      console.log(
+        categoryData.filter(item => item.category_id == 1)[0].cate_name
+      );
+  }, [categoryData])
   return (
     <>
       <div className="w-full">
@@ -200,10 +222,10 @@ export default function Home() {
               </div>
             </div>
             <div className="flex flex-wrap gap-6 pt-10">
-              {cate?.map((cate, index) => (
+              {map(categoryData, (index) => (
                 <div className="" key={index}>
                   <Button
-                    text={cate.cateName}
+                    text={index.cate_name}
                     Class={classNames(
                       "text-[13px] font-medium text-[#333333] leading-4 uppercase",
                       "px-8 py-4 bg-white rounded-lg transition",
@@ -238,11 +260,11 @@ export default function Home() {
               <p className="font-semibold text-[24px]">Danh mục</p>
             </div>
             <div className="grid grid-cols-12 gap-6 lg:gap-6 md:gap-4">
-              {cate?.map((cate, index) => (
+              {map(categoryData, (index) => (
                 <CateCard
                   key={index}
-                  image={cate.image}
-                  cateName={cate.cateName}
+                  image={index.cate_logo}
+                  cateName={index.cate_name}
                 />
               ))}
             </div>
