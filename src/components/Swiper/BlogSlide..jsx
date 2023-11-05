@@ -1,14 +1,14 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
-import Card from "./../Card/Card";
 import { Navigation } from "swiper/modules";
 import classNames from "classnames";
 import Button from "../button/Button";
 import ChevronRight from "./../commom/icons/ChevronRight";
 import { map } from "lodash";
+import BlogCard from "../Card/BlogCard";
 
-// eslint-disable-next-line react/prop-types, no-unused-vars
-export default function CourseSlide({ prefixAction, data }) {
+// eslint-disable-next-line react/prop-types
+export default function BlogSlide({ prefixAction, data }) {
   return (
     <div className={`relative group ${prefixAction}`}>
       <Swiper
@@ -22,11 +22,11 @@ export default function CourseSlide({ prefixAction, data }) {
             spaceBetween: 20,
           },
           1024: {
-            slidesPerView: 3,
+            slidesPerView: 2,
             spaceBetween: 30,
           },
           1200: {
-            slidesPerView: 4,
+            slidesPerView: 3,
             spaceBetween: 30,
           },
         }}
@@ -37,14 +37,12 @@ export default function CourseSlide({ prefixAction, data }) {
       >
         {map(data, (item) => (
           <SwiperSlide key={item.id}>
-            <Card
+            <BlogCard
               image={item.image}
               category={item.category}
               cateId={item.cateId}
-              price={item.price}
-              name={item.name}
-              rating={item.rating}
-              joiner={item.joiner}
+              title={item.title}
+              comment={item.comment}
             />
           </SwiperSlide>
         ))}

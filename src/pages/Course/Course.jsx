@@ -177,7 +177,7 @@ const PriceSlider = () => {
   );
 };
 
-export default function CourseDetail() {
+export default function Course() {
   const [checkboxes, setCheckboxes] = useState([false, false]);
   const checkboxLabels = ["Có phí", "Miễn phí"];
 

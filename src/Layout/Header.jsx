@@ -1,17 +1,16 @@
 import { Fragment, useState } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
-import { Bars3Icon, XMarkIcon, BellIcon } from "@heroicons/react/24/outline";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { NavLink, Link } from "react-router-dom";
 import Button from "../components/button/Button";
 import Search from "../components/commom/icons/Search";
-
-
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function Header() {
+  // eslint-disable-next-line no-unused-vars
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const [menuItems, setMenuItems] = useState([
@@ -22,9 +21,9 @@ export default function Header() {
   ]);
 
   const handleMenuItemClick = (index) => {
-    const updatedMenuItems = menuItems.map((item, idx) => ({
+    const updatedMenuItems = menuItems.map((item, id) => ({
       ...item,
-      current: idx === index,
+      current: id === index,
     }));
     setMenuItems(updatedMenuItems);
   };
@@ -79,12 +78,17 @@ export default function Header() {
                 </div>
                 <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                   <div className="relative text-gray-600 hidden max-w-md mx-auto md:block sm:block">
-                    <input type="search" name="serch" placeholder="Tìm kiếm khóa học" className="bg-white h-10 px-4 pr-40 rounded-full border border-[#8d8d8d] text-sm focus:outline-none" />
-                    <button type="submit" className="absolute right-0 top-0 mt-2.5 mr-3">
-                      <Search
-                        width={20}
-                        height={20}
-                      ></Search>
+                    <input
+                      type="search"
+                      name="serch"
+                      placeholder="Tìm kiếm khóa học"
+                      className="bg-white h-10 px-4 pr-40 rounded-full border border-[#8d8d8d] text-sm focus:outline-none"
+                    />
+                    <button
+                      type="submit"
+                      className="absolute right-0 top-0 mt-2.5 mr-3"
+                    >
+                      <Search width={20} height={20}></Search>
                     </button>
                   </div>
                   <Button
@@ -105,7 +109,11 @@ export default function Header() {
             <Disclosure.Panel className="lg:hidden">
               <div className="px-2 pt-2 pb-3 space-y-1">
                 <div className="flex justify-center py-2">
-                  <img className="w-auto h-8" src="/images/logo.png" alt="Logo" />
+                  <img
+                    className="w-auto h-8"
+                    src="/images/logo.png"
+                    alt="Logo"
+                  />
                 </div>
                 {menuItems.map((item, index) => (
                   <Link
@@ -124,12 +132,17 @@ export default function Header() {
                   </Link>
                 ))}
                 <div className="relative text-gray-600 mx-auto w-max sm:hidden pt-3 lg:pt-0 md:pt-0 sm:pt-3">
-                  <input type="search" name="serch" placeholder="Tìm kiếm khóa học" className="bg-white h-10 px-4 pr-40 rounded-full border border-[#8d8d8d] text-sm focus:outline-none" />
-                  <button type="submit" class="absolute right-0 top-0 mt-2.5 mr-3 pt-3 lg:pt-0 md:pt-0 sm:pt-3">
-                    <Search
-                      width={20}
-                      height={20}
-                    ></Search>
+                  <input
+                    type="search"
+                    name="serch"
+                    placeholder="Tìm kiếm khóa học"
+                    className="bg-white h-10 px-4 pr-40 rounded-full border border-[#8d8d8d] text-sm focus:outline-none"
+                  />
+                  <button
+                    type="submit"
+                    className="absolute right-0 top-0 mt-2.5 mr-3 pt-3 lg:pt-0 md:pt-0 sm:pt-3"
+                  >
+                    <Search width={20} height={20}></Search>
                   </button>
                 </div>
               </div>
@@ -191,17 +204,24 @@ export default function Header() {
                 </div>
                 <div className="absolute inset-y-0 right-0 flex items-center gap-4 pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                   <div className="relative text-gray-600 hidden max-w-md mx-auto md:block sm:block">
-                    <input type="search" name="serch" placeholder="Tìm kiếm khóa học" className="bg-white h-10 px-4 pr-40 rounded-full border border-[#8d8d8d] text-sm focus:outline-none" />
-                    <button type="submit" class="absolute right-0 top-0 mt-2.5 mr-3">
-                      <Search
-                        width={20}
-                        height={20}
-                      ></Search>
+                    <input
+                      type="search"
+                      name="serch"
+                      placeholder="Tìm kiếm khóa học"
+                      className="bg-white h-10 px-4 pr-40 rounded-full border border-[#8d8d8d] text-sm focus:outline-none"
+                    />
+                    <button
+                      type="submit"
+                      className="absolute right-0 top-0 mt-2.5 mr-3"
+                    >
+                      <Search width={20} height={20}></Search>
                     </button>
                   </div>
 
                   <NavLink to="#">
-                    <p className="text-[14px] text-[#808080] font-medium">Khóa học của tôi</p>
+                    <p className="text-[14px] text-[#808080] font-medium">
+                      Khóa học của tôi
+                    </p>
                   </NavLink>
 
                   {/* Profile dropdown */}
@@ -231,7 +251,10 @@ export default function Header() {
                           {({ active }) => (
                             <a
                               href="#"
-                              className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                              className={classNames(
+                                active ? "bg-gray-100" : "",
+                                "block px-4 py-2 text-sm text-gray-700"
+                              )}
                             >
                               Trang cá nhân
                             </a>
@@ -241,7 +264,10 @@ export default function Header() {
                           {({ active }) => (
                             <a
                               href="#"
-                              className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                              className={classNames(
+                                active ? "bg-gray-100" : "",
+                                "block px-4 py-2 text-sm text-gray-700"
+                              )}
                             >
                               Viết Blog
                             </a>
@@ -251,7 +277,10 @@ export default function Header() {
                           {({ active }) => (
                             <a
                               href="#"
-                              className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                              className={classNames(
+                                active ? "bg-gray-100" : "",
+                                "block px-4 py-2 text-sm text-gray-700"
+                              )}
                             >
                               Đăng xuất
                             </a>
@@ -266,7 +295,11 @@ export default function Header() {
             <Disclosure.Panel className="lg:hidden">
               <div className="px-2 pt-2 pb-3 space-y-1">
                 <div className="flex justify-center py-2">
-                  <img className="w-auto h-8" src="/images/logo.png" alt="Logo" />
+                  <img
+                    className="w-auto h-8"
+                    src="/images/logo.png"
+                    alt="Logo"
+                  />
                 </div>
                 {menuItems.map((item, index) => (
                   <Link
@@ -285,12 +318,17 @@ export default function Header() {
                   </Link>
                 ))}
                 <div className="relative text-gray-600 mx-auto w-max sm:hidden pt-3 lg:pt-0 md:pt-0 sm:pt-3">
-                  <input type="search" name="serch" placeholder="Tìm kiếm khóa học" className="bg-white h-10 px-4 pr-40 rounded-full border border-[#8d8d8d] text-sm focus:outline-none" />
-                  <button type="submit" className="absolute right-0 top-0 mt-2.5 mr-3 pt-3 lg:pt-0 md:pt-0 sm:pt-3">
-                    <Search
-                      width={20}
-                      height={20}
-                    ></Search>
+                  <input
+                    type="search"
+                    name="serch"
+                    placeholder="Tìm kiếm khóa học"
+                    className="bg-white h-10 px-4 pr-40 rounded-full border border-[#8d8d8d] text-sm focus:outline-none"
+                  />
+                  <button
+                    type="submit"
+                    className="absolute right-0 top-0 mt-2.5 mr-3 pt-3 lg:pt-0 md:pt-0 sm:pt-3"
+                  >
+                    <Search width={20} height={20}></Search>
                   </button>
                 </div>
               </div>
@@ -300,10 +338,5 @@ export default function Header() {
       </Disclosure>
     </>
   );
-  return (
-
-    <>
-      {isLoggedIn ? renderLoggedInMenu : renderLoggedOutMenu}
-    </>
-  );
+  return <>{isLoggedIn ? renderLoggedInMenu : renderLoggedOutMenu}</>;
 }
