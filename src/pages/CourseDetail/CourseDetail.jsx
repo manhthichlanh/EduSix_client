@@ -8,62 +8,62 @@ import { useLocation } from "react-router-dom";
 import { useQuery } from "react-query";
 import { apiServer } from "../../utils/http";
 
-const data = [
-  {
-    image: "/course.png",
-    category: "Marketing",
-    cateId: 1,
-    price: 299000,
-    name: "Khóa học Thiết kế đồ họa cơ bản",
-    rating: 4.5,
-    joiner: 150,
-  },
-  {
-    image: "/course.png",
-    category: "Lập trình",
-    cateId: 2,
-    price: 499000,
-    name: "Khóa học Lập trình web JavaScript",
-    rating: 4.8,
-    joiner: 200,
-  },
-  {
-    image: "/course.png",
-    category: "Thiết kế đồ họa",
-    cateId: 3,
-    price: 0,
-    name: "Khóa học Quản lý doanh nghiệp",
-    rating: 4.2,
-    joiner: 120,
-  },
-  {
-    image: "/course.png",
-    category: "Ngôn ngữ",
-    cateId: 4,
-    price: 799000,
-    name: "Khóa học Quản lý doanh nghiệp",
-    rating: 4.2,
-    joiner: 120,
-  },
-  {
-    image: "/course.png",
-    category: "Tài chính",
-    cateId: 5,
-    price: 799000,
-    name: "Khóa học Quản lý doanh nghiệp",
-    rating: 4.2,
-    joiner: 120,
-  },
-  {
-    image: "/course.png",
-    category: "Photography",
-    cateId: 6,
-    price: 0,
-    name: "Khóa học Quản lý doanh nghiệp",
-    rating: 4.2,
-    joiner: 120,
-  },
-];
+// const data = [
+//   {
+//     image: "/course.png",
+//     category: "Marketing",
+//     cateId: 1,
+//     price: 299000,
+//     name: "Khóa học Thiết kế đồ họa cơ bản",
+//     rating: 4.5,
+//     joiner: 150,
+//   },
+//   {
+//     image: "/course.png",
+//     category: "Lập trình",
+//     cateId: 2,
+//     price: 499000,
+//     name: "Khóa học Lập trình web JavaScript",
+//     rating: 4.8,
+//     joiner: 200,
+//   },
+//   {
+//     image: "/course.png",
+//     category: "Thiết kế đồ họa",
+//     cateId: 3,
+//     price: 0,
+//     name: "Khóa học Quản lý doanh nghiệp",
+//     rating: 4.2,
+//     joiner: 120,
+//   },
+//   {
+//     image: "/course.png",
+//     category: "Ngôn ngữ",
+//     cateId: 4,
+//     price: 799000,
+//     name: "Khóa học Quản lý doanh nghiệp",
+//     rating: 4.2,
+//     joiner: 120,
+//   },
+//   {
+//     image: "/course.png",
+//     category: "Tài chính",
+//     cateId: 5,
+//     price: 799000,
+//     name: "Khóa học Quản lý doanh nghiệp",
+//     rating: 4.2,
+//     joiner: 120,
+//   },
+//   {
+//     image: "/course.png",
+//     category: "Photography",
+//     cateId: 6,
+//     price: 0,
+//     name: "Khóa học Quản lý doanh nghiệp",
+//     rating: 4.2,
+//     joiner: 120,
+//   },
+// ];
 
 // const getCourseDetail = async () => {
 //   try {
@@ -77,10 +77,29 @@ const data = [
 
 export default function CourseDetail() {
   const { state } = useLocation();
-  const { course_id } = state;
+  // const { course_id } = state;
+  const course_id = state.course_id
   console.log(course_id)
   const [isBoxCro, setIsBoxCro] = useState(true);
+  const { data: courseDetails, isError, isLoading } = useQuery(
+    ['courseDetails', course_id],
+    () => apiServer.get(`/course/${course_id}`),
+    {
+      enabled: !!course_id, // Only run query if course_id is available
+    }
+  );
 
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (isError) {
+    return <div>Error fetching course details.</div>;
+  }
+
+  // Assuming the API response has a structure like: { title: 'Course Title', content: 'Course Content' }
+  const { name, content } = courseDetails.data;
+  console.log(name, content)
   const handleScroll = () => {
     const element = document.getElementById("box-list-course");
     const triggerPosition = element.getBoundingClientRect().top;
@@ -134,8 +153,8 @@ export default function CourseDetail() {
               </div>
             </div>
             <div className="py-20">
-              <p className="font-semibold text-[36px] pb-2">title</p>
-              <p className="font-medium text-[16px] text-[#8d8d8d]">content</p>
+              <p className="font-semibold text-[36px] pb-2">{name}</p>
+              <p className="font-medium text-[16px] text-[#8d8d8d]">{content}</p>
             </div>
 
             <div className="w-full">
