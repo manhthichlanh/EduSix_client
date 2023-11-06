@@ -7,6 +7,8 @@ import Button from "../button/Button";
 import ChevronRight from "./../commom/icons/ChevronRight";
 import { map } from "lodash";
 
+// cate
+
 // eslint-disable-next-line react/prop-types, no-unused-vars
 export default function CourseSlide({ prefixAction, data }) {
   return (
@@ -35,16 +37,17 @@ export default function CourseSlide({ prefixAction, data }) {
           nextEl: `.${prefixAction} > .${prefixAction}-next`,
         }}
       >
-        {map(data, (item) => (
-          <SwiperSlide key={item.id}>
+        {map(data, (item, index) => (
+          <SwiperSlide key={index}>
             <Card
-              image={item.image}
-              category={item.category}
-              cateId={item.cateId}
-              price={item.price}
+              course_id={item.course_id}
+              thumbnail={item.thumbnail}
+              category={item.cate_name}
+              cateId={item.category_id}
+              price={item.course_price}
               name={item.name}
-              rating={item.rating}
-              joiner={item.joiner}
+              rating={123}
+              joiner={456}
             />
           </SwiperSlide>
         ))}

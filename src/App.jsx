@@ -23,6 +23,7 @@ import Blog from "./pages/Blog/Blog";
 //||Components
 function App() {
   return (
+<<<<<<< HEAD
 
 
       <BrowserRouter>
@@ -33,6 +34,16 @@ function App() {
             <Route path="/course-detail" element={<CourseDetail />} />
             <Route path="/course" element={<Course />} />
             <Route path="/about" element={<About />} />
+=======
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route path="*" element={<NoPage />} />
+          <Route index element={<Home />} />
+          <Route path="/course-detail" element={<CourseDetail />} />
+          <Route path="/course" element={<Course />} />
+          <Route path="/about" element={<About />} />
+>>>>>>> cd09bb7cf88a63a3d99cae4db178444c5d77905c
           <Route path="/blog" element={<Blog />} />
           <Route path="/create-bLog" element={<CreateBLog />} />
           <Route path="/blog-detail" element={<BlogDetail />} />
