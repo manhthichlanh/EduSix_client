@@ -152,7 +152,7 @@ export default function About() {
         </div>
       </div>
 
-      <div className="flex items-center bg-[url('/images/background.png')] bg-no-repeat bg-right pt-10 pb-20">
+      <div className="flex items-center bg-[url('/images/background.png')] bg-no-repeat bg-right py-20">
         <div className="grid grid-cols-12 h-full items-center gap-7 lg:mx-20 mx-10">
           <div className="col-span-12 text-center lg:hidden block z-1">
             <p className="text-[#29281E] text-sm font-medium">

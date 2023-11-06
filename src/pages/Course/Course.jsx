@@ -225,6 +225,13 @@ export default function Course() {
     }
   };
 
+  useEffect(() => {
+    if (categoryData && categoryData.length > 0)
+      console.log(
+        categoryData.filter(item => item.category_id == 1)[0].cate_name
+      );
+  }, [categoryData])
+
   // Use React Query to fetch and manage course data
   const { data: courseData, isLoading, isError } = useQuery("courseData", getCourseData);
   
@@ -232,7 +239,18 @@ export default function Course() {
   //   console.log(courseData);
   // },[courseData])
 
-  
+   // cate
+   const getCategoryData = async () => {
+    try {
+      const response = await apiServer.get("/category");
+      return response.data;
+    } catch (error) {
+      throw new Error("Error fetching course data");
+    }
+  };
+
+  // Use React Query to fetch and manage course data
+  const { data: categoryData, isLoadingCategory, isErrorCategory } = useQuery("categoryData", getCategoryData)
   return (
     <>
       <div className="w-full">
@@ -401,25 +419,25 @@ export default function Course() {
                       />
                       <Disclosure.Panel className="flex py-4 mx-4">
                         <div className=" flex flex-col gap-[10px]">
-                          {cate.map((category) => (
+                          {map(categoryData,(category) => (
                             <label
-                              key={category.id}
+                              key={category.category_id}
                               className="flex items-center space-x-2"
                             >
                               <input
                                 type="checkbox"
                                 className="w-5 h-5 form-checkbox accent-[#FF6636]"
-                                id={`category-${category.id}`}
-                                checked={checkedItems[category.id] || false}
-                                onChange={() => handleCateChange(category.id)}
+                                id={`category-${category.category_id}`}
+                                checked={checkedItems[category.category_id] || false}
+                                onChange={() => handleCateChange(category.category_id)}
                               />
                               <span
-                                className={`text-sm font-medium ${checkedItems[category.id]
+                                className={`text-sm font-medium ${checkedItems[category.category_id]
                                     ? "text-[#FF6636] font-medium"
                                     : "text-[#4E5566] font-normal"
                                   }`}
                               >
-                                {category.cateName}
+                                {category.cate_name}
                               </span>
                             </label>
                           ))}
@@ -508,7 +526,7 @@ export default function Course() {
                   <Card
                     thumbnail={item.thumbnail}
                     category={item.category_id}
-                    cateId={item.category_id}
+                    cateId={item.cate_name}
                     price={item.course_price}
                     name={item.name}
                     rating={item.rating}

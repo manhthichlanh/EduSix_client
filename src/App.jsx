@@ -29,10 +29,11 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
           <Route path="*" element={<NoPage />} />
+          <Route index element={<Home />} />
           <Route path="/course-detail" element={<CourseDetail />} />
           <Route path="/course" element={<Course />} />
+          <Route path="/course-video" element={<CourseVideo />} />
           <Route path="/about" element={<About />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/create-bLog" element={<CreateBLog />} />
@@ -47,7 +48,7 @@ function App() {
             />
           </Route>
         </Route>
-        <Route path="/course-video" element={<CourseVideo />} />
+
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
