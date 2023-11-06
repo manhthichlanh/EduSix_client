@@ -40,6 +40,7 @@ export default function CourseSlide({ prefixAction, data }) {
         {map(data, (item, index) => (
           <SwiperSlide key={index}>
             <Card
+              course_id={item.course_id}
               thumbnail={item.thumbnail}
               category={item.cate_name}
               cateId={item.category_id}
