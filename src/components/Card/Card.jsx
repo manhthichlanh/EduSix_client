@@ -1,24 +1,44 @@
+/* eslint-disable react/prop-types */
 import { Link } from "react-router-dom";
 import StarFill from "./../commom/icons/StarFill";
+// import { serverEndpoint } from "../../utils/http";
 
 function Card(props) {
-  // eslint-disable-next-line react/prop-types
-  const { thumbnail, category, price, name, rating, joiner, cateId } = props;
+  const {
+    thumbnail,
+    category,
+    price,
+    name,
+    rating,
+    joiner,
+    cateId,
+    course_id,
+  } = props;
+
+  // console.log(categoryData);
   const categoryColors = {
-    1: { backgroundColor: "#EFEFFD", color: "#5C59E8" },
-    2: { backgroundColor: "#FDF1E8", color: "#D3620F" },
-    3: { backgroundColor: "#F0F1F3", color: "#667085" },
-    4: { backgroundColor: "#E7F4EE", color: "#15711F" },
-    5: { backgroundColor: "#ECEFFF", color: "#4462FE" },
-    6: { backgroundColor: "#FEEDEC", color: "#882929" },
+    2: { backgroundColor: "#EFEFFD", color: "#5C59E8" },
+    3: { backgroundColor: "#FDF1E8", color: "#D3620F" },
+    4: { backgroundColor: "#F0F1F3", color: "#667085" },
+    5: { backgroundColor: "#E7F4EE", color: "#15711F" },
+    6: { backgroundColor: "#ECEFFF", color: "#4462FE" },
+    7: { backgroundColor: "#FEEDEC", color: "#882929" },
   };
   const colors = categoryColors[cateId] || {};
 
   return (
     <div className="rounded-lg w-full border border-[#e8e8e8] p-2 pb-3 select-none">
       {/* thumbnail */}
-      <Link to="/" className="block w-full mb-4 overflow-hidden rounded">
-        <img className="object-cover w-full h-full" src={thumbnail} alt={thumbnail} />
+      <Link
+        to={`/course/${course_id}`}
+        className="block w-full mb-4 overflow-hidden rounded"
+        state={{ course_id }}
+      >
+        <img
+          className="object-cover w-full h-full"
+          src={`${`http://14.225.198.206:8080/`}course/thumbnail/${thumbnail}`}
+          alt={thumbnail}
+        />
       </Link>
       {/* meta */}
       <div className="flex items-center justify-between mb-2">
@@ -33,7 +53,7 @@ function Card(props) {
           {category}
         </Link>
         <p className="text-base font-semibold text-[#FF6636]">
-          {price === 0 ? "Miễn phí" : price.toLocaleString("vi-VN") + "đ"}
+          {price === 0 ? "Miễn phí" : price?.toLocaleString("vi-VN") + "đ"}
         </p>
       </div>
       {/* name */}

@@ -4,6 +4,9 @@ import Vecter from "../../components/commom/icons/Vector";
 import Button from "../../components/button/Button";
 import Arcordition from "../../components/Dropdown/Arcordion";
 import CourseSlide from "../../components/Swiper/CourseSlide";
+// import { useQuery } from "react-query";
+// import { apiServer } from "../../utils/http";
+
 const data = [
   {
     image: "/course.png",
@@ -60,8 +63,8 @@ const data = [
     joiner: 120,
   },
 ];
+
 export default function CourseDetail() {
-  //   const [active, setActive] = useState([]);
   const [isBoxCro, setIsBoxCro] = useState(true);
 
   const handleScroll = () => {
@@ -86,7 +89,7 @@ export default function CourseDetail() {
     <>
       <div className="px-20">
         <div className="relative grid justify-between gap-6 lg:grid-cols-12">
-          <div className="relative lg:col-span-8 md:col-span-12 ">
+          <div className="relative lg:col-span-8 md:col-span-12">
             <div className="py-5 text-sm breadcrumbs">
               <ul>
                 <li>
@@ -117,13 +120,8 @@ export default function CourseDetail() {
               </div>
             </div>
             <div className="py-20">
-              <p className="font-semibold text-[36px] pb-2">Lập trình cơ bản</p>
-              <p className="font-medium text-[16px] text-[#8d8d8d]">
-                Khóa học lập trình C++ từ cơ bản tới nâng cao dành cho người mới
-                bắt đầu. Mục tiêu của khóa học này nhằm giúp các bạn nắm được
-                các khái niệm căn cơ của lập trình, giúp các bạn có nền tảng
-                vững chắc để chinh phục con đường trở thành một lập trình viên.
-              </p>
+              <p className="font-semibold text-[36px] pb-2">title</p>
+              <p className="font-medium text-[16px] text-[#8d8d8d]">content</p>
             </div>
 
             <div className="w-full">
