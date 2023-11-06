@@ -11,63 +11,69 @@ import ChecvronUp from "../../components/commom/icons/ChevronUp";
 import { useState } from "react";
 import StarFill from "../../components/commom/icons/StarFill";
 import Button from "../../components/button/Button";
+import { useQuery } from "react-query";
+import { apiServer } from "../../utils/http";
+// import { useEffect } from "react";
 
-const data = [
-  {
-    image: "/course.png",
-    category: "Marketing",
-    cateId: 1,
-    price: 299000,
-    name: "Khóa học Thiết kế đồ họa cơ bản",
-    rating: 4.5,
-    joiner: 150,
-  },
-  {
-    image: "/course.png",
-    category: "Lập trình",
-    cateId: 2,
-    price: 499000,
-    name: "Khóa học Lập trình web JavaScript",
-    rating: 4.8,
-    joiner: 200,
-  },
-  {
-    image: "/course.png",
-    category: "Thiết kế đồ họa",
-    cateId: 3,
-    price: 0,
-    name: "Khóa học Quản lý doanh nghiệp",
-    rating: 4.2,
-    joiner: 120,
-  },
-  {
-    image: "/course.png",
-    category: "Ngôn ngữ",
-    cateId: 4,
-    price: 799000,
-    name: "Khóa học Quản lý doanh nghiệp",
-    rating: 4.2,
-    joiner: 120,
-  },
-  {
-    image: "/course.png",
-    category: "Tài chính",
-    cateId: 5,
-    price: 799000,
-    name: "Khóa học Quản lý doanh nghiệp",
-    rating: 4.2,
-    joiner: 120,
-  },
-  {
-    image: "/course.png",
-    category: "Photography",
-    cateId: 6,
-    price: 0,
-    name: "Khóa học Quản lý doanh nghiệp",
-    rating: 4.2,
-    joiner: 120,
-  },
-];
+// let someVariable = 1000;
+// console.log(someVariable?.toLocaleString());
+
+// const data = [
+//   {
+//     image: "/course.png",
+//     category: "Marketing",
+//     cateId: 1,
+//     price: 299000,
+//     name: "Khóa học Thiết kế đồ họa cơ bản",
+//     rating: 4.5,
+//     joiner: 150,
+//   },
+//   {
+//     image: "/course.png",
+//     category: "Lập trình",
+//     cateId: 2,
+//     price: 499000,
+//     name: "Khóa học Lập trình web JavaScript",
+//     rating: 4.8,
+//     joiner: 200,
+//   },
+//   {
+//     image: "/course.png",
+//     category: "Thiết kế đồ họa",
+//     cateId: 3,
+//     price: 0,
+//     name: "Khóa học Quản lý doanh nghiệp",
+//     rating: 4.2,
+//     joiner: 120,
+//   },
+//   {
+//     image: "/course.png",
+//     category: "Ngôn ngữ",
+//     cateId: 4,
+//     price: 799000,
+//     name: "Khóa học Quản lý doanh nghiệp",
+//     rating: 4.2,
+//     joiner: 120,
+//   },
+//   {
+//     image: "/course.png",
+//     category: "Tài chính",
+//     cateId: 5,
+//     price: 799000,
+//     name: "Khóa học Quản lý doanh nghiệp",
+//     rating: 4.2,
+//     joiner: 120,
+//   },
+//   {
+//     image: "/course.png",
+//     category: "Photography",
+//     cateId: 6,
+//     price: 0,
+//     name: "Khóa học Quản lý doanh nghiệp",
+//     rating: 4.2,
+//     joiner: 120,
+//   },
+// ];
 
 const cate = [
   {
@@ -180,7 +186,6 @@ const PriceSlider = () => {
 export default function Course() {
   const [checkboxes, setCheckboxes] = useState([false, false]);
   const checkboxLabels = ["Có phí", "Miễn phí"];
-
   const handlePriceChange = (index) => {
     setCheckboxes((prevState) =>
       prevState.map((value, i) => (i === index ? !value : value))
@@ -209,6 +214,23 @@ export default function Course() {
       prevState.map((value, i) => (i === index ? !value : value))
     );
   };
+
+  // course
+  const getCourseData = async () => {
+    try {
+      const response = await apiServer.get("/course");
+      return response.data;
+    } catch (error) {
+      throw new Error("Error fetching course data");
+    }
+  };
+
+  const {
+    data: courseData,
+    isLoading,
+    isError,
+  } = useQuery("courseData", getCourseData);
+
   return (
     <>
       <div className="w-full">
@@ -487,16 +509,16 @@ export default function Course() {
           </div>
           <div className="col-span-12 lg:col-span-9 justify-between items-center flex flex-col">
             <div className="grid grid-cols-12 gap-6">
-              {map(data, (item) => (
+              {map(courseData, (item) => (
                 <div
                   className="col-span-12 lg:col-span-4 md:col-span-6"
-                  key={item.id}
+                  key={item?.course_id}
                 >
                   <Card
-                    image={item.image}
-                    category={item.category}
-                    cateId={item.cateId}
-                    price={item.price}
+                    thumbnail={item.thumbnail}
+                    category={item.cate_name}
+                    cateId={item.category_id}
+                    price={item.course_price}
                     name={item.name}
                     rating={item.rating}
                     joiner={item.joiner}

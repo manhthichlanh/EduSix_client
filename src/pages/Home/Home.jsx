@@ -4,6 +4,9 @@ import CourseSlide from "../../components/Swiper/CourseSlide";
 import Input from "./../../components/input/Input";
 import classNames from "classnames";
 import BlogSlide from "../../components/Swiper/BlogSlide.";
+import { useQuery } from "react-query";
+import { apiServer } from "../../utils/http";
+import { map } from "lodash";
 // import { v4 } from "uuid";
 const cate = [
   {
@@ -35,69 +38,6 @@ const cate = [
     id: 6,
     image: "images/04.png",
     cateName: "Photography",
-  },
-];
-
-const data = [
-  {
-    id: 1,
-    image: "/course.png",
-    category: "Marketing",
-    cateId: 1,
-    price: 299000,
-    name: "Khóa học Thiết kế đồ họa cơ bản",
-    rating: 4.5,
-    joiner: 150,
-  },
-  {
-    id: 2,
-    image: "/course.png",
-    category: "Lập trình",
-    cateId: 2,
-    price: 499000,
-    name: "Khóa học Lập trình web JavaScript",
-    rating: 4.8,
-    joiner: 200,
-  },
-  {
-    id: 3,
-    image: "/course.png",
-    category: "Thiết kế đồ họa",
-    cateId: 3,
-    price: 0,
-    name: "Khóa học Quản lý doanh nghiệp",
-    rating: 4.2,
-    joiner: 120,
-  },
-  {
-    id: 4,
-    image: "/course.png",
-    category: "Ngôn ngữ",
-    cateId: 4,
-    price: 799000,
-    name: "Khóa học Quản lý doanh nghiệp",
-    rating: 4.2,
-    joiner: 120,
-  },
-  {
-    id: 5,
-    image: "/course.png",
-    category: "Tài chính",
-    cateId: 5,
-    price: 799000,
-    name: "Khóa học Quản lý doanh nghiệp",
-    rating: 4.2,
-    joiner: 120,
-  },
-  {
-    id: 6,
-    image: "/course.png",
-    category: "Photography",
-    cateId: 6,
-    price: 0,
-    name: "Khóa học Quản lý doanh nghiệp",
-    rating: 4.2,
-    joiner: 120,
   },
 ];
 
@@ -152,9 +92,43 @@ const blog = [
   },
 ];
 
-const filterPhography = data.filter((item) => item.cateId === 6);
-
+// const filterPhography = data.filter((item) => item.cateId === 6);
+const getCategoryData = async () => {
+  try {
+    const response = await apiServer.get("/category");
+    console.log("cóa");
+    return response.data;
+  } catch (error) {
+    throw new Error("Error fetching course data");
+  }
+};
+// course
+const getCourseData = async () => {
+  try {
+    const response1 = await apiServer.get("/course");
+    const course = response1.data;
+    return course;
+  } catch (error) {
+    throw new Error("Error fetching course data");
+  }
+};
 export default function Home() {
+  // Use React Query to fetch and manage course data
+  const {
+    data: courseData,
+    isLoading,
+    isError,
+  } = useQuery("courseData", getCourseData);
+  // cate
+  // Use React Query to fetch and manage course data
+  const {
+    data: categoryData,
+    isLoadingCategory,
+    isErrorCategory,
+  } = useQuery("categoryData", getCategoryData);
+
+  // console.log(categoryData);
+  console.log(courseData);
   return (
     <>
       <div className="w-full">
@@ -187,10 +161,10 @@ export default function Home() {
               </div>
             </div>
             <div className="flex flex-wrap gap-6 pt-10">
-              {cate?.map((cate, index) => (
+              {map(categoryData, (item, index) => (
                 <div className="" key={index}>
                   <Button
-                    text={cate.cateName}
+                    text={item.cate_name}
                     Class={classNames(
                       "text-[13px] font-medium text-[#333333] leading-4 uppercase",
                       "px-8 py-4 bg-white rounded-lg transition",
@@ -216,8 +190,9 @@ export default function Home() {
                 }
               ></Button>
             </div>
+
             <div className="">
-              <CourseSlide prefixAction={"trending"} data={data} />
+              <CourseSlide prefixAction={"trending"} data={courseData} />
             </div>
           </div>
           <div className="my-[100px] lg:col-span-4 md:col-span-12 ">
@@ -225,11 +200,11 @@ export default function Home() {
               <p className="font-semibold text-[24px]">Danh mục</p>
             </div>
             <div className="grid grid-cols-12 gap-6 lg:gap-6 md:gap-4">
-              {cate?.map((cate, index) => (
+              {map(categoryData, (item, index) => (
                 <CateCard
                   key={index}
-                  image={cate.image}
-                  cateName={cate.cateName}
+                  image={item.logo_cate}
+                  cateName={item.cate_name}
                 />
               ))}
             </div>
@@ -245,7 +220,7 @@ export default function Home() {
               ></Button>
             </div>
             <div className="">
-              <CourseSlide prefixAction={"newest"} data={data} />
+              {/* <CourseSlide prefixAction={"newest"} data={data} /> */}
             </div>
           </div>
           <div className="my-20 lg:col-span-4 md:col-span-12">
@@ -261,10 +236,10 @@ export default function Home() {
               ></Button>
             </div>
             <div className="">
-              <CourseSlide
+              {/* <CourseSlide
                 prefixAction={"photography"}
                 data={filterPhography}
-              />
+              /> */}
             </div>
           </div>
           <div className="my-20 lg:col-span-4 md:col-span-12">

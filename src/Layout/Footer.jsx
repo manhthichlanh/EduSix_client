@@ -1,5 +1,5 @@
 import Instagram from "../components/commom/icons/Instagram";
-import Facebook from "../components/commom/icons/Facebook";
+import Facebook2 from "../components/commom/icons/Facebook2";
 import Linkedin from "../components/commom/icons/Linkedin";
 import Twitter from "../components/commom/icons/Twitter";
 export default function Footer(props) {
@@ -17,7 +17,7 @@ export default function Footer(props) {
             </p>
             <div className="flex items-center gap-4">
               <Instagram className="" width={32} height={32}></Instagram>
-              <Facebook className="" width={32} height={32}></Facebook>
+              <Facebook2 className="" width={32} height={32}></Facebook2>
               <Linkedin className="" width={32} height={32}></Linkedin>
               <Twitter width={32} height={32}></Twitter>
             </div>

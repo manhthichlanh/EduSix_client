@@ -89,7 +89,6 @@ const CourseVideo = () => {
         },
       ],
     },
-    // Add more top-level comments with their respective replies
   ];
 
   const toggleAnHienSubMenu = () => {
