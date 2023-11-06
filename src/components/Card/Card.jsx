@@ -30,7 +30,7 @@ function Card(props) {
     <div className="rounded-lg w-full border border-[#e8e8e8] p-2 pb-3 select-none">
       {/* thumbnail */}
       <Link
-        to={`/course-detail/${course_id}`}
+        to={`/course-detail?courseId=${course_id}`}
         className="block w-full mb-4 overflow-hidden rounded"
         state={{ course_id }}
       >

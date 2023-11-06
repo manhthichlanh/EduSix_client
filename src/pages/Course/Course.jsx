@@ -317,15 +317,13 @@ export default function Course() {
                           </p>
                         </div>
                         <ChecvronUp
-                          className={`${
-                            open ? "rotate-180 transform" : ""
-                          } h-5 w-5`}
+                          className={`${open ? "rotate-180 transform" : ""
+                            } h-5 w-5`}
                         />
                       </Disclosure.Button>
                       <div
-                        className={`${
-                          open ? "block" : "hidden"
-                        } h-[1px] w-full bg-[#E9EAF0]`}
+                        className={`${open ? "block" : "hidden"
+                          } h-[1px] w-full bg-[#E9EAF0]`}
                       />
                       <Disclosure.Panel className="flex flex-col gap-6 py-4 mx-4">
                         <PriceSlider></PriceSlider>
@@ -348,22 +346,20 @@ export default function Course() {
                                 <label htmlFor={`checkbox-${index}`}>
                                   <span
                                     id=""
-                                    className={`ml-2 text-sm font-medium ${
-                                      checkboxes[index]
+                                    className={`ml-2 text-sm font-medium ${checkboxes[index]
                                         ? "text-[#FF6636] font-medium"
                                         : "text-[#4E5566] font-normal"
-                                    }`}
+                                      }`}
                                   >
                                     {label}
                                   </span>
                                 </label>
                               </div>
                               <div
-                                className={`text-xs font-medium ${
-                                  checkboxes[index]
+                                className={`text-xs font-medium ${checkboxes[index]
                                     ? "text-[#4E5566] font-medium"
                                     : "text-[#8C94A3] font-normal"
-                                }`}
+                                  }`}
                               >
                                 12345
                               </div>
@@ -393,15 +389,13 @@ export default function Course() {
                           </p>
                         </div>
                         <ChecvronUp
-                          className={`${
-                            open ? "rotate-180 transform" : ""
-                          } h-5 w-5`}
+                          className={`${open ? "rotate-180 transform" : ""
+                            } h-5 w-5`}
                         />
                       </Disclosure.Button>
                       <div
-                        className={`${
-                          open ? "block" : "hidden"
-                        } h-[1px] w-full bg-[#E9EAF0]`}
+                        className={`${open ? "block" : "hidden"
+                          } h-[1px] w-full bg-[#E9EAF0]`}
                       />
                       <Disclosure.Panel className="flex py-4 mx-4">
                         <div className=" flex flex-col gap-[10px]">
@@ -418,11 +412,10 @@ export default function Course() {
                                 onChange={() => handleCateChange(category.id)}
                               />
                               <span
-                                className={`text-sm font-medium ${
-                                  checkedItems[category.id]
+                                className={`text-sm font-medium ${checkedItems[category.id]
                                     ? "text-[#FF6636] font-medium"
                                     : "text-[#4E5566] font-normal"
-                                }`}
+                                  }`}
                               >
                                 {category.cateName}
                               </span>
@@ -452,15 +445,13 @@ export default function Course() {
                           </p>
                         </div>
                         <ChecvronUp
-                          className={`${
-                            open ? "rotate-180 transform" : ""
-                          } h-5 w-5`}
+                          className={`${open ? "rotate-180 transform" : ""
+                            } h-5 w-5`}
                         />
                       </Disclosure.Button>
                       <div
-                        className={`${
-                          open ? "block" : "hidden"
-                        } h-[1px] w-full bg-[#E9EAF0]`}
+                        className={`${open ? "block" : "hidden"
+                          } h-[1px] w-full bg-[#E9EAF0]`}
                       />
                       <Disclosure.Panel className="flex flex-col gap-[10px] pt-4 mx-4">
                         <div className=" flex flex-col gap-[10px] pb-11">
@@ -479,21 +470,19 @@ export default function Course() {
                                 />
                                 <StarFill width={20} height={20}></StarFill>
                                 <span
-                                  className={`text-sm font-medium ${
-                                    checkRating[index]
+                                  className={`text-sm font-medium ${checkRating[index]
                                       ? "text-[#FF6636] font-medium"
                                       : "text-[#4E5566] font-normal"
-                                  }`}
+                                    }`}
                                 >
                                   {label}
                                 </span>
                               </div>
                               <p
-                                className={`text-xs font-medium ${
-                                  checkRating[index]
+                                className={`text-xs font-medium ${checkRating[index]
                                     ? "text-[#4E5566] font-medium"
                                     : "text-[#8C94A3] font-normal"
-                                }`}
+                                  }`}
                               >
                                 12345
                               </p>
@@ -515,6 +504,7 @@ export default function Course() {
                   key={item?.course_id}
                 >
                   <Card
+                    course_id={item.course_id}
                     thumbnail={item.thumbnail}
                     category={item.cate_name}
                     cateId={item.category_id}

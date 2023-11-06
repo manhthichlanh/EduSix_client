@@ -4,8 +4,9 @@ import Vecter from "../../components/commom/icons/Vector";
 import Button from "../../components/button/Button";
 import Arcordition from "../../components/Dropdown/Arcordion";
 import CourseSlide from "../../components/Swiper/CourseSlide";
-// import { useQuery } from "react-query";
-// import { apiServer } from "../../utils/http";
+import { useLocation } from "react-router-dom";
+import { useQuery } from "react-query";
+import { apiServer } from "../../utils/http";
 
 const data = [
   {
@@ -64,7 +65,20 @@ const data = [
   },
 ];
 
+// const getCourseDetail = async () => {
+//   try {
+//     const response1 = await apiServer.get("/course/"+courseId);
+//     const course = response1.data;
+//     return course;
+//   } catch (error) {
+//     throw new Error("Error fetching course data");
+//   }
+// }
+
 export default function CourseDetail() {
+  const { state } = useLocation();
+  const { course_id } = state;
+  console.log(course_id)
   const [isBoxCro, setIsBoxCro] = useState(true);
 
   const handleScroll = () => {
@@ -132,11 +146,10 @@ export default function CourseDetail() {
           </div>
           <div
             id="box"
-            className={`${
-              isBoxCro
-                ? "pt-[60px] fixed col-span-4 right-20 bottom-[-20]"
-                : "pt-[60px] absolute col-span-4 right-0 bottom-0 "
-            }`}
+            className={`${isBoxCro
+              ? "pt-[60px] fixed col-span-4 right-20 bottom-[-20]"
+              : "pt-[60px] absolute col-span-4 right-0 bottom-0 "
+              }`}
           >
             <DetailCart></DetailCart>
           </div>
