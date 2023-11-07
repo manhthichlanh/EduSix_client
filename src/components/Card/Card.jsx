@@ -31,7 +31,7 @@ function Card(props) {
       {/* thumbnail */}
       <Link
         to={`/course-detail?courseId=${course_id}`}
-        className="block w-full mb-4 overflow-hidden rounded"
+        className="block w-full mb-4 overflow-hidden rounded h-fit"
         state={{ course_id }}
       >
         <img
