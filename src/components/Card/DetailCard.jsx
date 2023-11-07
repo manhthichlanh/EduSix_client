@@ -5,19 +5,24 @@ import BatteryEmpty from "./../commom/icons/BatteryEmpty";
 import Award from "./../commom/icons/Award";
 import Monitor from "../commom/icons/Monitor";
 
-const DetailCard = (props) => {
-  //   const { price, discountPrice, time, totalLesson } = props;
+const DetailCard = ( props ) => {
+  const {data} = props
+  const price = data.data.course_price;
   return (
     <div className="rounded-lg w-full max-w-[430px] shadow-xl px-8 py-6 select-none">
       <div className="flex flex-col items-center gap-3">
         <p className="text-xl font-bold text-black">Gói cao cấp</p>
         <div className="flex items-center gap-2">
-          <p className="text-2xl text-black line-through text-opacity-80">
-            {(100000).toLocaleString("vi-VN")}đ
-          </p>
-          <p className="text-[#F05123] font-medium text-[36px]">
-            {(100000).toLocaleString("vi-VN") + "đ"}
-          </p>
+            {price ? (
+              <p className="text-[#F05123] font-medium text-[32px]">
+              {price.toLocaleString("vi-VN") + "đ"}
+            </p> 
+            ):
+            (
+              <p className="text-[#F05123] font-medium text-[32px]">
+              Miễn phí
+            </p> 
+            )}
         </div>
       </div>
       <span className="block w-full h-px my-4 bg-gray-200" />
@@ -54,7 +59,7 @@ const DetailCard = (props) => {
       <div>
         <Button
           Class={
-            "w-full rounded-lg bg-[#FFEEE8] p-4 mt-4 text-[#FF6636] font-medium text-lg"
+            "w-full rounded-lg bg-[#FFEEE8] p-3 mt-4 text-[#FF6636] font-medium text-lg"
           }
           text={"Mua ngay"}
         ></Button>
