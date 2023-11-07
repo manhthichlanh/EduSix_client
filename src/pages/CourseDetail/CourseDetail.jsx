@@ -8,78 +8,12 @@ import { useLocation } from "react-router-dom";
 import { useQuery } from "react-query";
 import { apiServer } from "../../utils/http";
 
-// const data = [
-//   {
-//     image: "/course.png",
-//     category: "Marketing",
-//     cateId: 1,
-//     price: 299000,
-//     name: "Khóa học Thiết kế đồ họa cơ bản",
-//     rating: 4.5,
-//     joiner: 150,
-//   },
-//   {
-//     image: "/course.png",
-//     category: "Lập trình",
-//     cateId: 2,
-//     price: 499000,
-//     name: "Khóa học Lập trình web JavaScript",
-//     rating: 4.8,
-//     joiner: 200,
-//   },
-//   {
-//     image: "/course.png",
-//     category: "Thiết kế đồ họa",
-//     cateId: 3,
-//     price: 0,
-//     name: "Khóa học Quản lý doanh nghiệp",
-//     rating: 4.2,
-//     joiner: 120,
-//   },
-//   {
-//     image: "/course.png",
-//     category: "Ngôn ngữ",
-//     cateId: 4,
-//     price: 799000,
-//     name: "Khóa học Quản lý doanh nghiệp",
-//     rating: 4.2,
-//     joiner: 120,
-//   },
-//   {
-//     image: "/course.png",
-//     category: "Tài chính",
-//     cateId: 5,
-//     price: 799000,
-//     name: "Khóa học Quản lý doanh nghiệp",
-//     rating: 4.2,
-//     joiner: 120,
-//   },
-//   {
-//     image: "/course.png",
-//     category: "Photography",
-//     cateId: 6,
-//     price: 0,
-//     name: "Khóa học Quản lý doanh nghiệp",
-//     rating: 4.2,
-//     joiner: 120,
-//   },
-// ];
-
-// const getCourseDetail = async () => {
-//   try {
-//     const response1 = await apiServer.get("/course/"+courseId);
-//     const course = response1.data;
-//     return course;
-//   } catch (error) {
-//     throw new Error("Error fetching course data");
-//   }
-// }
 
 export default function CourseDetail() {
   const { state } = useLocation();
   // const { course_id } = state;
   const course_id = state.course_id
-  console.log(course_id)
+  // console.log(course_id)
   const [isBoxCro, setIsBoxCro] = useState(true);
   const { data: courseDetails, isError, isLoading } = useQuery(
     ['courseDetails', course_id],
@@ -98,8 +32,8 @@ export default function CourseDetail() {
   }
 
   // Assuming the API response has a structure like: { title: 'Course Title', content: 'Course Content' }
-  const { name, content } = courseDetails.data;
-  console.log(name, content)
+  const { name, content, thumbnail, course_price } = courseDetails.data;
+  // console.log(name, content)
   const handleScroll = () => {
     const element = document.getElementById("box-list-course");
     const triggerPosition = element.getBoundingClientRect().top;
@@ -112,12 +46,12 @@ export default function CourseDetail() {
     }
   };
 
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+  // useEffect(() => {
+  //   window.addEventListener("scroll", handleScroll);
+  //   return () => {
+  //     window.removeEventListener("scroll", handleScroll);
+  //   };
+  // }, []);
   return (
     <>
       <div className="px-20">
@@ -137,7 +71,7 @@ export default function CourseDetail() {
             <div className="">
               <img
                 className="w-full h-[420px] rounded-xl"
-                src="/course.png"
+                src={`${`http://14.225.198.206:8080/`}course/thumbnail/${thumbnail}`}
                 alt=""
               />
               <div className="absolute inline-flex items-end z-10 mt-[-50px] pl-20">
@@ -170,7 +104,7 @@ export default function CourseDetail() {
               : "pt-[60px] absolute col-span-4 right-0 bottom-0 "
               }`}
           >
-            <DetailCart></DetailCart>
+            <DetailCart data={courseDetails}></DetailCart>
           </div>
         </div>
         <div
@@ -187,7 +121,7 @@ export default function CourseDetail() {
             ></Button>
           </div>
           <div className="">
-            <CourseSlide data={data} />
+            <CourseSlide data={courseDetails} />
           </div>
         </div>
       </div>
