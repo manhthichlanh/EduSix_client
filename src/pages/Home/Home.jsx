@@ -1,5 +1,5 @@
 import Button from "../../components/button/Button";
-import CateCard from "../../components/Card/CateCard";
+// import CateCard from "../../components/Card/CateCard";
 import CourseSlide from "../../components/Swiper/CourseSlide";
 import Input from "./../../components/input/Input";
 import classNames from "classnames";
@@ -7,6 +7,7 @@ import BlogSlide from "../../components/Swiper/BlogSlide.";
 import { useQuery } from "react-query";
 import { apiServer } from "../../utils/http";
 import { filter, map, orderBy, slice } from "lodash";
+import CateSlide from "../../components/Swiper/CateSlide";
 // import { useEffect } from "react";
 
 const blog = [
@@ -87,12 +88,18 @@ export default function Home() {
     ["created_at"],
     ["desc"]
   );
-  const sortedByMarketing = filter(
-    courseData,
-    (course) => course.category_id === 2
+  const sortedByMarketing = slice(
+    filter(courseData, (course) => course.category_id === 2),
+    0,
+    8
+  );
+  const sortedByPrograming = slice(
+    filter(courseData, (course) => course.category_id === 3),
+    0,
+    8
   );
 
-  console.log(courseData);
+  // console.log(courseData);
   return (
     <>
       <div className="w-full">
@@ -166,16 +173,10 @@ export default function Home() {
             <div className="flex items-end justify-between py-10">
               <p className="font-semibold text-[24px]">Danh mục</p>
             </div>
-            <div className="grid grid-cols-12 gap-6 lg:gap-6 md:gap-4">
-              {map(categoryData, (item, index) => (
-                <CateCard
-                  key={index}
-                  image={item.logo_cate}
-                  cateName={item.cate_name}
-                />
-              ))}
-            </div>
+
+            <CateSlide data={categoryData} prefixAction={"cate"} />
           </div>
+
           <div className="my-20 lg:col-span-4 md:col-span-12">
             <div className="flex items-end justify-between py-10 ">
               <p className="font-semibold text-[24px]">KHÓA HỌC MỚI NHẤT</p>
@@ -193,7 +194,7 @@ export default function Home() {
           <div className="my-20 lg:col-span-4 md:col-span-12">
             <div className="flex items-end justify-between py-10 ">
               <p className="font-semibold text-[24px] uppercase">
-                Khóa học <span className="text-[#882929]">Marketing</span>
+                Khóa học <span className="text-[#5C59E8]">Marketing</span>
               </p>
               <Button
                 text="Xem thêm"
@@ -209,6 +210,26 @@ export default function Home() {
               />
             </div>
           </div>
+          <div className="my-20 lg:col-span-4 md:col-span-12">
+            <div className="flex items-end justify-between py-10 ">
+              <p className="font-semibold text-[24px] uppercase">
+                Khóa học <span className="text-[#D3620F]">Lập trình</span>
+              </p>
+              <Button
+                text="Xem thêm"
+                Class={
+                  "text-sm font-medium py-2 px-8 rounded-[4px] shadow-md leading-6 hover:shadow-xl whitespace-nowrap"
+                }
+              ></Button>
+            </div>
+            <div className="">
+              <CourseSlide
+                prefixAction={"photography"}
+                data={sortedByPrograming}
+              />
+            </div>
+          </div>
+
           <div className="my-20 lg:col-span-4 md:col-span-12">
             <div className="flex items-end justify-between py-10 ">
               <p className="font-semibold text-[24px]">BÀI VIẾT NỔI BẬT</p>

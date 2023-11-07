@@ -4,7 +4,7 @@ export default function CateCard(props) {
   // eslint-disable-next-line react/prop-types
   const { image, cateName } = props;
   return (
-    <div className="col-span-6 lg:col-span-2 md:col-span-4">
+    <div className="my-4">
       <div className="w-full py-10 shadow-md rounded-xl">
         <Link to="/">
           <img
