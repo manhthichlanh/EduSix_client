@@ -10,7 +10,7 @@ import Button from "../../components/button/Button";
 import { useQuery } from "react-query";
 // import Footer from "../../Layout/Footer";
 import styled from "styled-components";
-import { apiServer } from "../../utils/http";
+import { apiServer, serverEndpoint } from "../../utils/http";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import {
@@ -37,6 +37,11 @@ const VideoWrapper = styled.div`
 const CourseVideo = () => {
   const [searchParams] = useSearchParams();
   const courseId = searchParams.get("courseId");
+  const [selectedLesson, setSelectedLesson] = useState(null);
+  const [selectedVideo, setSelectedVideo] = useState(null);
+  const [selectedQuiz, setSelectedQuiz] = useState([]);
+  const videoURL = `${serverEndpoint}video/stream/${selectedVideo}`;
+  console.log(videoURL);
 console.log(courseId);
 
   const [isAnHienSubMenu1, setIsAnHienSubMenu1] = useState(false);
@@ -44,14 +49,35 @@ console.log(courseId);
     window.innerWidth > 1000
   );
 // Sử dụng React Query để gọi API và lấy dữ liệu từ máy chủ
+
+
+const toggleAnHienSubMenu = () => {
+  setIsAnHienSubMenu(!isAnHienSubMenu);
+};
+const toggleAnHienSubMenu1 = () => {
+  setIsAnHienSubMenu1(!isAnHienSubMenu1);
+  setIsAnHienSubMenu(false);
+};
+useEffect(() => {
+  const handleResize = () => {
+    setIsAnHienSubMenu(window.innerWidth > 1000);
+  };
+
+  // Add event listener for window resize
+  window.addEventListener("resize", handleResize);
+
+  // Clean up the event listener when the component unmounts
+  return () => {
+    window.removeEventListener("resize", handleResize);
+  };
+}, []);
 const { data: courseData, isLoading, isError } = useQuery(
   ["courseData", courseId],
-  () => apiServer.get(`/admin-query/getAllLessonQuizzVideo/${courseId}`),
+  () => apiServer.get(`/admin-query/getAllLessonQuizzVideo/${+courseId}`),
   {
     enabled: !!courseId, // Không thực hiện gọi API nếu courseId không tồn tại
   }
 );
-
 useEffect(() => {
   if (courseData && courseData.data.success) {
     // Access the data from the response
@@ -80,6 +106,19 @@ if (!courseData || !courseData.data.Course_Info || !courseData.data.SectionDoc) 
 }
 
 const { Course_Info, SectionDoc, CourseDoc } = courseData.data;
+
+const handleLessonSelect = (lesson) => {
+  const { videos, quizzs } = lesson;
+  const video = videos && videos.length > 0 ? videos[0] : null;
+
+  setSelectedLesson(lesson);
+  setSelectedVideo(video ? video.file_videos : null);
+  setSelectedQuiz(quizzs);
+};
+
+
+
+
   const benefit = [
     { content: "Biết cách cài đặt và tùy biến Windows Terminal" },
     { content: "Biết cách cài đặt và tùy biến Windows Terminal" },
@@ -134,38 +173,27 @@ const { Course_Info, SectionDoc, CourseDoc } = courseData.data;
     },
   ];
 
-  const toggleAnHienSubMenu = () => {
-    setIsAnHienSubMenu(!isAnHienSubMenu);
-  };
-  const toggleAnHienSubMenu1 = () => {
-    setIsAnHienSubMenu1(!isAnHienSubMenu1);
-    setIsAnHienSubMenu(false);
-  };
-  // useEffect(() => {
-  //   const handleResize = () => {
-  //     setIsAnHienSubMenu(window.innerWidth > 1000);
-  //   };
-
-  //   // Add event listener for window resize
-  //   window.addEventListener("resize", handleResize);
-
-  //   // Clean up the event listener when the component unmounts
-  //   return () => {
-  //     window.removeEventListener("resize", handleResize);
-  //   };
-  // }, []);
-
+  
   const handleScrollToOverview = () => {
-    const element = document.getElementById("overview-section"); // Get the element by id
+    const element = document.getElementById("overview-section");
     if (element) {
       element.scrollIntoView({
         behavior: "smooth",
       });
     }
   };
-
+  
   const handleScrollToQuestion = () => {
-    const element = document.getElementById("question-section"); // Get the element by id
+    const element = document.getElementById("question-section");
+    if (element) {
+      element.scrollIntoView({
+        behavior: "smooth",
+      });
+    }
+  };
+  
+  const handleScrollToComments = () => {
+    const element = document.getElementById("comments-section");
     if (element) {
       element.scrollIntoView({
         behavior: "smooth",
@@ -173,14 +201,7 @@ const { Course_Info, SectionDoc, CourseDoc } = courseData.data;
     }
   };
 
-  const handleScrollToComments = () => {
-    const element = document.getElementById("comments-section"); // Get the element by id
-    if (element) {
-      element.scrollIntoView({
-        behavior: "smooth",
-      });
-    }
-  };
+
   return (
     <>
       <div className="CourseVideo">
@@ -198,24 +219,26 @@ const { Course_Info, SectionDoc, CourseDoc } = courseData.data;
               </NavLink>
             </div>
             <div className="name_course">
-              <p>Lập trình C++ cơ bản, nâng cao</p>
+              <p>{CourseDoc.name}</p>
             </div>
           </div>
         </div>
         <div className="Content_CourseVideo">
           <div className="CourseVideo_Left">
-            <div className="video">
-              <VideoWrapper>
-                <div>
-                  <ReactPlayer
-                    url="https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8"
-                    width="100%"
-                    height="100%"
-                    controls={true}
-                  />
-                </div>
-              </VideoWrapper>
-            </div>
+          {selectedVideo && (
+              <div className="video">
+                <VideoWrapper>
+                  <div>
+                    <ReactPlayer
+                      url= {videoURL}
+                      width="100%"
+                      height="100%"
+                      controls={true}
+                    />
+                  </div>
+                </VideoWrapper>
+              </div>
+            )}
             <div className="scrollBar">
               <div className="mini_menu">
                 <NavLink onClick={handleScrollToOverview}>
@@ -233,13 +256,9 @@ const { Course_Info, SectionDoc, CourseDoc } = courseData.data;
               </div>
               <div className="information">
                 <div className="overview_CourseVideo" id="overview-section">
-                  <h1>Lập trình C++ cơ bản, nâng cao</h1>
-                  <p>
-                    Khóa học lập trình C++ từ cơ bản tới nâng cao dành cho người
-                    mới bắt đầu. Mục tiêu của khóa học này nhằm giúp các bạn nắm
-                    được các khái niệm căn cơ của lập trình, giúp các bạn có nền
-                    tảng vững chắc để chinh phục con đường trở thành một lập
-                    trình viên.
+                  <h1>{CourseDoc.name}</h1>
+                  <p dangerouslySetInnerHTML={{ __html: CourseDoc.content }}>
+                  
                   </p>
                 </div>
 
@@ -367,7 +386,7 @@ const { Course_Info, SectionDoc, CourseDoc } = courseData.data;
                     Nội dung khóa học
                   </h2>
                   <div className="dropdownMenu">
-                    <Dropdown SectionDoc={SectionDoc} />
+                    <Dropdown SectionDoc={SectionDoc} handleSelectLesson={handleLessonSelect}/>
                   </div>
                 </div>
               </div>

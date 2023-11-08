@@ -7,24 +7,11 @@ import classNames from "classnames";
 import Button from "../button/Button";
 import ChevronRight from "./../commom/icons/ChevronRight";
 import { map } from "lodash";
-import { useQuery } from "react-query"; // Thêm import này
-import { apiServer } from "../../utils/http"; // Thêm import này
 
-export default function CourseSlide({ prefixAction, category_id }) {
-  const { data: allCourses, isError: coursesError, isLoading: coursesLoading } = useQuery(
-    "allCourses",
-    () => apiServer.get("/course").then(response => response.data)
-  );
 
-  if (coursesLoading) {
-    return <div>Loading all courses...</div>;
-  }
+export default function CourseSlide({ prefixAction, data}) {
+  const courseData = data;
 
-  if (coursesError) {
-    return <div>Error fetching all courses.</div>;
-  }
-
-  const relatedCourses = allCourses.filter(course => course.category_id === category_id);
 
   return (
     <div className={`z-10 relative group ${prefixAction}`}>
@@ -52,7 +39,7 @@ export default function CourseSlide({ prefixAction, category_id }) {
           nextEl: `.${prefixAction} > .${prefixAction}-next`,
         }}
       >
-        {map(relatedCourses, (item, index) => (
+        {map(courseData, (item, index) => (
           <SwiperSlide key={index}>
             <Card
               course_id={item.course_id}
