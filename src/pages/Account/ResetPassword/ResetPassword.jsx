@@ -45,7 +45,7 @@ const ResetPassword = () => {
                             />
                             <button onClick={togglePasswordVisibility}>
                                 <FontAwesomeIcon
-                                    icon={passwordVisible ? faEye : faEyeSlash}
+                                     icon={passwordVisible ? faEyeSlash : faEye}
                                 />
                             </button>
                             </div>
@@ -57,7 +57,7 @@ const ResetPassword = () => {
                             />
                             <button onClick={togglePasswordDisplayed}>
                                 <FontAwesomeIcon
-                                    icon={passwordDisplayed ? faEye : faEyeSlash}
+                                    icon={passwordDisplayed ? faEyeSlash : faEye}
                                 />
                             </button>
                             </div>

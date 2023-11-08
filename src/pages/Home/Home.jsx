@@ -68,7 +68,6 @@ const getCategoryData = async () => {
     throw new Error("Error fetching course data");
   }
 };
-// course
 const getCourseData = async () => {
   try {
     const response1 = await apiServer.get("/course");
@@ -99,7 +98,6 @@ export default function Home() {
     8
   );
 
-  // console.log(courseData);
   return (
     <>
       <div className="w-full">
@@ -161,7 +159,6 @@ export default function Home() {
                 }
               ></Button>
             </div>
-
             <div className="">
               <CourseSlide
                 prefixAction={"trending"}
@@ -194,7 +191,7 @@ export default function Home() {
           <div className="my-20 lg:col-span-4 md:col-span-12">
             <div className="flex items-end justify-between py-10 ">
               <p className="font-semibold text-[24px] uppercase">
-                Khóa học <span className="text-[#5C59E8]">Marketing</span>
+                Khóa học <span className="text-[#882929]">Photography</span>
               </p>
               <Button
                 text="Xem thêm"

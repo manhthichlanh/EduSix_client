@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types */
+
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import Card from "./../Card/Card";
@@ -6,13 +8,12 @@ import classNames from "classnames";
 import Button from "../button/Button";
 import ChevronRight from "./../commom/icons/ChevronRight";
 import { map } from "lodash";
+// import { useQuery } from "react-query";
+// import { apiServer } from "../../utils/http";
 
-// cate
-
-// eslint-disable-next-line react/prop-types, no-unused-vars
 export default function CourseSlide({ prefixAction, data }) {
   return (
-    <div className={`relative group ${prefixAction}`}>
+    <div className={`z-10 relative group ${prefixAction}`}>
       <Swiper
         modules={[Navigation]}
         breakpoints={{
@@ -46,7 +47,7 @@ export default function CourseSlide({ prefixAction, data }) {
               cateId={item.category_id}
               price={item.course_price}
               name={item.name}
-              rating={123}
+              rating={5}
               joiner={456}
             />
           </SwiperSlide>

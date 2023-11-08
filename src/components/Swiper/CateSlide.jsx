@@ -35,8 +35,8 @@ export default function CateSlide({ prefixAction, data }) {
           nextEl: `.${prefixAction} > .${prefixAction}-next`,
         }}
       >
-        {map(data, (item) => (
-          <SwiperSlide key={item.id}>
+        {map(data, (item, index) => (
+          <SwiperSlide key={index}>
             <CateCard image={item.logo_cate} cateName={item.cate_name} />
           </SwiperSlide>
         ))}
