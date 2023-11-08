@@ -1,45 +1,14 @@
 import Button from "../../components/button/Button";
-import CateCard from "../../components/Card/CateCard";
+// import CateCard from "../../components/Card/CateCard";
 import CourseSlide from "../../components/Swiper/CourseSlide";
 import Input from "./../../components/input/Input";
 import classNames from "classnames";
 import BlogSlide from "../../components/Swiper/BlogSlide.";
 import { useQuery } from "react-query";
 import { apiServer } from "../../utils/http";
-import { map } from "lodash";
-// import { v4 } from "uuid";
-const cate = [
-  {
-    id: 1,
-    image: "images/05.png",
-    cateName: "Marketing",
-  },
-  {
-    id: 2,
-    image: "images/01.png",
-    cateName: "Lập trình",
-  },
-  {
-    id: 3,
-    image: "images/02.png",
-    cateName: "Thiết kế đồ họa",
-  },
-  {
-    id: 4,
-    image: "images/06.png",
-    cateName: "Ngôn ngữ",
-  },
-  {
-    id: 5,
-    image: "images/03.png",
-    cateName: "Tài chính",
-  },
-  {
-    id: 6,
-    image: "images/04.png",
-    cateName: "Photography",
-  },
-];
+import { filter, map, orderBy, slice } from "lodash";
+import CateSlide from "../../components/Swiper/CateSlide";
+// import { useEffect } from "react";
 
 const blog = [
   {
@@ -91,12 +60,9 @@ const blog = [
     category: "Photography",
   },
 ];
-
-// const filterPhography = data.filter((item) => item.cateId === 6);
 const getCategoryData = async () => {
   try {
     const response = await apiServer.get("/category");
-    console.log("cóa");
     return response.data;
   } catch (error) {
     throw new Error("Error fetching course data");
@@ -112,23 +78,28 @@ const getCourseData = async () => {
     throw new Error("Error fetching course data");
   }
 };
-export default function Home() {
-  // Use React Query to fetch and manage course data
-  const {
-    data: courseData,
-    isLoading,
-    isError,
-  } = useQuery("courseData", getCourseData);
-  // cate
-  // Use React Query to fetch and manage course data
-  const {
-    data: categoryData,
-    isLoadingCategory,
-    isErrorCategory,
-  } = useQuery("categoryData", getCategoryData);
 
-  // console.log(categoryData);
-  console.log(courseData);
+export default function Home() {
+  const { data: courseData } = useQuery("courseData", getCourseData);
+  const { data: categoryData } = useQuery("categoryData", getCategoryData);
+  const sortedByOustanding = courseData;
+  const sortedByNewest = orderBy(
+    slice(courseData, 0, 8),
+    ["created_at"],
+    ["desc"]
+  );
+  const sortedByMarketing = slice(
+    filter(courseData, (course) => course.category_id === 2),
+    0,
+    8
+  );
+  const sortedByPrograming = slice(
+    filter(courseData, (course) => course.category_id === 3),
+    0,
+    8
+  );
+
+  // console.log(courseData);
   return (
     <>
       <div className="w-full">
@@ -192,23 +163,20 @@ export default function Home() {
             </div>
 
             <div className="">
-              <CourseSlide prefixAction={"trending"} data={courseData} />
+              <CourseSlide
+                prefixAction={"trending"}
+                data={sortedByOustanding}
+              />
             </div>
           </div>
           <div className="my-[100px] lg:col-span-4 md:col-span-12 ">
             <div className="flex items-end justify-between py-10">
               <p className="font-semibold text-[24px]">Danh mục</p>
             </div>
-            <div className="grid grid-cols-12 gap-6 lg:gap-6 md:gap-4">
-              {map(categoryData, (item, index) => (
-                <CateCard
-                  key={index}
-                  image={item.logo_cate}
-                  cateName={item.cate_name}
-                />
-              ))}
-            </div>
+
+            <CateSlide data={categoryData} prefixAction={"cate"} />
           </div>
+
           <div className="my-20 lg:col-span-4 md:col-span-12">
             <div className="flex items-end justify-between py-10 ">
               <p className="font-semibold text-[24px]">KHÓA HỌC MỚI NHẤT</p>
@@ -220,15 +188,13 @@ export default function Home() {
               ></Button>
             </div>
             <div className="">
-              {/* <CourseSlide prefixAction={"newest"} data={data} /> */}
+              <CourseSlide prefixAction={"newest"} data={sortedByNewest} />
             </div>
           </div>
           <div className="my-20 lg:col-span-4 md:col-span-12">
             <div className="flex items-end justify-between py-10 ">
               <p className="font-semibold text-[24px] uppercase">
-                Khóa học <span className="text-[#882929]">
-                  
-                  Photography</span>
+                Khóa học <span className="text-[#5C59E8]">Marketing</span>
               </p>
               <Button
                 text="Xem thêm"
@@ -238,12 +204,32 @@ export default function Home() {
               ></Button>
             </div>
             <div className="">
-              {/* <CourseSlide
+              <CourseSlide
                 prefixAction={"photography"}
-                data={filterPhography}
-              /> */}
+                data={sortedByMarketing}
+              />
             </div>
           </div>
+          <div className="my-20 lg:col-span-4 md:col-span-12">
+            <div className="flex items-end justify-between py-10 ">
+              <p className="font-semibold text-[24px] uppercase">
+                Khóa học <span className="text-[#D3620F]">Lập trình</span>
+              </p>
+              <Button
+                text="Xem thêm"
+                Class={
+                  "text-sm font-medium py-2 px-8 rounded-[4px] shadow-md leading-6 hover:shadow-xl whitespace-nowrap"
+                }
+              ></Button>
+            </div>
+            <div className="">
+              <CourseSlide
+                prefixAction={"photography"}
+                data={sortedByPrograming}
+              />
+            </div>
+          </div>
+
           <div className="my-20 lg:col-span-4 md:col-span-12">
             <div className="flex items-end justify-between py-10 ">
               <p className="font-semibold text-[24px]">BÀI VIẾT NỔI BẬT</p>
@@ -259,7 +245,7 @@ export default function Home() {
           </div>
         </div>
         <div className="grid grid-cols-12 gap-6 py-20  px-10 lg:px-20 md:px-16 sm:px-10 bg-[url('images/bg.png')]">
-          <div className="lg:col-span-7 col-span-12 my-auto md:col-span-12 sm:col-span-12">
+          <div className="col-span-12 my-auto lg:col-span-7 md:col-span-12 sm:col-span-12">
             <div className="pb-10">
               <p className="text-[40px] font-semibold leading-[48px] pb-4">
                 Tham gia khóa học{" "}
