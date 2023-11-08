@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useSearchParams } from "react-router-dom";
 import "./CourseVideo.scss";
 import ChevronLeft from "../../components/commom/icons/ChevronLeft";
 import ChevronRight from "../../components/commom/icons/ChevronRight";
@@ -7,9 +7,12 @@ import Check from "../../components/commom/icons/Check";
 import Messages from "../../components/commom/icons/Messages";
 import Dropdown from "../../components/Dropdown/Dropdown";
 import Button from "../../components/button/Button";
+import { useQuery } from "react-query";
 // import Footer from "../../Layout/Footer";
 import styled from "styled-components";
+import { apiServer } from "../../utils/http";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import {
   faXmark, // Add FontAwesome icons for hiding and showing the menu
   faBars,
@@ -32,11 +35,51 @@ const VideoWrapper = styled.div`
   }
 `;
 const CourseVideo = () => {
+  const [searchParams] = useSearchParams();
+  const courseId = searchParams.get("courseId");
+console.log(courseId);
+
   const [isAnHienSubMenu1, setIsAnHienSubMenu1] = useState(false);
   const [isAnHienSubMenu, setIsAnHienSubMenu] = useState(
     window.innerWidth > 1000
   );
+// Sử dụng React Query để gọi API và lấy dữ liệu từ máy chủ
+const { data: courseData, isLoading, isError } = useQuery(
+  ["courseData", courseId],
+  () => apiServer.get(`/admin-query/getAllLessonQuizzVideo/${courseId}`),
+  {
+    enabled: !!courseId, // Không thực hiện gọi API nếu courseId không tồn tại
+  }
+);
 
+useEffect(() => {
+  if (courseData && courseData.data.success) {
+    // Access the data from the response
+    const { Course_Info, CourseDoc, SectionDoc, success } = courseData.data;
+    const { sectionCount, LessonCount, TotalTime } = Course_Info;
+
+    // Do something with the data...
+    console.log('Section Count:', sectionCount);
+    console.log('Lesson Count:', LessonCount);
+    console.log('Total Time:', TotalTime);
+    console.log('Course Doc:', CourseDoc);
+    console.log('Section Doc:', SectionDoc);
+  }
+}, [courseData]);
+
+if (isLoading) {
+  return <div>Loading...</div>;
+}
+
+if (isError) {
+  return <div>Error fetching course data.</div>;
+}
+
+if (!courseData || !courseData.data.Course_Info || !courseData.data.SectionDoc) {
+  return <div>Error: Course data is not available.</div>;
+}
+
+const { Course_Info, SectionDoc, CourseDoc } = courseData.data;
   const benefit = [
     { content: "Biết cách cài đặt và tùy biến Windows Terminal" },
     { content: "Biết cách cài đặt và tùy biến Windows Terminal" },
@@ -98,19 +141,19 @@ const CourseVideo = () => {
     setIsAnHienSubMenu1(!isAnHienSubMenu1);
     setIsAnHienSubMenu(false);
   };
-  useEffect(() => {
-    const handleResize = () => {
-      setIsAnHienSubMenu(window.innerWidth > 1000);
-    };
+  // useEffect(() => {
+  //   const handleResize = () => {
+  //     setIsAnHienSubMenu(window.innerWidth > 1000);
+  //   };
 
-    // Add event listener for window resize
-    window.addEventListener("resize", handleResize);
+  //   // Add event listener for window resize
+  //   window.addEventListener("resize", handleResize);
 
-    // Clean up the event listener when the component unmounts
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
+  //   // Clean up the event listener when the component unmounts
+  //   return () => {
+  //     window.removeEventListener("resize", handleResize);
+  //   };
+  // }, []);
 
   const handleScrollToOverview = () => {
     const element = document.getElementById("overview-section"); // Get the element by id
@@ -324,7 +367,7 @@ const CourseVideo = () => {
                     Nội dung khóa học
                   </h2>
                   <div className="dropdownMenu">
-                    <Dropdown />
+                    <Dropdown SectionDoc={SectionDoc} />
                   </div>
                 </div>
               </div>

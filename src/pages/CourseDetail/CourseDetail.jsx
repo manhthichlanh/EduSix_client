@@ -2,24 +2,22 @@ import { useState, useEffect } from "react";
 import DetailCart from "../../components/Card/DetailCard";
 import Vecter from "../../components/commom/icons/Vector";
 import Button from "../../components/button/Button";
-import Arcordition from "../../components/Dropdown/Arcordion";
+import ArcordionItem from "../../components/Dropdown/Arcordion";
 import CourseSlide from "../../components/Swiper/CourseSlide";
 import { useLocation } from "react-router-dom";
 import { useQuery } from "react-query";
 import { apiServer } from "../../utils/http";
 
-
 export default function CourseDetail() {
   const { state } = useLocation();
-  // const { course_id } = state;
-  const course_id = state.course_id
-  // console.log(course_id)
+  const course_id = state.course_id;
   const [isBoxCro, setIsBoxCro] = useState(true);
+  
   const { data: courseDetails, isError, isLoading } = useQuery(
     ['courseDetails', course_id],
     () => apiServer.get(`/course/${course_id}`),
     {
-      enabled: !!course_id, // Only run query if course_id is available
+      enabled: !!course_id,
     }
   );
 
@@ -31,9 +29,8 @@ export default function CourseDetail() {
     return <div>Error fetching course details.</div>;
   }
 
-  // Assuming the API response has a structure like: { title: 'Course Title', content: 'Course Content' }
-  const { name, content, thumbnail, course_price } = courseDetails.data;
-  // console.log(name, content)
+  const { name, content, thumbnail, course_price, category_id } = courseDetails.data; // Lấy category_id từ dữ liệu khóa học
+
   const handleScroll = () => {
     const element = document.getElementById("box-list-course");
     const triggerPosition = element.getBoundingClientRect().top;
@@ -46,12 +43,14 @@ export default function CourseDetail() {
     }
   };
 
-  // useEffect(() => {
-  //   window.addEventListener("scroll", handleScroll);
-  //   return () => {
-  //     window.removeEventListener("scroll", handleScroll);
-  //   };
-  // }, []);
+ 
+
+//  useEffect(() => {
+//     window.addEventListener("scroll", handleScroll);
+//     return () => {
+//       window.removeEventListener("scroll", handleScroll);
+//     };
+//   }, []);
   return (
     <>
       <div className="px-20">
@@ -87,13 +86,16 @@ export default function CourseDetail() {
               </div>
             </div>
             <div className="py-20">
-              <p className="font-semibold text-[36px] pb-2">{name}</p>
-              <p className="font-medium text-[16px] text-[#8d8d8d]">{content}</p>
-            </div>
+    <p className="font-semibold text-[36px] pb-2">{name}</p>
+    <div
+      className="font-medium text-[16px] text-[#8d8d8d]"
+      dangerouslySetInnerHTML={{ __html: content }}
+    ></div>
+  </div>
 
             <div className="w-full">
               <div className="flex items-center justify-between">
-                <Arcordition />
+                <ArcordionItem course_id={course_id} />
               </div>
             </div>
           </div>
@@ -104,7 +106,7 @@ export default function CourseDetail() {
               : "pt-[60px] absolute col-span-4 right-0 bottom-0 "
               }`}
           >
-            <DetailCart data={courseDetails}></DetailCart>
+            <DetailCart course_id={course_id} isFree={true}></DetailCart>
           </div>
         </div>
         <div
@@ -121,10 +123,11 @@ export default function CourseDetail() {
             ></Button>
           </div>
           <div className="">
-            <CourseSlide data={courseDetails} />
+            <CourseSlide course_id={course_id} category_id={category_id} />
           </div>
         </div>
       </div>
     </>
   );
+  
 }
