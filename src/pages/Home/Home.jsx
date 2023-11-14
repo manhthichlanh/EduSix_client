@@ -202,7 +202,7 @@ export default function Home() {
             </div>
             <div className="">
               <CourseSlide
-                prefixAction={"photography"}
+                prefixAction={"marketing"}
                 data={sortedByMarketing}
               />
             </div>
@@ -221,7 +221,7 @@ export default function Home() {
             </div>
             <div className="">
               <CourseSlide
-                prefixAction={"photography"}
+                prefixAction={"programming"}
                 data={sortedByPrograming}
               />
             </div>

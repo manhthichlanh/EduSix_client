@@ -8,8 +8,6 @@ import classNames from "classnames";
 import Button from "../button/Button";
 import ChevronRight from "./../commom/icons/ChevronRight";
 import { map } from "lodash";
-// import { useQuery } from "react-query";
-// import { apiServer } from "../../utils/http";
 
 export default function CourseSlide({ prefixAction, data }) {
   return (
