@@ -53,7 +53,7 @@ export default function CourseSlide({ prefixAction, data }) {
       </Swiper>
       <div
         className={classNames(
-          "absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 z-10 opacity-0 invisible transition duration-300 group-hover:opacity-100 group-hover:visible",
+          " bg-whiteabsolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 z-10 opacity-0 invisible transition duration-300 group-hover:opacity-100 group-hover:visible",
           `${prefixAction}-prev`
         )}
       >

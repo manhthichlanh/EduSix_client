@@ -76,7 +76,7 @@ function ArcordionItem({ course_id }) {
 
   const totalDurationInSeconds = calculateTotalDuration(SectionDoc);
   const formattedTotalDuration = formatDuration(totalDurationInSeconds);
-
+  const sortedSectionDoc = SectionDoc.sort((a, b) => a.section_id - b.section_id);
   return (
     <div className="w-full">
       <p className="mb-2 text-xl font-bold text-black">Nội dung khóa học</p>
@@ -103,7 +103,7 @@ function ArcordionItem({ course_id }) {
           {isEmpty(active) ? "Mở tất cả" : "Đóng tất cả"}
         </button>
       </div>
-      {SectionDoc.map((section, sectionIndex) => (
+      {sortedSectionDoc.map((section, sectionIndex) => (
   <Arcordion
     key={sectionIndex}
     title={section.name}

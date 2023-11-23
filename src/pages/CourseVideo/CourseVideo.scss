@@ -23,6 +23,9 @@
                     float: left;
                     margin-right: 10px;
                 }
+                .ChevronLeft{
+                    cursor: pointer;
+                }
             }
 
             p {
@@ -61,6 +64,139 @@
                 }
                 
             }
+            .Quiz{
+                width: 100%;
+                background-image: url("https://png.pngtree.com/thumb_back/fh260/background/20220215/pngtree-the-blue-background-of-the-question-box-image_927362.jpg");
+                user-select: none;
+                background-attachment: fixed;
+                height: 80vh;
+                .QuizQuestions{
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    .InputQuizQuestions{
+                        width: 80%;
+                        
+                       margin-top: 15%;
+                        .InputQuestions{
+                            width: 100%;
+                            padding: 10px;
+                            border-radius: 5px;
+                            background-color: #fff;
+                        }
+                        .InputQuestions::placeholder{
+                            color: #FF6636;
+                        }
+                        .AnswerInfo{
+                            color: #ffffff;
+                            font-weight: 600;
+                            background-color: #05a70a;
+                            border-radius: 10px;
+                            padding: 5px 10px;
+                            margin-bottom: 10px;
+                        }
+                        
+                       .Answer{
+                        display: grid;
+                        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                       gap: 10px;
+                       margin-top: 10px;
+                       text-align: center;
+                       /* CSS để tô màu cho đáp án đã chọn */
+
+                       .AnswerOption{
+                        position: relative;
+                        .AnswerLabel{
+                            background-color: #FF6636;
+                           width: 50px;
+                          padding: 10px 0px;
+                           border-top-left-radius: 5px;
+                           border-bottom-left-radius: 5px;
+                            color: #fff;
+                            position: absolute;
+                            left: 0;
+                            font-weight: 600;
+                            
+                           }
+                         
+                        
+                        
+                          .AnswerOption.selected {
+                            background-color: #4caf50; /* Green color for selected answers */
+                          }
+                          
+                          .AnswerLabel {
+                            margin-right: 8px;
+                          }
+                          
+                          .AnswerLabel.correct {
+                            background-color: green; /* or any color to indicate correct answer */
+                          }
+                          
+                          .AnswerLabel.incorrect {
+                            background-color: red; /* or any color to indicate incorrect answer */
+                          }
+
+                          .AnswerOption {
+                            cursor: pointer;
+                            padding: 10px;
+                            margin-bottom: 8px;
+                            border: 1px solid #ccc;
+                            border-radius: 5px;
+                          }
+                          
+                          .AnswerOption.selected {
+                            background-color: #4caf50; /* Green color for selected answers */
+                          }
+                          
+                          .AnswerLabel {
+                            margin-right: 8px;
+                          }
+                          
+                           .InputAnswer{
+                            width: 100%;
+                            padding: 10px 10px 10px 60px;
+                            border-radius: 5px;
+                            background-color: #fff;
+                           }
+                           .InputAnswer.selected {
+                            color: #ffffff; /* Change the text color for selected answers */
+                            background-color: #388e3c; /* Change the background color for selected answers */
+                          }
+                       }
+
+                       } 
+                    }
+                 
+                }
+                .ButtonGroup{
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 10px;
+                    margin-top: 20px;
+                    font-weight: 600;
+                    .back{
+                        padding: 10px 20px;
+                        background-color: #e30000;
+                        border-radius: 5px;
+                        color: #fff;
+                    }
+                    .continue{
+                        padding: 10px 20px;
+                        background-color: rgb(1, 150, 63);
+                        border-radius: 5px;
+                        color: #fff;
+                    }
+                    .save-answers{
+                        padding: 10px 20px;
+                        background-color: rgb(1, 150, 11);
+                        border-radius: 5px;
+                        color: #fff;
+                    }
+                }
+            }
+          
             .scrollBar{
                 background-color: #fff;
                 position: relative;
@@ -355,18 +491,19 @@
         gap: 10px;
         justify-content: center;
 
-        .button_next_page {
+        .knot {
             display: flex;
             border-radius: 5px;
-            border: 2px solid #b0b0b0;
+            border: 2px solid rgb(238, 96, 14);
             .icon-link {
                 margin-top: 10px;
-                margin-right: 8px;
+               margin-right: 3px;
             }
 
             .Button {
                 padding: 10px;
-                color: #656565;
+                color: #FF6636;
+              
                
             }
         }
@@ -459,3 +596,5 @@
         width: 70%;
     }
 }
+
+

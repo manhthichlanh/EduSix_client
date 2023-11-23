@@ -14,7 +14,7 @@ import Button from "../../components/button/Button";
 import { useQuery } from "react-query";
 import { apiServer } from "../../utils/http";
 // import { useEffect } from "react";
-
+import { Link } from "react-router-dom";
 // let someVariable = 1000;
 // console.log(someVariable?.toLocaleString());
 
@@ -500,6 +500,7 @@ export default function Course() {
                   className="col-span-12 lg:col-span-4 md:col-span-6"
                   key={item?.course_id}
                 >
+                     <Link to={`/course-detail?courseId=${item.course_id}`}>
                   <Card
                     course_id={item.course_id}
                     thumbnail={item.thumbnail}
@@ -510,7 +511,9 @@ export default function Course() {
                     rating={item.rating}
                     joiner={item.joiner}
                   />
+                     </Link>
                 </div>
+             
               ))}
             </div>
             <Button
