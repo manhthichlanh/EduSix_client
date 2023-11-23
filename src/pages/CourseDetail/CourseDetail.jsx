@@ -1,14 +1,13 @@
 import { useState, useEffect } from "react";
-import DetailCart from "../../components/Card/DetailCard";
-import Vecter from "../../components/commom/icons/Vector";
-import Button from "../../components/button/Button";
-import ArcordionItem from "../../components/Dropdown/Arcordion";
-import CourseSlide from "../../components/Swiper/CourseSlide";
 import { useLocation } from "react-router-dom";
 import { useQuery } from "react-query";
 import { apiServer } from "../../utils/http";
 import { filter, slice } from "lodash";
-
+import ArcordionItem from "../../components/Dropdown/Arcordion";
+import DetailCard from "../../components/Card/DetailCard";
+import Vector from "../../components/commom/icons/Vector";
+import Button from "../../components/button/Button";
+import CourseSlide from "../../components/Swiper/CourseSlide";
 const getCourseData = async () => {
   try {
     const response1 = await apiServer.get("/course");
@@ -19,8 +18,8 @@ const getCourseData = async () => {
   }
 };
 export default function CourseDetail() {
-  const { state } = useLocation();
-  const course_id = state.course_id;
+  const location = useLocation();
+  const course_id = new URLSearchParams(location.search).get("courseId");
   const [isBoxCro, setIsBoxCro] = useState(true);
 
   useEffect(() => {
@@ -88,7 +87,7 @@ export default function CourseDetail() {
             <div className="">
               <img
                 className="w-full h-[420px] rounded-xl"
-                src={`${`http://14.225.198.206:8080/`}course/thumbnail/${thumbnail}`}
+                src={`http://14.225.198.206:8080/course/thumbnail/${thumbnail}`}
                 alt=""
               />
               <div className="absolute inline-flex items-end z-10 mt-[-50px] pl-20">
@@ -99,7 +98,7 @@ export default function CourseDetail() {
                 />
                 <div className="flex items-baseline pl-5 ">
                   <p className="text-[20px] font-semibold pr-2 ">Edusix</p>
-                  <Vecter width={16} height={16} fill="#1B74E4"></Vecter>
+                  <Vector width={16} height={16} fill="#1B74E4"></Vector>
                 </div>
               </div>
             </div>
@@ -110,7 +109,6 @@ export default function CourseDetail() {
                 dangerouslySetInnerHTML={{ __html: content }}
               ></div>
             </div>
-
             <div className="w-full">
               <div className="flex items-center justify-between">
                 <ArcordionItem course_id={course_id} />
@@ -125,7 +123,7 @@ export default function CourseDetail() {
                 : "pt-[60px] absolute col-span-4 right-0 bottom-0 "
             }`}
           >
-            <DetailCart course_id={course_id} isFree={true}></DetailCart>
+            <DetailCard course_id={course_id} isFree={true}></DetailCard>
           </div>
         </div>
         <div
