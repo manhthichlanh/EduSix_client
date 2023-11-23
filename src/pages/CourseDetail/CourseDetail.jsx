@@ -7,14 +7,46 @@ import CourseSlide from "../../components/Swiper/CourseSlide";
 import { useLocation } from "react-router-dom";
 import { useQuery } from "react-query";
 import { apiServer } from "../../utils/http";
+import { filter, slice } from "lodash";
 
+const getCourseData = async () => {
+  try {
+    const response1 = await apiServer.get("/course");
+    const course = response1.data;
+    return course;
+  } catch (error) {
+    throw new Error("Error fetching course data");
+  }
+};
 export default function CourseDetail() {
   const { state } = useLocation();
   const course_id = state.course_id;
   const [isBoxCro, setIsBoxCro] = useState(true);
-  
-  const { data: courseDetails, isError, isLoading } = useQuery(
-    ['courseDetails', course_id],
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+  const handleScroll = () => {
+    const element = document.getElementById("box-list-course");
+    const triggerPosition = element.getBoundingClientRect().top;
+    const viewportHeight = window.innerHeight;
+
+    if (triggerPosition <= viewportHeight) {
+      setIsBoxCro(false);
+    } else {
+      setIsBoxCro(true);
+    }
+  };
+  const { data: courseData } = useQuery("courseData", getCourseData);
+  const {
+    data: courseDetails,
+    isError,
+    isLoading,
+  } = useQuery(
+    ["courseDetails", course_id],
     () => apiServer.get(`/course/${course_id}`),
     {
       enabled: !!course_id,
@@ -29,26 +61,14 @@ export default function CourseDetail() {
     return <div>Error fetching course details.</div>;
   }
 
-  const { name, content, thumbnail, category_id } = courseDetails.data; // Lấy category_id từ dữ liệu khóa học
+  const { name, content, thumbnail, category_id } = courseDetails.data;
 
-  const handleScroll = () => {
-    const element = document.getElementById("box-list-course");
-    const triggerPosition = element.getBoundingClientRect().top;
-    const viewportHeight = window.innerHeight;
+  const sortedBySameCateID = slice(
+    filter(courseData, (course) => course.category_id === category_id),
+    0,
+    8
+  );
 
-    if (triggerPosition <= viewportHeight) {
-      setIsBoxCro(false);
-    } else {
-      setIsBoxCro(true);
-    }
-  };
-
-//  useEffect(() => {
-//     window.addEventListener("scroll", handleScroll);
-//     return () => {
-//       window.removeEventListener("scroll", handleScroll);
-//     };
-//   }, []);
   return (
     <>
       <div className="px-20">
@@ -84,12 +104,12 @@ export default function CourseDetail() {
               </div>
             </div>
             <div className="py-20">
-    <p className="font-semibold text-[36px] pb-2">{name}</p>
-    <div
-      className="font-medium text-[16px] text-[#8d8d8d]"
-      dangerouslySetInnerHTML={{ __html: content }}
-    ></div>
-  </div>
+              <p className="font-semibold text-[36px] pb-2">{name}</p>
+              <div
+                className="font-medium text-[16px] text-[#8d8d8d]"
+                dangerouslySetInnerHTML={{ __html: content }}
+              ></div>
+            </div>
 
             <div className="w-full">
               <div className="flex items-center justify-between">
@@ -99,10 +119,11 @@ export default function CourseDetail() {
           </div>
           <div
             id="box"
-            className={`${isBoxCro
-              ? "pt-[60px] fixed col-span-4 right-20 bottom-[-20]"
-              : "pt-[60px] absolute col-span-4 right-0 bottom-0 "
-              }`}
+            className={`${
+              isBoxCro
+                ? "pt-[60px] fixed col-span-4 right-20 bottom-[-20]"
+                : "pt-[60px] absolute col-span-4 right-0 bottom-0 "
+            }`}
           >
             <DetailCart course_id={course_id} isFree={true}></DetailCart>
           </div>
@@ -121,11 +142,10 @@ export default function CourseDetail() {
             ></Button>
           </div>
           <div className="">
-            <CourseSlide course_id={course_id} category_id={category_id} />
+            <CourseSlide prefixAction={"details"} data={sortedBySameCateID} />
           </div>
         </div>
       </div>
     </>
   );
-  
 }
