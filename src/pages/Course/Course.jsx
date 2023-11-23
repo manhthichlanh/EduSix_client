@@ -231,7 +231,7 @@ export default function Course() {
     isError,
   } = useQuery("courseData", getCourseData);
 
-  // course
+  // category
   const getCategoryData = async () => {
     try {
       const response = await apiServer.get("/category");

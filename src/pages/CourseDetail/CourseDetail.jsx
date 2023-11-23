@@ -29,7 +29,7 @@ export default function CourseDetail() {
     return <div>Error fetching course details.</div>;
   }
 
-  const { name, content, thumbnail, course_price, category_id } = courseDetails.data; // Lấy category_id từ dữ liệu khóa học
+  const { name, content, thumbnail, category_id } = courseDetails.data; // Lấy category_id từ dữ liệu khóa học
 
   const handleScroll = () => {
     const element = document.getElementById("box-list-course");
@@ -42,8 +42,6 @@ export default function CourseDetail() {
       setIsBoxCro(true);
     }
   };
-
- 
 
 //  useEffect(() => {
 //     window.addEventListener("scroll", handleScroll);
