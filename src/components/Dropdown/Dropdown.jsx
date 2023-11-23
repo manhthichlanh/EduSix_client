@@ -5,8 +5,36 @@ import PlayCircleFill from "../commom/icons/PlayCircleFill";
 import Vector from "../commom/icons/Vector";
 import Pause from "../commom/icons/Pause";
 import Lock from "../commom/icons/Lock";
+import Quizz from "../commom/icons/Quizz";
+import { useState, useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
-export default function Dropdown({ SectionDoc, handleSelectLesson }) {
+export default function Dropdown({ SectionDoc, markLessonAsCompleted, handleSelectLesson, completedLessons, setCompletedLessons, courseId }) {
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const lessonIdFromURL = searchParams.get("lessonId");
+
+  // Automatically unlock the first lesson if no lessons are completed
+ 
+
+  const handleLessonClick = (lesson) => {
+    const lessonIndex = SectionDoc.flatMap(section => section.lessons).findIndex(l => l === lesson);
+    if (completedLessons.includes(lesson.lesson_id) || lessonIndex === completedLessons.length) {
+      handleSelectLesson(lesson);
+      navigate(`/course-video?courseId=${courseId}&lessonId=${lesson.lesson_id}`);
+    } else {
+      alert("Please complete previous lessons to unlock this one.");
+    }
+
+  };
+
+  const isLessonUnlocked = (lesson) => {
+    const lessonIndex = SectionDoc.flatMap(section => section.lessons).findIndex(l => l === lesson);
+    // Mở khóa bài học nếu tất cả các bài học trước nó đã hoàn thành
+    return lessonIndex <= completedLessons.length;
+  };
+  
+
   return (
     <div className="w-full">
       {SectionDoc?.map((section, sectionIndex) => (
@@ -30,7 +58,7 @@ export default function Dropdown({ SectionDoc, handleSelectLesson }) {
                     )}
                   >
                     <span>{section.lessons.length} lessons</span> |{" "}
-                    <span>{section.totalTime} mins</span>
+                    <span>{section.totalTime} seconds</span>
                   </div>
                 </div>
                 <ChevronUp
@@ -41,8 +69,12 @@ export default function Dropdown({ SectionDoc, handleSelectLesson }) {
                 {section.lessons.map((lesson, lessonIndex) => (
                   <button
                     key={lessonIndex}
-                    className="w-full px-4 py-2 focus:bg-[#FCDCD3] relative group"
-                    onClick={() => handleSelectLesson(lesson)}
+                    onClick={() => handleLessonClick(lesson)}
+                    disabled={!isLessonUnlocked(lesson)}
+                    className={classNames(
+                      "w-full px-4 py-2 focus:bg-[#FCDCD3] relative group",
+                      { "bg-[#FCDCD3]": lessonIdFromURL === lesson.lesson_id.toString() }
+                    )}
                   >
                     <div className="flex items-center justify-between gap-1">
                       <div className="flex flex-col">
@@ -50,34 +82,42 @@ export default function Dropdown({ SectionDoc, handleSelectLesson }) {
                           {lesson.name}
                         </p>
                         <div className="flex items-center justify-start gap-1">
-                          <PlayCircleFill
-                            width={12}
-                            height={12}
-                            fill="#808080"
-                            className="group-focus:hidden"
-                          />
-                          <Pause
-                            width={12}
-                            height={12}
-                            fill="#FF6636"
-                            className="hidden group-focus:block"
-                          />
                           <p className="text-xs font-normal text-black text-opacity-60">
                             {lesson.duration} mins
                           </p>
                         </div>
                       </div>
-                      <Lock
-                        width={16}
-                        height={16}
-                        className="group-focus:hidden"
-                      ></Lock>
-                      <Vector
-                        width={16}
-                        height={16}
-                        fill="#1F8354"
-                        className="hidden group-focus:block"
-                      ></Vector>
+                      {completedLessons.includes(lesson.lesson_id) ? (
+                        <Vector
+                          width={16}
+                          height={16}
+                          fill="#1F8354"
+                          className="group-focus:block"
+                        />
+                      ) : lessonIndex === completedLessons.length ? (
+                        <>
+                         
+                          <Pause
+                            width={12}
+                            height={12}
+                            fill="#FF6636"
+                            className="group-focus:hidden"
+                           
+                          />
+                           <Pause
+                            width={12}
+                            height={12}
+                            fill="#FF6636"
+                            className="hidden group-focus:block"
+                          />
+                        </>
+                      ) : (
+                        <Lock
+                          width={16}
+                          height={16}
+                          className="group-focus:hidden"
+                        />
+                      )}
                     </div>
                   </button>
                 ))}

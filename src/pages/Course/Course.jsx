@@ -14,7 +14,7 @@ import Button from "../../components/button/Button";
 import { useQuery } from "react-query";
 import { apiServer } from "../../utils/http";
 // import { useEffect } from "react";
-
+import { Link } from "react-router-dom";
 // let someVariable = 1000;
 // console.log(someVariable?.toLocaleString());
 
@@ -74,39 +74,6 @@ import { apiServer } from "../../utils/http";
 //     joiner: 120,
 //   },
 // ];
-
-const cate = [
-  {
-    id: 1,
-    image: "images/05.png",
-    cateName: "Marketing",
-  },
-  {
-    id: 2,
-    image: "images/01.png",
-    cateName: "Lập trình",
-  },
-  {
-    id: 3,
-    image: "images/02.png",
-    cateName: "Thiết kế đồ họa",
-  },
-  {
-    id: 4,
-    image: "images/06.png",
-    cateName: "Ngôn ngữ",
-  },
-  {
-    id: 5,
-    image: "images/03.png",
-    cateName: "Tài chính",
-  },
-  {
-    id: 6,
-    image: "images/04.png",
-    cateName: "Photography",
-  },
-];
 
 const PriceSlider = () => {
   const [range, setRange] = useState([0, 100]);
@@ -241,7 +208,6 @@ export default function Course() {
     }
   };
 
-
   const {
     data: categoryData,
     cateisLoading,
@@ -333,13 +299,15 @@ export default function Course() {
                           </p>
                         </div>
                         <ChecvronUp
-                          className={`${open ? "rotate-180 transform" : ""
-                            } h-5 w-5`}
+                          className={`${
+                            open ? "rotate-180 transform" : ""
+                          } h-5 w-5`}
                         />
                       </Disclosure.Button>
                       <div
-                        className={`${open ? "block" : "hidden"
-                          } h-[1px] w-full bg-[#E9EAF0]`}
+                        className={`${
+                          open ? "block" : "hidden"
+                        } h-[1px] w-full bg-[#E9EAF0]`}
                       />
                       <Disclosure.Panel className="flex flex-col gap-6 py-4 mx-4">
                         <PriceSlider></PriceSlider>
@@ -362,20 +330,22 @@ export default function Course() {
                                 <label htmlFor={`checkbox-${index}`}>
                                   <span
                                     id=""
-                                    className={`ml-2 text-sm font-medium ${checkboxes[index]
+                                    className={`ml-2 text-sm font-medium ${
+                                      checkboxes[index]
                                         ? "text-[#FF6636] font-medium"
                                         : "text-[#4E5566] font-normal"
-                                      }`}
+                                    }`}
                                   >
                                     {label}
                                   </span>
                                 </label>
                               </div>
                               <div
-                                className={`text-xs font-medium ${checkboxes[index]
+                                className={`text-xs font-medium ${
+                                  checkboxes[index]
                                     ? "text-[#4E5566] font-medium"
                                     : "text-[#8C94A3] font-normal"
-                                  }`}
+                                }`}
                               >
                                 12345
                               </div>
@@ -405,17 +375,19 @@ export default function Course() {
                           </p>
                         </div>
                         <ChecvronUp
-                          className={`${open ? "rotate-180 transform" : ""
-                            } h-5 w-5`}
+                          className={`${
+                            open ? "rotate-180 transform" : ""
+                          } h-5 w-5`}
                         />
                       </Disclosure.Button>
                       <div
-                        className={`${open ? "block" : "hidden"
-                          } h-[1px] w-full bg-[#E9EAF0]`}
+                        className={`${
+                          open ? "block" : "hidden"
+                        } h-[1px] w-full bg-[#E9EAF0]`}
                       />
                       <Disclosure.Panel className="flex py-4 mx-4">
                         <div className=" flex flex-col gap-[10px]">
-                          {map(categoryData,(category) => (
+                          {map(categoryData, (category) => (
                             <label
                               key={category.category_id}
                               className="flex items-center space-x-2"
@@ -424,14 +396,19 @@ export default function Course() {
                                 type="checkbox"
                                 className="w-5 h-5 form-checkbox accent-[#FF6636]"
                                 id={`category-${category.category_id}`}
-                                checked={checkedItems[category.category_id] || false}
-                                onChange={() => handleCateChange(category.category_id)}
+                                checked={
+                                  checkedItems[category.category_id] || false
+                                }
+                                onChange={() =>
+                                  handleCateChange(category.category_id)
+                                }
                               />
                               <span
-                                className={`text-sm font-medium ${checkedItems[category.id]
+                                className={`text-sm font-medium ${
+                                  checkedItems[category.id]
                                     ? "text-[#FF6636] font-medium"
                                     : "text-[#4E5566] font-normal"
-                                  }`}
+                                }`}
                               >
                                 {category.cate_name}
                               </span>
@@ -461,13 +438,15 @@ export default function Course() {
                           </p>
                         </div>
                         <ChecvronUp
-                          className={`${open ? "rotate-180 transform" : ""
-                            } h-5 w-5`}
+                          className={`${
+                            open ? "rotate-180 transform" : ""
+                          } h-5 w-5`}
                         />
                       </Disclosure.Button>
                       <div
-                        className={`${open ? "block" : "hidden"
-                          } h-[1px] w-full bg-[#E9EAF0]`}
+                        className={`${
+                          open ? "block" : "hidden"
+                        } h-[1px] w-full bg-[#E9EAF0]`}
                       />
                       <Disclosure.Panel className="flex flex-col gap-[10px] pt-4 mx-4">
                         <div className=" flex flex-col gap-[10px] pb-11">
@@ -486,19 +465,21 @@ export default function Course() {
                                 />
                                 <StarFill width={20} height={20}></StarFill>
                                 <span
-                                  className={`text-sm font-medium ${checkRating[index]
+                                  className={`text-sm font-medium ${
+                                    checkRating[index]
                                       ? "text-[#FF6636] font-medium"
                                       : "text-[#4E5566] font-normal"
-                                    }`}
+                                  }`}
                                 >
                                   {label}
                                 </span>
                               </div>
                               <p
-                                className={`text-xs font-medium ${checkRating[index]
+                                className={`text-xs font-medium ${
+                                  checkRating[index]
                                     ? "text-[#4E5566] font-medium"
                                     : "text-[#8C94A3] font-normal"
-                                  }`}
+                                }`}
                               >
                                 12345
                               </p>
@@ -512,13 +493,14 @@ export default function Course() {
               </div>
             </div>
           </div>
-          <div className="col-span-12 lg:col-span-9 justify-between items-center flex flex-col">
+          <div className="flex flex-col items-center justify-between col-span-12 lg:col-span-9">
             <div className="grid grid-cols-12 gap-6">
               {map(courseData, (item) => (
                 <div
                   className="col-span-12 lg:col-span-4 md:col-span-6"
                   key={item?.course_id}
                 >
+                     <Link to={`/course-detail?courseId=${item.course_id}`}>
                   <Card
                     course_id={item.course_id}
                     thumbnail={item.thumbnail}
@@ -529,7 +511,9 @@ export default function Course() {
                     rating={item.rating}
                     joiner={item.joiner}
                   />
+                     </Link>
                 </div>
+             
               ))}
             </div>
             <Button

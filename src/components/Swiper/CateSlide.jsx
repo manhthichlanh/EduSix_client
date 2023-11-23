@@ -1,19 +1,16 @@
-/* eslint-disable react/prop-types */
-
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
-import Card from "./../Card/Card";
 import { Navigation } from "swiper/modules";
 import classNames from "classnames";
 import Button from "../button/Button";
 import ChevronRight from "./../commom/icons/ChevronRight";
 import { map } from "lodash";
-// import { useQuery } from "react-query";
-// import { apiServer } from "../../utils/http";
+import CateCard from "../Card/CateCard";
 
-export default function CourseSlide({ prefixAction, data }) {
+// eslint-disable-next-line react/prop-types
+export default function CateSlide({ prefixAction, data }) {
   return (
-    <div className={`z-10 relative group ${prefixAction}`}>
+    <div className={`relative group ${prefixAction}`}>
       <Swiper
         modules={[Navigation]}
         breakpoints={{
@@ -21,7 +18,7 @@ export default function CourseSlide({ prefixAction, data }) {
             slidesPerView: 1,
           },
           768: {
-            slidesPerView: 2,
+            slidesPerView: 3,
             spaceBetween: 20,
           },
           1024: {
@@ -29,7 +26,7 @@ export default function CourseSlide({ prefixAction, data }) {
             spaceBetween: 30,
           },
           1200: {
-            slidesPerView: 4,
+            slidesPerView: 6,
             spaceBetween: 30,
           },
         }}
@@ -40,22 +37,13 @@ export default function CourseSlide({ prefixAction, data }) {
       >
         {map(data, (item, index) => (
           <SwiperSlide key={index}>
-            <Card
-              course_id={item.course_id}
-              thumbnail={item.thumbnail}
-              category={item.cate_name}
-              cateId={item.category_id}
-              price={item.course_price}
-              name={item.name}
-              rating={5}
-              joiner={456}
-            />
+            <CateCard image={item.logo_cate} cateName={item.cate_name} />
           </SwiperSlide>
         ))}
       </Swiper>
       <div
         className={classNames(
-          " bg-whiteabsolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 z-10 opacity-0 invisible transition duration-300 group-hover:opacity-100 group-hover:visible",
+          "absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 z-10 opacity-0 invisible transition duration-300 group-hover:opacity-100 group-hover:visible",
           `${prefixAction}-prev`
         )}
       >

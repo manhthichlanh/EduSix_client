@@ -20,20 +20,17 @@ function DetailCard({ course_id  }) {
     }
   );
 
-  useEffect(() => {
-    if (courseData && courseData.data.success) {
-      // Access the data from the response
-      const { Course_Info, CourseDoc, SectionDoc, success } = courseData.data;
-      const { sectionCount, LessonCount, TotalTime } = Course_Info;
 
-      // Do something with the data...
-      console.log('Section Count:', sectionCount);
-      console.log('Lesson Count:', LessonCount);
-      console.log('Total Time:', TotalTime);
-      console.log('Course Doc:', CourseDoc);
-      console.log('Section Doc:', SectionDoc);
+  
+  useEffect(() => {
+    if (courseData && courseData.data.success && SectionDoc.length > 0) {
+      const firstLessonId = SectionDoc[0].lessons[0]?.lesson_id;
+      setActive(firstLessonId); // Giả sử rằng bạn lưu trữ lesson_id đầu tiên trong state 'active'
     }
   }, [courseData]);
+
+
+ 
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -81,7 +78,7 @@ function DetailCard({ course_id  }) {
   const formattedTotalDuration = formatDuration(totalDurationInSeconds);
   const isFree = CourseDoc.course_price === 0;
   return (
-    <div className="rounded-lg w-full max-w-[430px] shadow-xl px-8 py-6 select-none">
+    <div className="rounded-lg w-full max-w-[430px] shadow-xl px-8 py-6 select-none bg-white">
       <div className="flex flex-col items-center gap-3">
         <p className="text-xl font-bold text-black">Gói</p>
         <div className="flex items-center gap-2">
@@ -127,12 +124,12 @@ function DetailCard({ course_id  }) {
       </div>
       <div>
       {isFree ? (
-        <Link to={`/course-video?courseId=${course_id}`}>
-          <Button
-            Class="w-full rounded-lg bg-[#FFEEE8] p-3 mt-4 text-[#FF6636] font-medium text-lg"
-            text="Tham gia khóa học"
-          />
-        </Link>
+       <Link to={`/course-video?courseId=${course_id}&lessonId=${active}`}>
+       <Button
+         Class="w-full rounded-lg bg-[#FFEEE8] p-3 mt-4 text-[#FF6636] font-medium text-lg"
+         text={isFree ? "Tham gia khóa học" : "Mua ngay"}
+       />
+     </Link>
       ) : (
         <Button
           Class="w-full rounded-lg bg-[#FFEEE8] p-3 mt-4 text-[#FF6636] font-medium text-lg"

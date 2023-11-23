@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { NavLink, useSearchParams } from "react-router-dom";
+import { NavLink, useSearchParams, useNavigate  } from "react-router-dom";
 import "./CourseVideo.scss";
 import ChevronLeft from "../../components/commom/icons/ChevronLeft";
 import ChevronRight from "../../components/commom/icons/ChevronRight";
@@ -7,6 +7,7 @@ import Check from "../../components/commom/icons/Check";
 import Messages from "../../components/commom/icons/Messages";
 import Dropdown from "../../components/Dropdown/Dropdown";
 import Button from "../../components/button/Button";
+import Input from "../../components/input/Input";
 import { useQuery } from "react-query";
 // import Footer from "../../Layout/Footer";
 import styled from "styled-components";
@@ -34,88 +35,312 @@ const VideoWrapper = styled.div`
     width: 100%;
   }
 `;
+
+
+
+
+
 const CourseVideo = () => {
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const courseId = searchParams.get("courseId");
+  const lessonId = searchParams.get("lessonId");
   const [selectedLesson, setSelectedLesson] = useState(null);
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [selectedQuiz, setSelectedQuiz] = useState([]);
+  const [questionIndex, setQuestionIndex] = useState(0);
+  const [completedLessons, setCompletedLessons] = useState([]);
+  const [selectedAnswersByQuestion, setSelectedAnswersByQuestion] = useState({});
+
+
+
   const videoURL = `${serverEndpoint}video/stream/${selectedVideo}`;
   console.log(videoURL);
-console.log(courseId);
+  console.log(courseId);
 
   const [isAnHienSubMenu1, setIsAnHienSubMenu1] = useState(false);
   const [isAnHienSubMenu, setIsAnHienSubMenu] = useState(
     window.innerWidth > 1000
   );
-// Sử dụng React Query để gọi API và lấy dữ liệu từ máy chủ
+  // Sử dụng React Query để gọi API và lấy dữ liệu từ máy chủ
 
 
-const toggleAnHienSubMenu = () => {
-  setIsAnHienSubMenu(!isAnHienSubMenu);
-};
-const toggleAnHienSubMenu1 = () => {
-  setIsAnHienSubMenu1(!isAnHienSubMenu1);
-  setIsAnHienSubMenu(false);
-};
-useEffect(() => {
-  const handleResize = () => {
-    setIsAnHienSubMenu(window.innerWidth > 1000);
+  const toggleAnHienSubMenu = () => {
+    setIsAnHienSubMenu(!isAnHienSubMenu);
+  };
+  const toggleAnHienSubMenu1 = () => {
+    setIsAnHienSubMenu1(!isAnHienSubMenu1);
+    setIsAnHienSubMenu(false);
+  };
+  useEffect(() => {
+    const handleResize = () => {
+      setIsAnHienSubMenu(window.innerWidth > 1000);
+    };
+
+    // Add event listener for window resize
+    window.addEventListener("resize", handleResize);
+
+    // Clean up the event listener when the component unmounts
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+
+
+
+  const updateCompletedLessons = (lesson) => {
+    setCompletedLessons((prevCompletedLessons) => {
+      const newCompletedLessons = new Set(prevCompletedLessons);
+      newCompletedLessons.add(lesson);
+      return Array.from(newCompletedLessons);
+    });
+  };
+  const { data: courseData, isLoading, isError } = useQuery(
+    ["courseData", courseId],
+    () => apiServer.get(`/admin-query/getAllLessonQuizzVideo/${+courseId}`),
+    {
+      enabled: !!courseId, // Không thực hiện gọi API nếu courseId không tồn tại
+    }
+  );
+  const handleGoBack = () => {
+    navigate(`/course-detail?courseId=${courseId}`);
   };
 
-  // Add event listener for window resize
-  window.addEventListener("resize", handleResize);
-
-  // Clean up the event listener when the component unmounts
-  return () => {
-    window.removeEventListener("resize", handleResize);
+  const handleNextQuestion = () => {
+    if (questionIndex < selectedQuiz.length - 1) {
+      setQuestionIndex(questionIndex + 1);
+    }
   };
-}, []);
-const { data: courseData, isLoading, isError } = useQuery(
-  ["courseData", courseId],
-  () => apiServer.get(`/admin-query/getAllLessonQuizzVideo/${+courseId}`),
-  {
-    enabled: !!courseId, // Không thực hiện gọi API nếu courseId không tồn tại
-  }
-);
-useEffect(() => {
+  const handlePreviousQuestion = () => {
+    if (questionIndex > 0) {
+      setQuestionIndex(questionIndex - 1);
+    }
+  };
+
   if (courseData && courseData.data.success) {
-    // Access the data from the response
-    const { Course_Info, CourseDoc, SectionDoc, success } = courseData.data;
-    const { sectionCount, LessonCount, TotalTime } = Course_Info;
+    const { SectionDoc } = courseData.data;
 
-    // Do something with the data...
-    console.log('Section Count:', sectionCount);
-    console.log('Lesson Count:', LessonCount);
-    console.log('Total Time:', TotalTime);
-    console.log('Course Doc:', CourseDoc);
-    console.log('Section Doc:', SectionDoc);
+    // Iterate through sections
+    SectionDoc.forEach((section) => {
+      section.lessons.forEach((lesson) => {
+        lesson.quizzs.forEach((quizz) => {
+          const { question, answers } = quizz;
+
+          // Now you have the question and its answers
+          // console.log('Question:', question);
+          // console.log('Answers:', answers);
+
+          // You can further iterate through the answers if needed
+          answers.forEach((answer) => {
+            // console.log('Answer:', answer.answer);
+            // console.log('Is Correct:', answer.isCorrect);
+            // console.log('Explanation:', answer.explain);
+          });
+        });
+      });
+    });
   }
-}, [courseData]);
 
-if (isLoading) {
-  return <div>Loading...</div>;
-}
 
-if (isError) {
-  return <div>Error fetching course data.</div>;
-}
+  const markLessonAsCompleted = (completedLessonId) => {
+    setCompletedLessons(prevCompletedLessons => {
+      const newCompletedLessons = new Set([...prevCompletedLessons, completedLessonId]);
+      return Array.from(newCompletedLessons);
+    });
+  };
+  
 
-if (!courseData || !courseData.data.Course_Info || !courseData.data.SectionDoc) {
-  return <div>Error: Course data is not available.</div>;
-}
+  const handleVideoEnd = () => {
+    const allLessons = SectionDoc.map(section => section.lessons).flat();
+    const currentIndex = allLessons.findIndex(lesson => lesson.lesson_id === selectedLesson.lesson_id);
+    setCompletedLessons(prev => [...prev, selectedLesson.lesson_id]);
+    if (currentIndex >= 0 && currentIndex < allLessons.length - 1) {
+      const nextLesson = allLessons[currentIndex + 1];
+      setSelectedLesson(nextLesson);
+      setSelectedVideo(nextLesson.videos?.[0]?.file_videos || null);
+      setSelectedQuiz(nextLesson.quizzs || []);
+      setQuestionIndex(0);
+      navigate(`/course-video?courseId=${courseId}&lessonId=${nextLesson.lesson_id}`);
+    } else {
+      alert("Đã hoàn thành tất cả các bài học trong khóa học này.");
+    }
+  };
+  
+  
+  
+  
+  
+  
 
-const { Course_Info, SectionDoc, CourseDoc } = courseData.data;
+  useEffect(() => {
+    if (courseData && courseData.data.success) {
+      // Access the data from the response
+      const { Course_Info, CourseDoc, SectionDoc, success } = courseData.data;
+      const { sectionCount, LessonCount, TotalTime } = Course_Info;
 
+      // Do something with the data...
+      console.log('Section Count:', sectionCount);
+      console.log('Lesson Count:', LessonCount);
+      console.log('Total Time:', TotalTime);
+      console.log('Course Doc:', CourseDoc);
+      console.log('Section Doc:', SectionDoc);
+    }
+    if (courseData && courseData.data.success) {
+      const firstLesson = courseData.data.SectionDoc[0]?.lessons[0];
+      if (firstLesson) {
+        setSelectedLesson(firstLesson);
+        setSelectedVideo(firstLesson.videos?.[0]?.file_videos || null);
+        setSelectedQuiz(firstLesson.quizzs || []);
+        setQuestionIndex(0);
+        const lesson = SectionDoc
+        .map(section => section.lessons)
+        .flat()
+        .find(lesson => lesson.lesson_id.toString() === lessonId);
+  
+      if (lesson) {
+        setSelectedLesson(lesson);
+        setSelectedVideo(lesson.videos?.[0]?.file_videos || null);
+        setSelectedQuiz(lesson.quizzs || []);
+        setQuestionIndex(0);
+      }
+    }
+  }
+  }, [courseData, lessonId]);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (isError) {
+    return <div>Error fetching course data.</div>;
+  }
+
+  if (!courseData || !courseData.data.Course_Info || !courseData.data.SectionDoc) {
+    return <div>Error: Course data is not available.</div>;
+  }
+
+  const { Course_Info, SectionDoc, CourseDoc } = courseData.data;
+  const sortedSectionDoc = SectionDoc.sort((a, b) => a.section_id - b.section_id);
+ // Inside the handleLessonSelect function in CourseVideo component
 const handleLessonSelect = (lesson) => {
-  const { videos, quizzs } = lesson;
-  const video = videos && videos.length > 0 ? videos[0] : null;
-
   setSelectedLesson(lesson);
-  setSelectedVideo(video ? video.file_videos : null);
-  setSelectedQuiz(quizzs);
+  setSelectedVideo(
+    lesson.isQuiz
+      ? lesson.quizzs?.[0]?.file_videos || null
+      : lesson.videos?.[0]?.file_videos || null
+  );
+  setSelectedQuiz(lesson.quizzs || []);
+  setQuestionIndex(0);
+
+  // Cập nhật URL với lessonId mới
+  const newURL = `/course-video?courseId=${courseId}&lessonId=${lesson.lesson_id}`;
+  window.history.pushState({}, '', newURL);
+  
 };
 
+  
+
+
+const isFirstLesson = () => {
+  if (!selectedLesson) {
+    return false; // or handle the case where selectedLesson is null
+  }
+
+  const allLessons = SectionDoc.map((section) => section.lessons).flat();
+  const currentIndex = allLessons.findIndex((lesson) => lesson.lesson_id === selectedLesson.lesson_id);
+  return currentIndex === 0;
+};
+
+
+const isLastLesson = () => {
+  if (!selectedLesson) {
+    return false; // or handle the case where selectedLesson is null
+  }
+
+  const allLessons = SectionDoc.map((section) => section.lessons).flat();
+  const currentIndex = allLessons.findIndex((lesson) => lesson.lesson_id === selectedLesson.lesson_id);
+
+  if (currentIndex < allLessons.length - 1) {
+    const nextLesson = allLessons[currentIndex + 1];
+    return nextLesson && nextLesson.lesson_id === null; // Adjust this condition based on your data
+  }
+
+  return true; // Handle the case when there is no next lesson
+};
+
+
+const isPreviousLessonCompleted = () => {
+  if (!selectedLesson) {
+    return false; // or handle the case where selectedLesson is null
+  }
+
+  const allLessons = SectionDoc.map((section) => section.lessons).flat();
+  const currentIndex = allLessons.findIndex((lesson) => lesson.lesson_id === selectedLesson.lesson_id);
+
+  if (currentIndex > 0) {
+    const previousLesson = allLessons[currentIndex - 1];
+    return previousLesson && previousLesson.completed; // Check if previousLesson is not null before accessing completed
+  }
+
+  return false; // Handle the case when there is no previous lesson
+};
+
+const isNextLessonCompleted = () => {
+  if (!selectedLesson) {
+    return false; // or handle the case where selectedLesson is null
+  }
+
+  const allLessons = SectionDoc.map((section) => section.lessons).flat();
+  const currentIndex = allLessons.findIndex((lesson) => lesson.lesson_id === selectedLesson.lesson_id);
+
+  if (currentIndex < allLessons.length - 1) {
+    const nextLesson = allLessons[currentIndex + 1];
+    return nextLesson && nextLesson.lesson_id === null; // Adjust this condition based on your data
+  }
+
+  return false; // Handle the case when there is no next lesson
+};
+
+
+const handlePreviousLesson = () => {
+  const allLessons = SectionDoc.map((section) => section.lessons).flat();
+  const currentIndex = allLessons.findIndex(
+    (lesson) => lesson.lesson_id === selectedLesson.lesson_id
+  );
+  const previousLesson = allLessons[currentIndex - 1];
+
+  if (previousLesson) {
+    const isNextLessonCompleted = completedLessons.includes(previousLesson.lesson_id);
+
+    if (!isNextLessonCompleted) {
+      alert('Hãy hoàn thành bài học sau đó!');
+      return;
+    }
+
+    navigate(`/course-video?courseId=${courseId}&lessonId=${previousLesson.lesson_id}`);
+  }
+};
+
+
+const handleNextLesson = () => {
+  const allLessons = SectionDoc.map((section) => section.lessons).flat();
+  const currentIndex = allLessons.findIndex(
+    (lesson) => lesson.lesson_id === selectedLesson.lesson_id
+  );
+  const nextLesson = allLessons[currentIndex + 1];
+
+  if (nextLesson) {
+    const isPreviousLessonCompleted = completedLessons.includes(selectedLesson.lesson_id);
+    
+    if (!isPreviousLessonCompleted) {
+      alert('Hãy hoàn thành bài học trước đó!');
+      return;
+    }
+
+    navigate(`/course-video?courseId=${courseId}&lessonId=${nextLesson.lesson_id}`);
+  }
+};
 
 
 
@@ -173,7 +398,7 @@ const handleLessonSelect = (lesson) => {
     },
   ];
 
-  
+
   const handleScrollToOverview = () => {
     const element = document.getElementById("overview-section");
     if (element) {
@@ -182,7 +407,7 @@ const handleLessonSelect = (lesson) => {
       });
     }
   };
-  
+
   const handleScrollToQuestion = () => {
     const element = document.getElementById("question-section");
     if (element) {
@@ -191,7 +416,7 @@ const handleLessonSelect = (lesson) => {
       });
     }
   };
-  
+
   const handleScrollToComments = () => {
     const element = document.getElementById("comments-section");
     if (element) {
@@ -201,6 +426,69 @@ const handleLessonSelect = (lesson) => {
     }
   };
 
+  const handleAnswerSelect = (answerIndex, isCorrect) => {
+    const currentQuestionId = selectedQuiz[questionIndex]?.id; // Assuming you have a unique identifier for each question
+
+    let newSelectedAnswers;
+
+    const allowsMultipleCorrectAnswers =
+      selectedQuiz[questionIndex]?.answers?.filter((answer) => answer.isCorrect).length > 1;
+
+    if (allowsMultipleCorrectAnswers) {
+      newSelectedAnswers = selectedAnswersByQuestion[currentQuestionId] || [];
+      newSelectedAnswers = newSelectedAnswers.includes(answerIndex)
+        ? newSelectedAnswers.filter((selectedIndex) => selectedIndex !== answerIndex)
+        : [...newSelectedAnswers, answerIndex];
+    } else {
+      newSelectedAnswers = [answerIndex];
+    }
+
+    setSelectedAnswersByQuestion({
+      ...selectedAnswersByQuestion,
+      [currentQuestionId]: newSelectedAnswers,
+    });
+  };
+
+
+  const allowsMultipleCorrectAnswers =
+    selectedQuiz[questionIndex]?.answers?.filter((answer) => answer.isCorrect).length > 1;
+
+
+    const handleSaveAnswers = () => {
+      let correctAnswersCount = 0;
+    
+      selectedQuiz.forEach((question) => {
+        const userAnswers = selectedAnswersByQuestion[question.id] || [];
+        const correctAnswers = question.answers.filter((a) => a.isCorrect).map((a, index) => index);
+    
+        if (JSON.stringify(userAnswers.sort()) === JSON.stringify(correctAnswers.sort())) {
+          correctAnswersCount++;
+        }
+      });
+    
+      const isAllCorrect = correctAnswersCount === selectedQuiz.length;
+    
+      if (isAllCorrect) {
+        // Hiển thị thông báo chúc mừng
+        alert("Chúc mừng bạn đã hoàn thành 100% câu hỏi.");
+    
+        // Chuyển hướng sau một khoảng thời gian ngắn
+        setTimeout(() => {
+          handleVideoEnd(); // Hàm này nên được cập nhật để chuyển đến bài học tiếp theo
+        }, 2000); // Đợi 2 giây trước khi chuyển hướng
+      } else {
+        // Hiển thị thông báo lỗi
+        alert(`Bạn đã trả lời sai ${selectedQuiz.length - correctAnswersCount} câu hỏi. Vui lòng xem lại.`);
+      }
+    };
+    
+    const isAllQuestionsAnswered = () => {
+      return selectedQuiz.every(question => 
+        selectedAnswersByQuestion.hasOwnProperty(question.id)
+      );
+    };
+    
+
 
   return (
     <>
@@ -208,15 +496,15 @@ const handleLessonSelect = (lesson) => {
         <div className="Header">
           <div className="directional">
             <div className="return">
-              <NavLink to="#">
+             <div className="ChevronLeft"  onClick={handleGoBack}>
                 <ChevronLeft
-                  width={20}
-                  height={20}
+                  width={28}
+                  height={28}
                   fill="#fff"
                   className="icon-link"
                 />
                 <p>Trở lại</p>
-              </NavLink>
+                </div>
             </div>
             <div className="name_course">
               <p>{CourseDoc.name}</p>
@@ -225,20 +513,92 @@ const handleLessonSelect = (lesson) => {
         </div>
         <div className="Content_CourseVideo">
           <div className="CourseVideo_Left">
-          {selectedVideo && (
+            {selectedVideo && (
               <div className="video">
                 <VideoWrapper>
                   <div>
                     <ReactPlayer
-                      url= {videoURL}
+                      url={videoURL}
                       width="100%"
                       height="100%"
                       controls={true}
+                      onEnded={handleVideoEnd}
                     />
                   </div>
                 </VideoWrapper>
               </div>
             )}
+
+            {selectedQuiz.length > 0 && (
+              <div className="Quiz">
+                <div className="QuizQuestions">
+                  <div className="InputQuizQuestions">
+                    {selectedQuiz.length > 0 && (
+                      <>
+                        {/* Display information about multiple/single correct answers */}
+                        <p className="AnswerInfo">
+                          {allowsMultipleCorrectAnswers
+                            ? "Câu hỏi chọn được nhiều đáp án"
+                            : "Câu hỏi chọn được 1 đáp án"}
+                        </p>
+
+                        <Input
+  className="InputQuestions"
+  type="text"
+  placeholder={selectedQuiz[questionIndex]?.question ? `${selectedQuiz[questionIndex].question}?` : ""}
+  disabled
+/>
+
+                        <div className="Answer">
+                          {selectedQuiz[questionIndex]?.answers?.map((answer, answerIndex) => (
+                            <div
+                              key={answerIndex}
+                              className={`AnswerOption ${selectedAnswersByQuestion[selectedQuiz[questionIndex]?.id]?.includes(answerIndex)
+                                  ? "selected"
+                                  : ""
+                                }`}
+                              onClick={() => handleAnswerSelect(answerIndex, answer.isCorrect)}
+                            >
+                              <span className="AnswerLabel">
+                                {String.fromCharCode(65 + answerIndex).toUpperCase()}.{" "}
+                              </span>
+                              <p
+                                className={`InputAnswer ${selectedAnswersByQuestion[selectedQuiz[questionIndex]?.id]?.includes(answerIndex)
+                                    ? "selected"
+                                    : ""
+                                  }`}
+                              >
+                                {answer.answer}
+                              </p>
+                            </div>
+                          ))}
+
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </div>
+
+                <div className="ButtonGroup">
+                  {questionIndex > 0 && (
+                    <Button Class="back" text="Trở lại" onClick={handlePreviousQuestion}></Button>
+                  )}
+                  {questionIndex < selectedQuiz.length - 1 && (
+                    <Button Class="continue" text="Tiếp tục" onClick={handleNextQuestion}></Button>
+                  )}
+         {isAllQuestionsAnswered() && (
+  <Button 
+    Class="save-answers" 
+    text="Lưu Đáp Án" 
+    onClick={handleSaveAnswers}
+  />
+)}
+                </div>
+             
+              </div>
+            )}
+
+
             <div className="scrollBar">
               <div className="mini_menu">
                 <NavLink onClick={handleScrollToOverview}>
@@ -258,7 +618,7 @@ const handleLessonSelect = (lesson) => {
                 <div className="overview_CourseVideo" id="overview-section">
                   <h1>{CourseDoc.name}</h1>
                   <p dangerouslySetInnerHTML={{ __html: CourseDoc.content }}>
-                  
+
                   </p>
                 </div>
 
@@ -386,7 +746,16 @@ const handleLessonSelect = (lesson) => {
                     Nội dung khóa học
                   </h2>
                   <div className="dropdownMenu">
-                    <Dropdown SectionDoc={SectionDoc} handleSelectLesson={handleLessonSelect}/>
+                  <Dropdown
+  SectionDoc={sortedSectionDoc}
+  handleSelectLesson={handleLessonSelect}
+  completedLessons={completedLessons}
+  setCompletedLessons={setCompletedLessons}
+  defaultOpen={true} // Thêm prop defaultOpen
+  courseId={courseId} // Truyền courseId
+  
+  
+/>
                   </div>
                 </div>
               </div>
@@ -405,25 +774,25 @@ const handleLessonSelect = (lesson) => {
           </button>
         </div>
         <div className="next_page">
-          <NavLink to="#" className="button_next_page">
-            <ChevronLeft
-              width={20}
-              height={20}
-              fill="#656565"
-              className="icon-link"
-            />
-            <Button text="Bài trước" Class="Button"></Button>
-          </NavLink>
+        <div className="knot">
+  <ChevronLeft width={28} height={28} fill="#FF6636" className="icon-link" />
+  <Button
+    text="Bài trước"
+    Class="Button"
+    onClick={handlePreviousLesson}
+    disabled={isFirstLesson() || !isPreviousLessonCompleted()}
+  />
 
-          <NavLink to="#" className="button_next_page">
-            <Button text="Bài sau" Class="Button"></Button>
-            <ChevronRight
-              width={20}
-              height={20}
-              fill="#656565"
-              className="icon-link"
-            />
-          </NavLink>
+</div>
+<div className="knot">
+  <Button
+    text="Bài sau"
+    Class="Button"
+    onClick={handleNextLesson}
+    disabled={isLastLesson() || !isNextLessonCompleted()}
+  />
+  <ChevronRight width={28} height={28} fill="#FF6636" className="icon-link" />
+</div>
         </div>
       </div>
     </>

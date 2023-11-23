@@ -1,27 +1,33 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useQuery } from "react-query";
 import { apiServer } from "../../utils/http";
-import CourseSlide from "../../components/Swiper/CourseSlide";
+import { filter, slice } from "lodash";
 import ArcordionItem from "../../components/Dropdown/Arcordion";
 import DetailCard from "../../components/Card/DetailCard";
 import Vector from "../../components/commom/icons/Vector";
 import Button from "../../components/button/Button";
-
+import CourseSlide from "../../components/Swiper/CourseSlide";
+const getCourseData = async () => {
+  try {
+    const response1 = await apiServer.get("/course");
+    const course = response1.data;
+    return course;
+  } catch (error) {
+    throw new Error("Error fetching course data");
+  }
+};
 export default function CourseDetail() {
-  const { state } = useLocation();
-  const course_id = state.course_id;
+  const location = useLocation();
+  const course_id = new URLSearchParams(location.search).get("courseId");
   const [isBoxCro, setIsBoxCro] = useState(true);
 
-  const { data: courseDetails, isError, isLoading } = useQuery(
-    ['courseDetails', course_id],
-    () => apiServer.get(`/course/${course_id}`),
-    {
-      enabled: !!course_id,
-    }
-  );
-
- 
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
   const handleScroll = () => {
     const element = document.getElementById("box-list-course");
     const triggerPosition = element.getBoundingClientRect().top;
@@ -33,24 +39,18 @@ export default function CourseDetail() {
       setIsBoxCro(true);
     }
   };
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-  const { data: allCourses, isError: coursesError, isLoading: coursesLoading } = useQuery(
-    "allCourses",
-    () => apiServer.get("/course").then(response => response.data)
+  const { data: courseData } = useQuery("courseData", getCourseData);
+  const {
+    data: courseDetails,
+    isError,
+    isLoading,
+  } = useQuery(
+    ["courseDetails", course_id],
+    () => apiServer.get(`/course/${course_id}`),
+    {
+      enabled: !!course_id,
+    }
   );
- 
-  if (coursesLoading) {
-    return <div>Loading all courses...</div>;
-  }
-
-  if (coursesError) {
-    return <div>Error fetching all courses.</div>;
-  }
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -59,11 +59,15 @@ export default function CourseDetail() {
   if (isError) {
     return <div>Error fetching course details.</div>;
   }
- 
-  const { name, content, thumbnail, course_price, category_id } = courseDetails.data;
 
-  
-  const courseData = allCourses.filter(course => course.category_id === category_id);
+  const { name, content, thumbnail, category_id } = courseDetails.data;
+
+  const sortedBySameCateID = slice(
+    filter(courseData, (course) => course.category_id === category_id),
+    0,
+    8
+  );
+
   return (
     <>
       <div className="px-20">
@@ -113,10 +117,11 @@ export default function CourseDetail() {
           </div>
           <div
             id="box"
-            className={`${isBoxCro
-              ? "pt-[60px] fixed col-span-4 right-20 bottom-[-20]"
-              : "pt-[60px] absolute col-span-4 right-0 bottom-0 "
-              }`}
+            className={`${
+              isBoxCro
+                ? "pt-[60px] fixed col-span-4 right-20 bottom-[-20]"
+                : "pt-[60px] absolute col-span-4 right-0 bottom-0 "
+            }`}
           >
             <DetailCard course_id={course_id} isFree={true}></DetailCard>
           </div>
@@ -135,7 +140,7 @@ export default function CourseDetail() {
             ></Button>
           </div>
           <div className="">
-            <CourseSlide prefixAction={"courseData"} data={ courseData } />
+            <CourseSlide prefixAction={"details"} data={sortedBySameCateID} />
           </div>
         </div>
       </div>
