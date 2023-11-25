@@ -70,9 +70,8 @@ const getCategoryData = async () => {
 };
 const getCourseData = async () => {
   try {
-    const response1 = await apiServer.get("/course");
-    const course = response1.data;
-    return course;
+    const response = await apiServer.get("/course");
+    return response.data;
   } catch (error) {
     throw new Error("Error fetching course data");
   }
@@ -202,8 +201,9 @@ export default function Home() {
             </div>
             <div className="">
               <CourseSlide
-                prefixAction={"photography"}
+                prefixAction={"marketing"}
                 data={sortedByMarketing}
+
               />
             </div>
           </div>
@@ -221,7 +221,7 @@ export default function Home() {
             </div>
             <div className="">
               <CourseSlide
-                prefixAction={"photography"}
+                prefixAction={"programming"}
                 data={sortedByPrograming}
               />
             </div>
