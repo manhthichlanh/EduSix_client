@@ -20,8 +20,11 @@ import Account from "./pages/Setting/Account";
 import About from "./pages/About/About";
 import Blog from "./pages/Blog/Blog";
 import Payment from "./pages/Payment/Payment";
+import AccountCourse from "./pages/Setting/Course";
 // import Login from "./pages/Login/Login";
-//||Components
+import AccountProfile from "./pages/Setting/Profile";
+import AccountBlog from "./pages/Setting/Blog";
+import AccountPurchaseHistory from "./pages/Setting/History";
 function App() {
   return (
     <BrowserRouter>
@@ -35,7 +38,15 @@ function App() {
           <Route path="/blog" element={<Blog />} />
           <Route path="/create-bLog" element={<CreateBLog />} />
           <Route path="/blog-detail" element={<BlogDetail />} />
-          <Route path="/account-profile" element={<Account />} />
+          <Route path="account" element={<Account />}>
+            <Route path="profile" element={<AccountProfile />} />
+            <Route path="course" element={<AccountCourse />} />
+            <Route path="blog" element={<AccountBlog />} />
+            <Route
+              path="purchase-history"
+              element={<AccountPurchaseHistory />}
+            />
+          </Route>
           <Route path="/payment" element={<Payment />} />
         </Route>
         <Route path="/course-video" element={<CourseVideo />} />
