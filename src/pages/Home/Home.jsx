@@ -169,10 +169,8 @@ export default function Home() {
             <div className="flex items-end justify-between py-10">
               <p className="font-semibold text-[24px]">Danh mục</p>
             </div>
-
             <CateSlide data={categoryData} prefixAction={"cate"} />
           </div>
-
           <div className="my-20 lg:col-span-4 md:col-span-12">
             <div className="flex items-end justify-between py-10 ">
               <p className="font-semibold text-[24px]">KHÓA HỌC MỚI NHẤT</p>

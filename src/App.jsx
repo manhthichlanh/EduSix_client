@@ -35,7 +35,7 @@ function App() {
           <Route path="/blog" element={<Blog />} />
           <Route path="/create-bLog" element={<CreateBLog />} />
           <Route path="/blog-detail" element={<BlogDetail />} />
-          <Route path="/account-profile" element={<Account />} />
+          <Route path="/account" element={<Account />} />
           <Route path="/payment" element={<Payment />} />
         </Route>
         <Route path="/course-video" element={<CourseVideo />} />
