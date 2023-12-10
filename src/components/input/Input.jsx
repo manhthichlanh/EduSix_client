@@ -10,6 +10,7 @@ function Input({ type, className, placeholder, value, onChange, disabled, onClic
         onChange={onChange}
         disabled={disabled}
         onClick={onClick}
+       
       />
     </div>
   );

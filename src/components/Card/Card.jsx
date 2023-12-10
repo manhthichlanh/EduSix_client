@@ -2,7 +2,7 @@
 import { Link } from "react-router-dom";
 import StarFill from "./../commom/icons/StarFill";
 // import { serverEndpoint } from "../../utils/http";
-
+import {serverEndpoint } from "../../utils/http";
 function Card(props) {
   const {
     thumbnail,
@@ -36,7 +36,7 @@ function Card(props) {
       >
         <img
           className="object-cover w-full h-full"
-          src={`${`http://14.225.198.206:8080/`}course/thumbnail/${thumbnail}`}
+          src={`${serverEndpoint}course/thumbnail/${thumbnail}`}
           alt={thumbnail}
         />
       </Link>

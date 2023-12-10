@@ -1,18 +1,25 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import Camera from "../../components/commom/icons/Camera";
 import classNames from "classnames";
+import { useUser } from '../../utils/UserAPI'; 
 
 export default function Account() {
   const inputFileRef = useRef(null);
   const imageRef = useRef(null);
   const location = useLocation();
+  const { user, isLoading, error, handleLogout, refetchUser } = useUser();
 
+ 
+
+  // Ensure user data is available before accessing properties
+  const userDetails = user?.userDetails || {};
+  
   const [menuItems] = useState([
     {
       name: "Thông tin",
       href: "/account/profile",
-      current: false,
+      current: true,
     },
     { name: "Khóa học", href: "/account/course", current: false },
     { name: "Blog", href: "/account/blog", current: false },
@@ -22,6 +29,7 @@ export default function Account() {
       current: false,
     },
   ]);
+
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     const reader = new FileReader();
@@ -48,7 +56,7 @@ export default function Account() {
               <img
                 ref={imageRef}
                 className="w-[60px] h-[60px] rounded-full cursor-pointer object-cover"
-                src="../images/thumbnail.png"
+                src={userDetails.avatar || "https://cdn.lazi.vn/storage/uploads/users/avatar/1586848529_anh-dai-dien-avatar-dep-facebook.jpg"}
                 alt=""
                 onClick={() => inputFileRef.current.click()}
               />
@@ -64,7 +72,7 @@ export default function Account() {
                 <Camera width={14} height={14}></Camera>
               </div>
             </label>
-            <p className="text-[16px] font-medium">Ngô Thủy Đan</p>
+            <p className="text-[16px] font-medium">{userDetails.fullname}</p>
             <div className="h-[1px] w-full bg-[#e8e8e8] my-6"></div>
             <div className="w-full text-[#333333]">
               {menuItems.map((item) => (

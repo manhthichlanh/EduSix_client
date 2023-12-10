@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useQuery } from "react-query";
-import { apiServer } from "../../utils/http";
+import { apiServer, serverEndpoint } from "../../utils/http";
 import { filter, slice } from "lodash";
 import ArcordionItem from "../../components/Dropdown/Arcordion";
 import DetailCard from "../../components/Card/DetailCard";
 import Vector from "../../components/commom/icons/Vector";
 import Button from "../../components/button/Button";
 import CourseSlide from "../../components/Swiper/CourseSlide";
+import { useUser } from '../../utils/UserAPI'; 
 const getCourseData = async () => {
   try {
     const response1 = await apiServer.get("/course");
@@ -30,15 +31,20 @@ export default function CourseDetail() {
   }, []);
   const handleScroll = () => {
     const element = document.getElementById("box-list-course");
-    const triggerPosition = element.getBoundingClientRect().top;
-    const viewportHeight = window.innerHeight;
-
-    if (triggerPosition <= viewportHeight) {
-      setIsBoxCro(false);
-    } else {
-      setIsBoxCro(true);
+  
+    // Check if the element exists before trying to access its properties
+    if (element) {
+      const triggerPosition = element.getBoundingClientRect().top;
+      const viewportHeight = window.innerHeight;
+  
+      if (triggerPosition <= viewportHeight) {
+        setIsBoxCro(false);
+      } else {
+        setIsBoxCro(true);
+      }
     }
   };
+  
   const { data: courseData } = useQuery("courseData", getCourseData);
   const {
     data: courseDetails,
@@ -87,7 +93,7 @@ export default function CourseDetail() {
             <div className="">
               <img
                 className="w-full h-[420px] rounded-xl"
-                src={`http://14.225.198.206:8080/course/thumbnail/${thumbnail}`}
+                src={`${serverEndpoint}course/thumbnail/${thumbnail}`}
                 alt=""
               />
               <div className="absolute inline-flex items-end z-10 mt-[-50px] pl-20">
