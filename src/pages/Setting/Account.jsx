@@ -64,7 +64,9 @@ export default function Account() {
   const selectedMenuItem = menuItems.find(
     (item) => item.href === location.pathname
   );
-
+  const avatarUrl = userDetails && userDetails.avatar && userDetails.avatar.startsWith("https")
+  ? userDetails.avatar
+  : `${serverEndpoint}user/avatar/${userDetails.avatar}`;
   return (
     <>
       <div className="grid grid-cols-12 gap-6 px-20 my-10">
@@ -74,7 +76,7 @@ export default function Account() {
               <img
                 ref={imageRef}
                 className="w-[60px] h-[60px] rounded-full cursor-pointer object-cover"
-                src={`${serverEndpoint}user/avatar/${userDetails.avatar}` || "https://cdn.lazi.vn/storage/uploads/users/avatar/1586848529_anh-dai-dien-avatar-dep-facebook.jpg"}
+                src={ avatarUrl || "https://cdn.lazi.vn/storage/uploads/users/avatar/1586848529_anh-dai-dien-avatar-dep-facebook.jpg"}
                 alt=""
                 onClick={() => inputFileRef.current.click()}
               />

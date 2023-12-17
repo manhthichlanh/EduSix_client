@@ -74,7 +74,7 @@ export default function Header() {
       const users = user.userDetails;
       // Access user_id directly from the user object
 
-
+      const avatarUrl = users.avatar.startsWith("https") ? users.avatar : `${serverEndpoint}user/avatar/${users.avatar}`;
 
 
       return (
@@ -91,7 +91,7 @@ export default function Header() {
                 <span className="sr-only">Open user menu</span>
                 <img
                   className="w-full h-full rounded-full p-0.5"
-                  src={`${serverEndpoint}user/avatar/${users.avatar}` || "https://cdn.lazi.vn/storage/uploads/users/avatar/1586848529_anh-dai-dien-avatar-dep-facebook.jpg"}
+                  src={avatarUrl|| "https://cdn.lazi.vn/storage/uploads/users/avatar/1586848529_anh-dai-dien-avatar-dep-facebook.jpg"}
                   alt=""
                 />
                 <span className='bg-red-500 px-1.5 pb-0.5 text-white rounded-3xl text-xs'>99+</span>
@@ -119,7 +119,7 @@ export default function Header() {
                         <div className='w-11 h-11'>
                           <img
                             className="w-full h-full rounded-full"
-                            src={`${serverEndpoint}user/avatar/${users.avatar}` || "https://cdn.lazi.vn/storage/uploads/users/avatar/1586848529_anh-dai-dien-avatar-dep-facebook.jpg"}
+                            src={ avatarUrl || "https://cdn.lazi.vn/storage/uploads/users/avatar/1586848529_anh-dai-dien-avatar-dep-facebook.jpg"}
                             alt=""
                           />
                         </div>
