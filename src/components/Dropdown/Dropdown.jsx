@@ -23,7 +23,7 @@ export default function Dropdown({
   const lessonIdFromURL = searchParams.get("lessonId");
   const [currentSection, setCurrentSection] = useState(0);
   const [alertShown, setAlertShown] = useState(false);
-  console.log("Bài học nè:", progressData);
+  // console.log("Bài học nè:", progressData);
 
   const getAllLessons = () => SectionDoc.flatMap((section) => section.lessons);
   useEffect(() => {
@@ -53,13 +53,13 @@ export default function Dropdown({
     const allLessons = getAllLessons();
 
     const lessonIndex = getLessonIndex(lesson);
-    const lessonProgress =
-      progressData?.s_doc?.[0]?.section_progresses.find(
-        (sectionProgress) => sectionProgress.section_id === lesson.section_id
-      );
+    // const lessonProgress =
+    //   progressData?.s_doc?.[0]?.section_progresses.find(
+    //     (sectionProgress) => sectionProgress.section_id === lesson.section_id
+    //   );
 
-    console.log("Lesson Index:", lessonIndex);
-    console.log("Lesson Progress:", lessonProgress);
+    // console.log("Lesson Index:", lessonIndex);
+    // console.log("Lesson Progress:", lessonProgress);
 
     const isUnlocked = isLessonUnlocked(lesson, currentSection);
 
@@ -83,7 +83,7 @@ export default function Dropdown({
     }
 
     // Save the current lesson ID to local storage
-    localStorage.setItem("currentLessonId", lesson.lesson_id);
+  
   };
 
   const isLessonUnlocked = (lesson, sectionIndex) => {
@@ -107,7 +107,7 @@ export default function Dropdown({
   return (
     <div className="w-full">
       {SectionDoc?.map((section, sectionIndex) => (
-        <Disclosure key={sectionIndex}>
+        <Disclosure key={sectionIndex} defaultOpen={true}>
           {({ open }) => (
             <>
               <Disclosure.Button
@@ -134,7 +134,7 @@ export default function Dropdown({
                   className={`${open ? "rotate-180 transform" : ""} h-5 w-5`}
                 />
               </Disclosure.Button>
-              <Disclosure.Panel className="bg-[#F5F5F5] hover:bg-slate-200">
+              <Disclosure.Panel className="bg-[#F5F5F5]">
                 {section.lessons.map((lesson, lessonIndex) => {
                   const lessonProgress = progressData?.s_doc?.[0]?.section_progresses.find(
                     (sectionProgress) =>
@@ -160,7 +160,7 @@ export default function Dropdown({
                         opacity: !isUnlocked ? 0.5 : 1, // Set opacity for locked lessons
                       }}
                       className={classNames(
-                        "w-full px-4 py-2 focus:bg-[#FCDCD3]  relative group bg-orange-100 my-0.5",
+                        "w-full px-4 py-2 focus:bg-[#FCDCD3]  relative group bg-orange-100 my-0.5 hover:bg-slate-200",
                         { "bg-[#FCDCD3]": lessonIdFromURL === lesson.lesson_id.toString() },
                         { "completed": isCompleted },
                         { "active": lessonIdFromURL === lesson.lesson_id.toString() }

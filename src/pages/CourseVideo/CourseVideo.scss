@@ -36,12 +36,22 @@
                 color: #fff;
                 
             }
-
             .name_course {
+                width: 200px; /* Chiều rộng của phần tử cha */
+                overflow: hidden;
+              z-index: 1;
+              
+            p {
                 padding-left: 20px;
+                width: 100%; /* Chiều rộng của phần tử con, có thể là 100% hoặc giá trị cố định khác */
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
         }
+        }
         .progress {
+            // background-color: #29303b;
             position: absolute;
             top: 0px;
             right: 20px; /* Adjust the right position */
@@ -330,7 +340,6 @@
                                 min-width: 50px;
                                 height: 50px;
                                 margin-right: 20px;
-
                                 img {
 
                                     border-radius: 50%;
@@ -469,7 +478,7 @@
                 width: 30%;
                 position: fixed;
                 .dropdownMenu{
-                    max-height: 75vh;
+                    max-height: 72vh;
                     overflow: auto;
                     
                 }

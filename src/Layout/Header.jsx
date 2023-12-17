@@ -1,22 +1,23 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import { Fragment, useState, useEffect } from 'react';
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { NavLink, Link, useNavigate } from "react-router-dom";
 import Button from "../components/button/Button";
 import Search from "../components/commom/icons/Search";
-
-import { useUser } from '../utils/UserAPI'; 
+import { useSearchCourse } from '../utils/searchApi';
+import { serverEndpoint } from "../utils/http";
+import { useUser } from '../utils/UserAPI';
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function Header() {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  
+  const [searchKeyword, setSearchKeyword] = useState('');
   const { user, isLoading, handleLogout } = useUser();
 
-
+  const { isLoading: isSearchLoading, searchCourse } = useSearchCourse();
 
   const [menuItems, setMenuItems] = useState([
     { name: "Trang chủ", href: "/", current: true },
@@ -41,66 +42,94 @@ export default function Header() {
     setMenuItems(updatedMenuItems);
   }, [location.pathname]);
 
+
+
+
+
+  const handleSearchChange = (event) => {
+    setSearchKeyword(event.target.value);
+  };
+
+  const handleSearchSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      // Call the searchCourse function from the custom hook and use navigate
+      await searchCourse(searchKeyword, navigate);
+      // The searchCourse function will update the URL and trigger a reload
+    } catch (error) {
+      console.error('Error:', error);
+      // Handle the error as needed
+    }
+  };
+
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      handleSearchSubmit();
+    }
+  };
+
+
   const renderUserContent = () => {
     if (user && user.userDetails) {
       const users = user.userDetails;
       // Access user_id directly from the user object
-    
 
 
-      
+
+
       return (
         <>
-          <NavLink to="#">
+          <NavLink to="/account/course">
             <p className="text-[14px] text-[#808080] font-medium">
               Khóa học của tôi
             </p>
           </NavLink>
           <Menu as="div" className="relative ml-3">
-  <div className=''>
-    <Menu.Button className="relative inline-flex rounded-full  text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 hover:ring-offset-orange-500 w-8 h-8">
-      <span className="absolute -inset-1.5" />
-      <span className="sr-only">Open user menu</span>
-      <img
-        className="w-full h-full rounded-full p-0.5"
-        src={users.avatar || "https://cdn.lazi.vn/storage/uploads/users/avatar/1586848529_anh-dai-dien-avatar-dep-facebook.jpg"}
-        alt=""
-      />
-    </Menu.Button>
-  </div>
-  <Transition
-    as={Fragment}
-    enter="transition ease-out duration-100"
-    enterFrom="transform opacity-0 scale-95"
-    enterTo="transform opacity-100 scale-100"
-    leave="transition ease-in duration-75"
-    leaveFrom="transform opacity-100 scale-100"
-    leaveTo="transform opacity-0 scale-95"
-  >
-    <Menu.Items className="absolute right-0 z-10 mt-2 w-max origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none overflow-hidden">
-      <Menu.Item>
-        {({ active }) => (
-          <div
-            className={classNames(
-              active ? "bg-gray-100" : "",
-              "block px-4 py-2 text-sm text-gray-700 bg-gray-100"
-            )}
-          >
-            <div className='flex gap-3 mb-3 '>
-              <div className='w-11 h-11'>
+            <div className=''>
+              <Menu.Button className="relative inline-flex rounded-full  text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 hover:ring-offset-orange-500 w-8 h-8">
+                <span className="absolute -inset-1.5" />
+                <span className="sr-only">Open user menu</span>
                 <img
-                  className="w-full h-full rounded-full"
-                  src={users.avatar || "https://cdn.lazi.vn/storage/uploads/users/avatar/1586848529_anh-dai-dien-avatar-dep-facebook.jpg"}
+                  className="w-full h-full rounded-full p-0.5"
+                  src={`${serverEndpoint}user/avatar/${users.avatar}` || "https://cdn.lazi.vn/storage/uploads/users/avatar/1586848529_anh-dai-dien-avatar-dep-facebook.jpg"}
                   alt=""
                 />
-              </div>
+                <span className='bg-red-500 px-1.5 pb-0.5 text-white rounded-3xl text-xs'>99+</span>
+              </Menu.Button>
+            </div>
+            <Transition
+              as={Fragment}
+              enter="transition ease-out duration-100"
+              enterFrom="transform opacity-0 scale-95"
+              enterTo="transform opacity-100 scale-100"
+              leave="transition ease-in duration-75"
+              leaveFrom="transform opacity-100 scale-100"
+              leaveTo="transform opacity-0 scale-95"
+            >
+              <Menu.Items className="absolute right-0 z-10 mt-2 w-max origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none overflow-hidden">
+                <Menu.Item>
+                  {({ active }) => (
+                    <div
+                      className={classNames(
+                        active ? "bg-gray-100" : "",
+                        "block px-4 py-2 text-sm text-gray-700 bg-gray-100"
+                      )}
+                    >
+                      <div className='flex gap-3 mb-3 '>
+                        <div className='w-11 h-11'>
+                          <img
+                            className="w-full h-full rounded-full"
+                            src={`${serverEndpoint}user/avatar/${users.avatar}` || "https://cdn.lazi.vn/storage/uploads/users/avatar/1586848529_anh-dai-dien-avatar-dep-facebook.jpg"}
+                            alt=""
+                          />
+                        </div>
 
-                <div className='w-36'>
-  <h2 className='text-base font-semibold text-orange-600 line-clamp-1'>{users.fullname}</h2>
-  <p className='text-xs truncate'>{users.email}</p>
-</div>
+                        <div className='w-36'>
+                          <h2 className='text-base font-semibold text-orange-600 line-clamp-1'>{users.fullname}</h2>
+                          <p className='text-xs truncate'>{users.email}</p>
+                        </div>
 
-                </div>
+                      </div>
                     </div>
                   )}
                 </Menu.Item>
@@ -113,7 +142,7 @@ export default function Header() {
                         "block px-4 py-2 text-sm text-gray-700"
                       )}
                     >
-                   Thông tin cá nhân
+                      Thông tin cá nhân
                     </NavLink>
                   )}
                 </Menu.Item>
@@ -152,32 +181,32 @@ export default function Header() {
     } else {
       return (
         <>
-         <NavLink to="/register">
-          <Button
-            text={"Đăng ký"}
-            Class={
-              " text-gray-500 px-6 py-2 ml-3 rounded text-sm font-medium leading-6 hover:text-[#808080] hover:bg-gray-100"
-            }
-          ></Button>
+          <NavLink to="/register">
+            <Button
+              text={"Đăng ký"}
+              Class={
+                " text-gray-500 px-6 py-2 ml-3 rounded text-sm font-medium leading-6 hover:text-[#808080] hover:bg-gray-100"
+              }
+            ></Button>
           </NavLink>
           <NavLink to="/login">
-          <Button
+            <Button
 
-            text={"Đăng nhập"}
-            Class={
-              "bg-[#ff6636] text-white px-6 py-2 ml-3 rounded text-sm font-medium leading-6  hover:text-[#ff6636] hover:bg-[#FFEEE8]"
-            }
-          ></Button>
+              text={"Đăng nhập"}
+              Class={
+                "bg-[#ff6636] text-white px-6 py-2 ml-3 rounded text-sm font-medium leading-6  hover:text-[#ff6636] hover:bg-[#FFEEE8]"
+              }
+            ></Button>
           </NavLink>
         </>
       );
     }
   };
-  
+
 
   return (
     <>
-   
+
       <Disclosure as="nav" className="bg-white">
         {({ open }) => (
           <>
@@ -238,7 +267,7 @@ export default function Header() {
                             >
                               {item.name}
                             </Link>
-                            
+
                           ))}
                         </>
                       )}
@@ -247,18 +276,23 @@ export default function Header() {
                 </div>
                 <div className="absolute inset-y-0 right-0 flex items-center gap-4 pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                   <div className="relative text-gray-600 hidden max-w-md mx-auto md:block sm:block">
+
+
                     <input
                       type="search"
-                      name="serch"
+                      name="search"
+                      value={searchKeyword}
+                      onChange={handleSearchChange}
+                      onKeyPress={handleKeyPress}
                       placeholder="Tìm kiếm khóa học"
                       className="bg-white h-10 px-4 pr-40 rounded-full border border-[#8d8d8d] text-sm focus:outline-none"
                     />
-                    <button
-                      type="submit"
-                      className="absolute right-0 top-0 mt-2.5 mr-3"
-                    >
+                    <button type="button" onClick={handleSearchSubmit} className="absolute right-0 top-0 mt-2.5 mr-3">
                       <Search width={20} height={20}></Search>
                     </button>
+
+
+
                   </div>
                   {renderUserContent()}
                 </div>
@@ -282,7 +316,7 @@ export default function Header() {
                         item.current
                           ? "text-orange-500"
                           : "text-[#333333] hover:text-orange-500 font-medium text-sm hover:bg-transparent",
-                        "rounded-md px-3 py-2 text-sm font-medium"
+                        "rounded-md px-3 py-2 text-sm font-medium block text-center" // Updated styles
                       )}
                       aria-current={item.current ? "page" : undefined}
                       onClick={() => handleMenuItemClick(index)}
@@ -299,8 +333,8 @@ export default function Header() {
                         className={classNames(
                           item.current
                             ? "text-orange-500"
-                            : "text-[#333333] hover:text-orange-500 font-medium text-sm hover:bg-transparent",
-                          "rounded-md px-3 py-2 text-sm font-medium"
+                            : "text-[#333333] hover:text-orange-500 font-medium text-sm hover:bg-orange-100",
+                          "rounded-md px-3 py-2 text-sm font-medium block text-center bg-orange-50" // Updated styles
                         )}
                         aria-current={item.current ? "page" : undefined}
                         onClick={() => handleMenuItemClick(index)}
@@ -313,19 +347,20 @@ export default function Header() {
                 <div className="relative text-gray-600 mx-auto w-max sm:hidden pt-3 lg:pt-0 md:pt-0 sm:pt-3">
                   <input
                     type="search"
-                    name="serch"
+                    name="search"
+                    value={searchKeyword}
+                    onChange={handleSearchChange}
+                    onKeyPress={handleKeyPress}
                     placeholder="Tìm kiếm khóa học"
                     className="bg-white h-10 px-4 pr-40 rounded-full border border-[#8d8d8d] text-sm focus:outline-none"
                   />
-                  <button
-                    type="submit"
-                    className="absolute right-0 top-0 mt-2.5 mr-3 pt-3 lg:pt-0 md:pt-0 sm:pt-3"
-                  >
+                  <button type="button" onClick={handleSearchSubmit} className="absolute right-0 top-0 mt-2.5 mr-3">
                     <Search width={20} height={20}></Search>
                   </button>
                 </div>
               </div>
             </Disclosure.Panel>
+
           </>
         )}
       </Disclosure>

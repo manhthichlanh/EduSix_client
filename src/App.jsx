@@ -25,10 +25,14 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AccountProfile from "./pages/Setting/Profile";
 import AccountCourse from "./pages/Setting/Course";
+import AccountCertification from "./pages/Setting/Certification/Certification";
 import AccountBlog from "./pages/Setting/Blog";
 import AccountPurchaseHistory from "./pages/Setting/History";
+import CourseList from "./pages/CourseList/CourseList";
+import CertificateDetails from "./pages/CertificateDetails/CertificateDetails";
 // import Login from "./pages/Login/Login";
 //||Components
+
 function App() {
   return (
     <>
@@ -43,11 +47,14 @@ function App() {
           <Route path="/blog" element={<Blog />} />
           <Route path="/create-bLog" element={<CreateBLog />} />
           <Route path="/blog-detail" element={<BlogDetail />} />
+          <Route path="/course-search" element={<CourseList />} />
+           <Route path="/certification/:id" element={<CertificateDetails />} />
           {/* <Route path="/account/*" element={<Account />} /> */}
           <Route path="/payment" element={<Payment />} />
           <Route path="account" element={<Account />}>
             <Route path="profile" element={<AccountProfile />} />
             <Route path="course" element={<AccountCourse />} />
+            <Route path="certification" element={<AccountCertification />} />
             <Route path="blog" element={<AccountBlog />} />
             <Route
               path="purchase-history"

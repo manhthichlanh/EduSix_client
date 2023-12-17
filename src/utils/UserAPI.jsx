@@ -44,5 +44,5 @@ export const useUser = () => {
     navigate("/login")
   };
 
-  return { user, isLoading, handleLogout };
+  return { user, isLoading, handleLogout, navigate };
 };

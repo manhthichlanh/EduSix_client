@@ -8,7 +8,7 @@ import Card from "../../components/Card/Card";
 import { Disclosure } from "@headlessui/react";
 import Slider from "rc-slider";
 import ChecvronUp from "../../components/commom/icons/ChevronUp";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import StarFill from "../../components/commom/icons/StarFill";
 import Button from "../../components/button/Button";
 import { useQuery } from "react-query";
@@ -75,20 +75,55 @@ import { Link } from "react-router-dom";
 //   },
 // ];
 
-const PriceSlider = () => {
-  const [range, setRange] = useState([0, 100]);
+const PriceSlider = ({ range, setRange }) => {
+
+  const [focusedInput, setFocusedInput] = useState(null);
+  const inputRefs = {
+    min: useRef(null),
+    max: useRef(null),
+  };
 
   const handleSliderChange = (newRange) => {
     setRange(newRange);
+  };
+
+  const handleInputFocus = (inputName) => {
+    setFocusedInput(inputName);
+  };
+
+  const handleInputBlur = () => {
+    setFocusedInput(null);
+  };
+
+  const handleInputChange = (inputName, value) => {
+    // Allow only digits
+    const newValue = value.replace(/\D/g, '');
+
+    // Parse the value; if empty, set to null
+    const intValue = newValue === '' ? null : parseInt(newValue);
+
+    setRange((prevRange) => {
+      const newRange = [...prevRange];
+      newRange[inputName === 'min' ? 0 : 1] = intValue;
+      return newRange;
+    });
+  };
+
+  // Use a setTimeout to restore focus after state is updated
+  const restoreFocus = () => {
+    if (focusedInput && inputRefs[focusedInput]?.current) {
+      setTimeout(() => {
+        inputRefs[focusedInput]?.current.focus();
+      }, 0);
+    }
   };
 
   return (
     <div className="flex flex-col gap-6">
       <Slider
         range
-        // className="pt-6"
         min={0}
-        max={1000}
+        max={5000000}
         step={10}
         value={range}
         onChange={handleSliderChange}
@@ -117,33 +152,40 @@ const PriceSlider = () => {
           <span className="absolute flex items-center mx-3 mb-1">
             <div className="w-5 h-5 fill-slate-300">$</div>
           </span>
-          <Input
+          <input
+            ref={inputRefs.min}
             type="number"
             className={"w-full outline-none border border-[#E9EAF0] py-3 pl-6"}
             name="min"
             placeholder={"min:"}
             id=""
+
             value={range[0]}
-            onChange={(e) => {
-              setRange([parseInt(e.target.value), range[1]]);
-            }}
-          ></Input>
+            onChange={(e) => handleInputChange('min', e.target.value)}
+            onFocus={() => handleInputFocus('min')}
+            onBlur={handleInputBlur}
+            autoFocus={focusedInput === 'min'}
+            onKeyDown={restoreFocus}
+          />
         </label>
         <label className="relative flex items-center w-full">
           <span className="absolute flex items-center mx-3 mb-1">
             <div className="w-5 h-5 fill-slate-300">$</div>
           </span>
-          <Input
+          <input
+            ref={inputRefs.max}
             type="number"
             name="max"
             className={"w-full outline-none border border-[#E9EAF0] py-3 pl-6"}
             placeholder={"max:"}
             id=""
             value={range[1]}
-            onChange={(e) => {
-              setRange([range[0], parseInt(e.target.value)]);
-            }}
-          ></Input>
+            onChange={(e) => handleInputChange('max', e.target.value)}
+            onFocus={() => handleInputFocus('max')}
+            onBlur={handleInputBlur}
+            autoFocus={focusedInput === 'max'}
+            onKeyDown={restoreFocus}
+          />
         </label>
       </div>
     </div>
@@ -151,21 +193,33 @@ const PriceSlider = () => {
 };
 
 export default function Course() {
-  const [checkboxes, setCheckboxes] = useState([false, false]);
+  const [checkboxes, setCheckboxes] = useState([true, true]); // Show all by default
   const checkboxLabels = ["Có phí", "Miễn phí"];
+  const [searchQuery, setSearchQuery] = useState("");
+  const [range, setRange] = useState([0, 5000000]);
+  const [selectedCategories, setSelectedCategories] = useState({});
+  const [checkedItems, setCheckedItems] = useState({});
+  const [selectedRatings, setSelectedRatings] = useState([false, false, false, false, false]);
+  const [loadMore, setLoadMore] = useState(6);
+  const [selectedSorting, setSelectedSorting] = useState("");
+  const handleSortingChange = (e) => {
+    setSelectedSorting(e.target.value);
+  };
   const handlePriceChange = (index) => {
     setCheckboxes((prevState) =>
       prevState.map((value, i) => (i === index ? !value : value))
     );
   };
 
-  const [checkedItems, setCheckedItems] = useState({});
-  const handleCateChange = (categoryId) => {
-    setCheckedItems((prevCheckedItems) => ({
-      ...prevCheckedItems,
-      [categoryId]: !prevCheckedItems[categoryId],
-    }));
+
+
+
+
+  const handleLoadMore = () => {
+    setLoadMore((prevLoadMore) => prevLoadMore + 6);
   };
+  
+
 
   const [checkRating, setCheckRating] = useState([
     false,
@@ -213,6 +267,71 @@ export default function Course() {
     cateisLoading,
     cateisError,
   } = useQuery("categoryData", getCategoryData);
+
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+
+  const handleCateChange = (categoryId) => {
+    setCheckedItems((prevCheckedItems) => ({
+      ...prevCheckedItems,
+      [categoryId]: !prevCheckedItems[categoryId],
+    }));
+    setSelectedCategories((prevSelectedCategories) => ({
+      ...prevSelectedCategories,
+      [categoryId]: !prevSelectedCategories[categoryId],
+    }));
+  };
+  const filteredAndSortedCourses = courseData
+    ? courseData
+      .filter((course) => course.course_price >= range[0] && course.course_price <= range[1])
+      .filter((course) =>
+        course.name.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+      .filter((course) => {
+        const meetsPriceCriteria =
+          (checkboxes[0] && course.course_price > 0) ||
+          (checkboxes[1] && course.course_price === 0);
+        return meetsPriceCriteria;
+      })
+      .filter((course) => {
+        const meetsCategoryCriteria =
+          Object.keys(selectedCategories).length === 0 ||
+          selectedCategories[course.category_id];
+        return meetsCategoryCriteria;
+      })
+      .filter((course) => {
+        const meetsRatingCriteria =
+          checkRating.every((isChecked, index) =>
+            isChecked ? course.rating === 5 - index : true
+          );
+        return meetsRatingCriteria;
+      })
+      .sort((a, b) => {
+        switch (selectedSorting) {
+          case "mn":
+            return b.course_id - a.course_id;
+          case "asc":
+            return a.course_price - b.course_price;
+          case "desc":
+            return b.course_price - a.course_price;
+          case "az":
+            return a.name.localeCompare(b.name);
+          case "za":
+            return b.name.localeCompare(a.name);
+          default:
+            return 0; // Default sorting or no sorting
+        }
+      })
+    : [];
+
+
+
+    const remainingCourses = filteredAndSortedCourses.length - loadMore;
+
+
+
   return (
     <>
       <div className="w-full">
@@ -260,6 +379,8 @@ export default function Course() {
                   className={
                     "text-[16px] leading-6 border w-full rounded-lg border-gray-200 py-3 px-3 hover:border-gray-300 focus:outline-none focus:border-[#ff6636] transition-colors "
                   }
+                  value={searchQuery}
+                  onChange={handleSearch}
                 />
                 <button className="absolute block w-8 h-8 my-auto text-center top-2 right-2">
                   <Search width={20} height={20} />
@@ -268,12 +389,17 @@ export default function Course() {
             </div>
             <div className="flex items-center w-full gap-4">
               <p className="whitespace-nowrap">Lọc theo</p>
-              <select className="block w-full p-3 text-base text-gray-900 border border-gray-200 rounded-lg outline-none focus:border-[#FF6636]">
-                <option defaultValue={""}>Mới nhất</option>
-                <option value="">Từ thấp tới cao</option>
-                <option value="">Từ cao tới thấp</option>
-                <option value="">Từ A - Z</option>
-                <option value="">Từ Z - A</option>
+              <select
+                className="block w-full p-3 text-base text-gray-900 border border-gray-200 rounded-lg outline-none focus:border-[#FF6636]"
+                value={selectedSorting}
+                onChange={handleSortingChange}
+              >
+                <option value="">Tất cả</option>
+                <option value="mn">Mới nhất</option>
+                <option value="asc">Từ thấp tới cao</option>
+                <option value="desc">Từ cao tới thấp</option>
+                <option value="az">Từ A - Z</option>
+                <option value="za">Từ Z - A</option>
               </select>
             </div>
           </div>
@@ -308,14 +434,11 @@ export default function Course() {
                           } h-[1px] w-full bg-[#E9EAF0]`}
                       />
                       <Disclosure.Panel className="flex flex-col gap-6 py-4 mx-4">
-                        <PriceSlider></PriceSlider>
+                        <PriceSlider range={range} setRange={setRange} />
 
-                        <div className=" flex flex-col gap-[10px]">
+                        <div className="flex flex-col gap-[10px]">
                           {checkboxLabels.map((label, index) => (
-                            <div
-                              key={index}
-                              className="flex items-center justify-between"
-                            >
+                            <div key={index} className="flex items-center justify-between">
                               <div className="flex items-center">
                                 <input
                                   type="checkbox"
@@ -343,7 +466,12 @@ export default function Course() {
                                     : "text-[#8C94A3] font-normal"
                                   }`}
                               >
-                                12345
+                                {filteredAndSortedCourses.filter((course) => {
+                                  const meetsPriceCriteria =
+                                    (index === 0 && course.course_price > 0) ||
+                                    (index === 1 && course.course_price === 0);
+                                  return meetsPriceCriteria;
+                                }).length}
                               </div>
                             </div>
                           ))}
@@ -399,8 +527,8 @@ export default function Course() {
                               />
                               <span
                                 className={`text-sm font-medium ${checkedItems[category.id]
-                                    ? "text-[#FF6636] font-medium"
-                                    : "text-[#4E5566] font-normal"
+                                  ? "text-[#FF6636] font-medium"
+                                  : "text-[#4E5566] font-normal"
                                   }`}
                               >
                                 {category.cate_name}
@@ -457,8 +585,8 @@ export default function Course() {
                                 <StarFill width={20} height={20}></StarFill>
                                 <span
                                   className={`text-sm font-medium ${checkRating[index]
-                                      ? "text-[#FF6636] font-medium"
-                                      : "text-[#4E5566] font-normal"
+                                    ? "text-[#FF6636] font-medium"
+                                    : "text-[#4E5566] font-normal"
                                     }`}
                                 >
                                   {label}
@@ -466,8 +594,8 @@ export default function Course() {
                               </div>
                               <p
                                 className={`text-xs font-medium ${checkRating[index]
-                                    ? "text-[#4E5566] font-medium"
-                                    : "text-[#8C94A3] font-normal"
+                                  ? "text-[#4E5566] font-medium"
+                                  : "text-[#8C94A3] font-normal"
                                   }`}
                               >
                                 12345
@@ -484,28 +612,32 @@ export default function Course() {
           </div>
           <div className="flex flex-col items-center justify-between col-span-12 lg:col-span-9">
             <div className="grid grid-cols-12 gap-6">
-            {map(courseData, (item) => (
-  <div className="col-span-12 lg:col-span-4 md:col-span-6" key={item?.course_id}>
-    <Card
-      course_id={item.course_id}
-      thumbnail={item.thumbnail}
-      category={item.cate_name}
-      cateId={item.category_id}
-      price={item.course_price}
-      name={item.name}
-      rating={item.rating}
-      joiner={item.joiner}
-    />
-  </div>
-))}
-
+              {map(filteredAndSortedCourses.slice(0, loadMore), (item) => (
+                <div className="col-span-12 lg:col-span-4 md:col-span-6" key={item?.course_id}>
+                  <Card
+                    course_id={item.course_id}
+                    thumbnail={item.thumbnail}
+                    category={item.cate_name}
+                    cateId={item.category_id}
+                    price={item.course_price}
+                    name={item.name}
+                    rating={item.rating}
+                    joiner={item.joiner}
+                  />
+                </div>
+              ))}
             </div>
-            <Button
-              text="Xem thêm"
-              Class={
-                "text-[18px] leading-6 text-[#ff6636] font-medium mt-10 mb-[100px] bg-[#ffeee8] px-[42px] py-4 rounded-md"
-              }
-            />
+
+            {loadMore < filteredAndSortedCourses.length && (
+              <Button
+                text={`Xem thêm (${remainingCourses} kết quả)`}
+                Class={
+                  "text-[15px] leading-6 text-[#ff6636] font-medium mt-10 mb-[100px] bg-[#ffeee8] px-[42px] py-4 rounded-md"
+                }
+                onClick={handleLoadMore}
+                disabled={remainingCourses <= 0} // Disable the button when there are no more courses
+              />
+            )}
           </div>
         </div>
       </div>

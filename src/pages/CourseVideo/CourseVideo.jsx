@@ -72,10 +72,47 @@ const CourseVideo = () => {
   const { user, handleLogout } = useUser();
   const users = user?.userDetails || {};
   const user_id = users.user_id;
+  // const saveProgressToLocalStorage = (lessonId) => {
+  //   const savedProgress = localStorage.getItem('userProgress');
 
+  //   let progressData;
+  //   if (savedProgress) {
+  //     progressData = JSON.parse(savedProgress);
+
+  //     // Check if userId or courseId has changed
+  //     if (progressData.userId !== user_id || progressData.courseId !== courseId) {
+  //       // Create a new entry
+  //       progressData = {
+  //         userId: user_id,
+  //         courseId: courseId,
+  //         lessonId: lessonId,
+  //       };
+  //     } else {
+  //       // Update lessonId in the existing entry
+  //       progressData.lessonId = lessonId;
+  //     }
+  //   } else {
+  //     // If no progress data exists, create a new entry
+  //     progressData = {
+  //       userId: user_id,
+  //       courseId: courseId,
+  //       lessonId: lessonId,
+  //     };
+  //   }
+
+  //   localStorage.setItem('userProgress', JSON.stringify(progressData));
+  // };
+
+  // useEffect(() => {
+  //   const savedProgress = localStorage.getItem('userProgress');
+  //   if (savedProgress) {
+  //     const progressData = JSON.parse(savedProgress);
+  //     // Use progressData.userId, progressData.courseId, and progressData.lessonId as needed
+  //   }
+  // }, [user_id, courseId]); // Add user_id and courseId to the dependency array
   const videoURL = `${serverEndpoint}video/stream/${selectedVideo}`;
-  console.log(videoURL);
-  console.log(courseId);
+  // console.log(videoURL);
+  // console.log(courseId);
 
   const [isAnHienSubMenu1, setIsAnHienSubMenu1] = useState(false);
   const [isAnHienSubMenu, setIsAnHienSubMenu] = useState(
@@ -175,76 +212,77 @@ const CourseVideo = () => {
 
       setCompletedLessons(lessonsProgress);
     } else {
-      console.log('progressData or progressData.data is undefined');
+      // console.log('progressData or progressData.data is undefined');
     }
   }, [progressData, refetchProgressData]);
-  
-  const ProgressData= progressData?.data;
-  console.log(ProgressData);
+
+  const ProgressData = progressData?.data;
+  // console.log(ProgressData);
 
 
   const handleVideoEnd = async () => {
-    const allLessons = SectionDoc.map(section => section.lessons).flat();
-    const currentIndex = allLessons.findIndex(lesson => lesson.lesson_id === selectedLesson.lesson_id);
-    setCompletedLessons(prev => [...prev, selectedLesson.lesson_id]);
-
-    if (currentIndex >= 0 && currentIndex < allLessons.length - 1) {
-      const nextLesson = allLessons[currentIndex + 1];
-      setSelectedLesson(nextLesson);
-      setSelectedVideo(nextLesson.videos?.[0]?.file_videos || null);
-      setSelectedQuiz(nextLesson.quizzs || []);
-      setQuestionIndex(0);
-     
-      navigate(`/course-video?courseId=${courseId}&lessonId=${nextLesson.lesson_id}`);
-      
-    } else {
+    try {
       // Check if all lessons are finished
       const allLessonsFinished = ProgressData?.s_doc?.[0]?.section_progresses.every(sectionProgress =>
         sectionProgress.lesson_progresses.every(lessonProgress => lessonProgress.is_finish)
       );
-
+  
       if (allLessonsFinished) {
         alert("Đã hoàn thành tất cả các bài học trong khóa học này.");
-      } else {
-        alert("Bạn đã hoàn thành tất cả bài học có sẵn, nhưng vẫn còn bài học chưa hoàn thành.");
       }
-    }
-
-    try {
-      await apiServer.post("/admin-query/updateProgress", {
-        course_id: courseId,
-        user_id: user_id,
-        section_id: selectedLesson.section_id,
-        lesson_id: selectedLesson.lesson_id,
-      });
-
-      // Refetch the progress data after updating
-      refetchProgressData();
-      
-      const newURL = `/course-video?courseId=${courseId}&lessonId=${nextLesson.lesson_id}`;
-      window.location.replace(newURL);
+      //  else {
+      //   alert("Bạn đã hoàn thành tất cả bài học có sẵn, nhưng vẫn còn bài học chưa hoàn thành.");
+      // }
+  
+      // If all lessons are finished, do not make the API call
+      if (!allLessonsFinished) {
+        const allLessons = SectionDoc.map(section => section.lessons).flat();
+        const currentIndex = allLessons.findIndex(lesson => lesson.lesson_id === selectedLesson.lesson_id);
+        setCompletedLessons(prev => [...prev, selectedLesson.lesson_id]);
+  
+        if (currentIndex >= 0 && currentIndex < allLessons.length - 1) {
+          const nextLesson = allLessons[currentIndex + 1];
+          setSelectedLesson(nextLesson);
+          setSelectedVideo(nextLesson.videos?.[0]?.file_videos || null);
+          setSelectedQuiz(nextLesson.quizzs || []);
+          setQuestionIndex(0);
+  
+          navigate(`/course-video?courseId=${courseId}&lessonId=${nextLesson.lesson_id}`);
+        }
+  
+        // Make the API call to update progress
+        await apiServer.post("/admin-query/updateProgress", {
+          course_id: courseId,
+          user_id: user_id,
+          section_id: selectedLesson.section_id,
+          lesson_id: selectedLesson.lesson_id,
+        });
+  
+        // Refetch the progress data after updating
+        refetchProgressData();
+      }
     } catch (error) {
-      console.error("Error updating progress:", error);
+      console.error("Error handling video end:", error);
     }
   };
-
-
-
-
-
-
   
 
 
 
 
- 
 
 
 
-useEffect(() => {
-  // Your code here
-}, [courseId, lessonId]);
+
+
+
+
+
+
+
+  useEffect(() => {
+    // Your code here
+  }, [courseId, lessonId]);
   useEffect(() => {
     if (courseData && courseData.data.success) {
       // Access the data from the response
@@ -252,11 +290,11 @@ useEffect(() => {
       const { sectionCount, LessonCount, TotalTime } = Course_Info;
 
       // Do something with the data...
-      console.log('Section Count:', sectionCount);
-      console.log('Lesson Count:', LessonCount);
-      console.log('Total Time:', TotalTime);
-      console.log('Course Doc:', CourseDoc);
-      console.log('Section Doc:', SectionDoc);
+      // console.log('Section Count:', sectionCount);
+      // console.log('Lesson Count:', LessonCount);
+      // console.log('Total Time:', TotalTime);
+      // console.log('Course Doc:', CourseDoc);
+      // console.log('Section Doc:', SectionDoc);
     }
     if (courseData && courseData.data.success) {
       const firstLesson = courseData.data.SectionDoc[0]?.lessons[0];
@@ -309,7 +347,7 @@ useEffect(() => {
     const newURL = `/course-video?courseId=${courseId}&lessonId=${lesson.lesson_id}`;
     window.history.pushState({}, '', newURL);
     navigate(newURL);
-
+    // saveProgressToLocalStorage(lesson.lesson_id);
     // Mở khóa các bài học đã hoàn thành
     const lessonProgress = progressData?.s_doc?.[0]?.section_progresses.find(sectionProgress => sectionProgress.section_id === lesson.section_id);
     const completedLessonIds = lessonProgress?.lesson_progresses.filter(lp => lp.is_finish).map(lp => lp.lesson_id) || [];
@@ -391,15 +429,15 @@ useEffect(() => {
     if (previousLesson) {
       const isNextLessonCompleted = completedLessons.includes(previousLesson.lesson_id.toString());
 
-    
+
 
       const lessonProgress = ProgressData.s_doc[0]?.section_progresses.find(sectionProgress => sectionProgress.section_id === previousLesson.section_id);
       const isLessonLocked = lessonProgress?.lesson_progresses.find(lp => lp.lesson_id === previousLesson.lesson_id && lp.is_lock);
-      console.log('Is Next Lesson Locked:', isLessonLocked);
+      // console.log('Is Next Lesson Locked:', isLessonLocked);
 
       if (isLessonLocked) {
         alert('Bạn cần hoàn thành bài học trước đó trước khi tiếp tục!');
-        console.log('Is Next Lesson Locked:', isLessonLocked);
+        // console.log('Is Next Lesson Locked:', isLessonLocked);
         return;
       }
 
@@ -409,7 +447,7 @@ useEffect(() => {
     }
   };
 
- 
+
   const handleNextLesson = () => {
     const allLessons = SectionDoc.map((section) => section.lessons).flat();
     const currentIndex = allLessons.findIndex(
@@ -418,12 +456,12 @@ useEffect(() => {
     const nextLesson = allLessons[currentIndex + 1];
 
     if (nextLesson) {
-    
+
 
       const nextLessonProgress = ProgressData.s_doc?.[0]?.section_progresses.find(sectionProgress => sectionProgress.section_id === nextLesson.section_id);
       const isNextLessonLocked = nextLessonProgress?.lesson_progresses.find(lp => lp.lesson_id === nextLesson.lesson_id && lp.is_lock);
 
-      console.log('Is Next Lesson Locked:', isNextLessonLocked);
+      // console.log('Is Next Lesson Locked:', isNextLessonLocked);
 
       if (isNextLessonLocked) {
         alert('Bạn cần hoàn thành bài học trước đó trước khi tiếp tục!');
@@ -435,8 +473,10 @@ useEffect(() => {
 
       // Chuyển đến bài học tiếp theo
       navigate(newURL);
+      // saveProgressToLocalStorage(nextLesson.lesson_id);
     }
   };
+
 
 
 
@@ -603,26 +643,27 @@ useEffect(() => {
                 <p>Trở lại</p>
               </div>
             </div>
-            <div className="name_course">
-              <p>{CourseDoc.name}</p>
-            </div>
+
+              <div className="name_course">
+                <p>{CourseDoc.name}</p>
+              </div>
           </div>
           <div className="progress">
-    <strong>
-        {ProgressData && ProgressData.course_info
-            ? `${Math.round(ProgressData.course_info.progress * 100)}%`
-            : 'N/A'}
-    </strong>
-    <p>
-        {ProgressData && ProgressData.course_info
-            ? `${ProgressData.course_info.totalLessons.current}/${ProgressData.course_info.totalLessons.total} bài học`
-            : 'N/A'}
-    </p>
-</div>
+            <strong>
+              {ProgressData && ProgressData.course_info
+                ? `${Math.round(ProgressData.course_info.progress * 100)}%`
+                : 'N/A'}
+            </strong>
+            <p>
+              {ProgressData && ProgressData.course_info
+                ? `${ProgressData.course_info.totalLessons.current}/${ProgressData.course_info.totalLessons.total} bài học`
+                : 'N/A'}
+            </p>
+          </div>
 
 
         </div>
-      
+
         <div className="Content_CourseVideo">
           <div className="CourseVideo_Left">
             {selectedVideo && (
@@ -843,6 +884,7 @@ useEffect(() => {
                     <Button text="Xem thêm" Class="Button"></Button>
                   </div>
                 </div>
+
               </div>
             </div>
           </div>
@@ -876,6 +918,7 @@ useEffect(() => {
           )}
         </div>
       </div>
+
       {/* <div className="footer">
                 <Footer></Footer>
             </div> */}
@@ -896,7 +939,7 @@ useEffect(() => {
             />
 
           </div>
-          <div className="knot"  onClick={handleNextLesson}>
+          <div className="knot" onClick={handleNextLesson}>
             <Button
               text="Bài sau"
               Class="Button"
@@ -906,6 +949,7 @@ useEffect(() => {
           </div>
         </div>
       </div>
+
     </>
   );
 };

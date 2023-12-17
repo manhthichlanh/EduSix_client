@@ -1,8 +1,9 @@
 /* eslint-disable react/prop-types */
-function Input({ type, className, placeholder, value, onChange, disabled, onClick }) {
+function Input({ id, type, className, placeholder, value, onChange, disabled, onClick, autoComplete }) {
   return (
     <div className="w-full">
       <input
+      id={id}
         type={type}
         className={className}
         placeholder={placeholder}
@@ -10,7 +11,7 @@ function Input({ type, className, placeholder, value, onChange, disabled, onClic
         onChange={onChange}
         disabled={disabled}
         onClick={onClick}
-       
+        autoComplete={autoComplete}
       />
     </div>
   );

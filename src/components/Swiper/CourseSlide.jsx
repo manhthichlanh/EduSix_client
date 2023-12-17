@@ -6,7 +6,7 @@ import Card from "./../Card/Card";
 import { Navigation } from "swiper/modules";
 import classNames from "classnames";
 import Button from "../button/Button";
-import ChevronRight from "./../commom/icons/ChevronRight";
+import ChevronRight from "./../commom/icons/ChevronRight"; // Import ChevronRight icon
 import { map } from "lodash";
 
 export default function CourseSlide({ prefixAction, data }) {
@@ -53,16 +53,16 @@ export default function CourseSlide({ prefixAction, data }) {
       </Swiper>
       <div
         className={classNames(
-          " bg-whiteabsolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 z-10 opacity-0 invisible transition duration-300 group-hover:opacity-100 group-hover:visible",
+          "absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 z-10 opacity-100 visible transition duration-300",
           `${prefixAction}-prev`
         )}
       >
         <Button
-          Class="rounded-full p-4 bg-white shadow-md rotate-180 hover:drop-shadow-lg"
+          Class="rounded-full p-4 bg-white shadow-md hover:drop-shadow-lg"
           Icon={function Icon() {
             return (
               <ChevronRight
-                className="stroke-[#FD8E1F] fill-[#FD8E1F]"
+                className="stroke-[#FD8E1F] fill-[#FD8E1F] transform rotate-180"
                 height={24}
                 width={24}
               ></ChevronRight>
@@ -72,7 +72,7 @@ export default function CourseSlide({ prefixAction, data }) {
       </div>
       <div
         className={classNames(
-          "absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 z-10 opacity-0 invisible transition duration-300 group-hover:opacity-100 group-hover:visible",
+          "absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 z-10 opacity-100 visible transition duration-300",
           `${prefixAction}-next`
         )}
       >

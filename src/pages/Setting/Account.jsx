@@ -3,12 +3,13 @@ import { Link, Outlet, useLocation } from "react-router-dom";
 import Camera from "../../components/commom/icons/Camera";
 import classNames from "classnames";
 import { useUser } from '../../utils/UserAPI'; 
-
+import { apiServer, serverEndpoint } from "../../utils/http";
+import ToastMessage from "../../utils/alert";
 export default function Account() {
   const inputFileRef = useRef(null);
   const imageRef = useRef(null);
   const location = useLocation();
-  const { user, isLoading, error, handleLogout, refetchUser } = useUser();
+  const { user, isLoading, error, handleLogout } = useUser();
 
  
 
@@ -22,24 +23,41 @@ export default function Account() {
       current: true,
     },
     { name: "Khóa học", href: "/account/course", current: false },
+    { name: "Chứng chỉ của tôi", href: "/account/certification", current: false },
     { name: "Blog", href: "/account/blog", current: false },
     {
       name: "Lịch sử mua hàng",
       href: "/account/purchase-history",
       current: false,
     },
+    
   ]);
 
-  const handleImageChange = (event) => {
+  const handleImageChange = async (event) => {
     const file = event.target.files[0];
-    const reader = new FileReader();
-
-    reader.onload = function (event) {
-      imageRef.current.src = event.target.result;
-    };
 
     if (file) {
-      reader.readAsDataURL(file);
+      const formData = new FormData();
+      formData.append('avatar', file);
+
+      try {
+        // Assuming you have the `apiServer` configured globally
+        const response = await apiServer.patch(`/user/update/${userDetails.user_id}`, formData);
+
+        if (response.status === 200) {
+          ToastMessage('Cập nhật ảnh đại diện thành công').success();
+          // Optionally, you can also update the local user data
+          setTimeout(() => {
+            window.location.reload();
+          }, 5000);
+  
+        } else {
+          ToastMessage('Đã xảy ra lỗi khi cập nhật ảnh đại diện').warn();
+        }
+      } catch (error) {
+        console.error('Error updating user image:', error);
+        ToastMessage('Đã xảy ra lỗi khi cập nhật ảnh đại diện').warn();
+      }
     }
   };
 
@@ -56,7 +74,7 @@ export default function Account() {
               <img
                 ref={imageRef}
                 className="w-[60px] h-[60px] rounded-full cursor-pointer object-cover"
-                src={userDetails.avatar || "https://cdn.lazi.vn/storage/uploads/users/avatar/1586848529_anh-dai-dien-avatar-dep-facebook.jpg"}
+                src={`${serverEndpoint}user/avatar/${userDetails.avatar}` || "https://cdn.lazi.vn/storage/uploads/users/avatar/1586848529_anh-dai-dien-avatar-dep-facebook.jpg"}
                 alt=""
                 onClick={() => inputFileRef.current.click()}
               />

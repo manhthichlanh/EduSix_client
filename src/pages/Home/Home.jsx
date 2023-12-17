@@ -84,7 +84,7 @@ const getCourseData = async () => {
 export default function Home() {
   const { data: courseData } = useQuery("courseData", getCourseData);
   const { data: categoryData } = useQuery("categoryData", getCategoryData);
-  console.log(categoryData);
+  // console.log(categoryData);
   const sortedByOustanding = courseData;
   const sortedByNewest = orderBy(
     slice(courseData, 0, 8),

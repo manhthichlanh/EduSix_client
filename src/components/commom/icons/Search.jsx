@@ -1,10 +1,11 @@
 /* eslint-disable react/prop-types */
-export default function Search({ width, height, ...props }) {
+export default function Search({ width, height, onSubmit, ...props }) {
   return (
     <svg
       className=""
       width={width}
       height={height}
+      onSubmit={onSubmit}
       viewBox="0 0 24 24"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

@@ -23,11 +23,11 @@ function ArcordionItem({ course_id }) {
       const { sectionCount, LessonCount, TotalTime } = Course_Info;
 
       // Do something with the data...
-      console.log('Section Count:', sectionCount);
-      console.log('Lesson Count:', LessonCount);
-      console.log('Total Time:', TotalTime);
-      console.log('Course Doc:', CourseDoc);
-      console.log('Section Doc:', SectionDoc);
+      // console.log('Section Count:', sectionCount);
+      // console.log('Lesson Count:', LessonCount);
+      // console.log('Total Time:', TotalTime);
+      // console.log('Course Doc:', CourseDoc);
+      // console.log('Section Doc:', SectionDoc);
     }
   }, [courseData]);
 
