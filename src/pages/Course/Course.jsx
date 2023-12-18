@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unknown-property */
-import { map } from "lodash";
+import { filter, map, sortBy } from "lodash";
 import classNames from "classnames";
 import "rc-slider/assets/index.css";
 import Search from "../../components/commom/icons/Search";
@@ -15,66 +15,31 @@ import { useQuery } from "react-query";
 import { apiServer } from "../../utils/http";
 // import { useEffect } from "react";
 import { Link } from "react-router-dom";
-// let someVariable = 1000;
-// console.log(someVariable?.toLocaleString());
+import { convertViToEn } from "../../utils/helper";
 
-// const data = [
-//   {
-//     image: "/course.png",
-//     category: "Marketing",
-//     cateId: 1,
-//     price: 299000,
-//     name: "Khóa học Thiết kế đồ họa cơ bản",
-//     rating: 4.5,
-//     joiner: 150,
-//   },
-//   {
-//     image: "/course.png",
-//     category: "Lập trình",
-//     cateId: 2,
-//     price: 499000,
-//     name: "Khóa học Lập trình web JavaScript",
-//     rating: 4.8,
-//     joiner: 200,
-//   },
-//   {
-//     image: "/course.png",
-//     category: "Thiết kế đồ họa",
-//     cateId: 3,
-//     price: 0,
-//     name: "Khóa học Quản lý doanh nghiệp",
-//     rating: 4.2,
-//     joiner: 120,
-//   },
-//   {
-//     image: "/course.png",
-//     category: "Ngôn ngữ",
-//     cateId: 4,
-//     price: 799000,
-//     name: "Khóa học Quản lý doanh nghiệp",
-//     rating: 4.2,
-//     joiner: 120,
-//   },
-//   {
-//     image: "/course.png",
-//     category: "Tài chính",
-//     cateId: 5,
-//     price: 799000,
-//     name: "Khóa học Quản lý doanh nghiệp",
-//     rating: 4.2,
-//     joiner: 120,
-//   },
-//   {
-//     image: "/course.png",
-//     category: "Photography",
-//     cateId: 6,
-//     price: 0,
-//     name: "Khóa học Quản lý doanh nghiệp",
-//     rating: 4.2,
-//     joiner: 120,
-//   },
-// ];
-
+const filterItems = [
+  {
+    id: 1,
+    title: "Giá: từ thấp đến cao",
+  },
+  {
+    id: 2,
+    title: "Giá: từ cao đến thấp",
+  },
+  {
+    id: 3,
+    title: "Từ A - Z",
+  },
+  {
+    id: 4,
+    title: "Từ Z - A",
+  },
+  {
+    id: 5,
+    title: "Mới nhất",
+  },
+  { id: 6, title: "Cũ nhất" },
+];
 const PriceSlider = () => {
   const [range, setRange] = useState([0, 100]);
 
@@ -86,7 +51,6 @@ const PriceSlider = () => {
     <div className="flex flex-col gap-6">
       <Slider
         range
-        // className="pt-6"
         min={0}
         max={1000}
         step={10}
@@ -151,6 +115,37 @@ const PriceSlider = () => {
 };
 
 export default function Course() {
+  const getCourseData = async () => {
+    try {
+      const response = await apiServer.get("/course");
+      return response.data;
+    } catch (error) {
+      throw new Error("Error fetching course data");
+    }
+  };
+
+  const {
+    data: courseData,
+    isLoading,
+    isError,
+  } = useQuery("courseData", getCourseData);
+
+  // course
+  const getCategoryData = async () => {
+    try {
+      const response = await apiServer.get("/category");
+      return response.data;
+    } catch (error) {
+      throw new Error("Error fetching course data");
+    }
+  };
+
+  const {
+    data: categoryData,
+    cateisLoading,
+    cateisError,
+  } = useQuery("categoryData", getCategoryData);
+
   const [checkboxes, setCheckboxes] = useState([false, false]);
   const checkboxLabels = ["Có phí", "Miễn phí"];
   const handlePriceChange = (index) => {
@@ -182,37 +177,42 @@ export default function Course() {
     );
   };
 
-  // course
-  const getCourseData = async () => {
-    try {
-      const response = await apiServer.get("/course");
-      return response.data;
-    } catch (error) {
-      throw new Error("Error fetching course data");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedFilter, setSelectedFilter] = useState("");
+  const filteredCourses = sortBy(
+    filter(courseData, (course) => {
+      const searchMatches = convertViToEn(course.name).includes(
+        convertViToEn(searchQuery)
+      );
+      return searchMatches;
+    }),
+    (course) => {
+      switch (selectedFilter) {
+        case "1":
+          return course.course_price;
+        case "2":
+          return -course.course_price;
+        case "3":
+          return course.name.toLowerCase();
+        case "4":
+          return -course.name.toLowerCase().charCodeAt(0);
+        case "5":
+          return -new Date(course.create_at).getTime();
+        case "6":
+          return new Date().getTime() - new Date(course.create_at).getTime();
+        default:
+          return undefined;
+      }
     }
+  );
+
+  const handleSearchInputChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+  const handleFilterChange = (event) => {
+    setSelectedFilter(event.target.value);
   };
 
-  const {
-    data: courseData,
-    isLoading,
-    isError,
-  } = useQuery("courseData", getCourseData);
-
-  // category
-  const getCategoryData = async () => {
-    try {
-      const response = await apiServer.get("/category");
-      return response.data;
-    } catch (error) {
-      throw new Error("Error fetching course data");
-    }
-  };
-
-  const {
-    data: categoryData,
-    cateisLoading,
-    cateisError,
-  } = useQuery("categoryData", getCategoryData);
   return (
     <>
       <div className="w-full">
@@ -260,6 +260,8 @@ export default function Course() {
                   className={
                     "text-[16px] leading-6 border w-full rounded-lg border-gray-200 py-3 px-3 hover:border-gray-300 focus:outline-none focus:border-[#ff6636] transition-colors "
                   }
+                  value={searchQuery}
+                  onChange={handleSearchInputChange}
                 />
                 <button className="absolute block w-8 h-8 my-auto text-center top-2 right-2">
                   <Search width={20} height={20} />
@@ -268,12 +270,17 @@ export default function Course() {
             </div>
             <div className="flex items-center w-full gap-4">
               <p className="whitespace-nowrap">Lọc theo</p>
-              <select className="block w-full p-3 text-base text-gray-900 border border-gray-200 rounded-lg outline-none focus:border-[#FF6636]">
-                <option defaultValue={""}>Mới nhất</option>
-                <option value="">Từ thấp tới cao</option>
-                <option value="">Từ cao tới thấp</option>
-                <option value="">Từ A - Z</option>
-                <option value="">Từ Z - A</option>
+              <select
+                className="block w-full p-3 text-base text-gray-900 border border-gray-200 rounded-lg outline-none focus:border-[#FF6636]"
+                value={selectedFilter}
+                onChange={handleFilterChange}
+              >
+                <option value="">Mặc định</option>
+                {map(filterItems, (item) => (
+                  <option value={item.id} key={item.id}>
+                    {item.title}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
@@ -495,25 +502,24 @@ export default function Course() {
           </div>
           <div className="flex flex-col items-center justify-between col-span-12 lg:col-span-9">
             <div className="grid grid-cols-12 gap-6">
-              {map(courseData, (item) => (
+              {map(filteredCourses, (item) => (
                 <div
                   className="col-span-12 lg:col-span-4 md:col-span-6"
                   key={item?.course_id}
                 >
-                     <Link to={`/course-detail?courseId=${item.course_id}`}>
-                  <Card
-                    course_id={item.course_id}
-                    thumbnail={item.thumbnail}
-                    category={item.cate_name}
-                    cateId={item.category_id}
-                    price={item.course_price}
-                    name={item.name}
-                    rating={item.rating}
-                    joiner={item.joiner}
-                  />
-                     </Link>
+                  <Link to={`/course-detail?courseId=${item.course_id}`}>
+                    <Card
+                      course_id={item.course_id}
+                      thumbnail={item.thumbnail}
+                      category={item.cate_name}
+                      cateId={item.category_id}
+                      price={item.course_price}
+                      name={item.name}
+                      rating={item.rating}
+                      joiner={item.joiner}
+                    />
+                  </Link>
                 </div>
-             
               ))}
             </div>
             <Button
