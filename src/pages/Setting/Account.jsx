@@ -64,19 +64,28 @@ export default function Account() {
   const selectedMenuItem = menuItems.find(
     (item) => item.href === location.pathname
   );
-  const avatarUrl = userDetails && userDetails.avatar && userDetails.avatar.startsWith("https")
-  ? userDetails.avatar
-  : `${serverEndpoint}user/avatar/${userDetails.avatar}`;
+  const avatarUrl = userDetails && userDetails.avatar
+  ? userDetails.avatar.startsWith("https")
+    ? userDetails.avatar
+    : `${serverEndpoint}user/avatar/${userDetails.avatar}`
+  : "https://cdn.lazi.vn/storage/uploads/users/avatar/1586848529_anh-dai-dien-avatar-dep-facebook.jpg";
+
+
+
+
+
+
+  
   return (
     <>
-      <div className="grid grid-cols-12 gap-6 px-20 my-10">
-        <div className="md:col-span-3 md:block hidden bg-[#f8f8f8] pt-[28px] pb-6 h-fit rounded-xl">
-          <div className="flex flex-col items-center">
+     <div className="grid grid-cols-1 md:w-[100%] md:flex gap-6 px-4 md:px-20 my-10">
+  <div className="md:w-[30%] md:col-span-3 col-span-12 bg-[#f8f8f8] pt-[28px] pb-6 h-fit rounded-xl">
+    <div className="flex flex-col items-center">
             <label htmlFor="fileInput" className="relative">
               <img
                 ref={imageRef}
                 className="w-[60px] h-[60px] rounded-full cursor-pointer object-cover"
-                src={ avatarUrl || "https://cdn.lazi.vn/storage/uploads/users/avatar/1586848529_anh-dai-dien-avatar-dep-facebook.jpg"}
+                src={ avatarUrl }
                 alt=""
                 onClick={() => inputFileRef.current.click()}
               />
@@ -113,19 +122,18 @@ export default function Account() {
           </div>
         </div>
 
-        <div className="col-span-12 md:col-span-9">
-          <div className="">
-            <div className="flex items-center">
-              {selectedMenuItem && (
-                <p className="px-3 py-[10px] border-l-4 border-[#ff6636] text-[16px] text-[#ff6636] font-medium leading-6">
-                  {selectedMenuItem.name}
-                </p>
-              )}
-            </div>
-            <Outlet />
-          </div>
-          <div></div>
-        </div>
+        <div className="col-span-12 md:w-[70%] mt-4 md:mt-0 md:ml-4">
+    <div className="bg-white rounded-xl p-4">
+      <div className="flex items-center mb-4">
+      {selectedMenuItem && (
+        <p className="px-3 py-2 border-l-4 border-[#ff6636] text-[16px] text-[#ff6636] font-medium leading-6">
+          {selectedMenuItem.name}
+        </p>
+      )}
+    </div>
+    <Outlet />
+  </div>
+</div>
       </div>
     </>
   );

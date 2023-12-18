@@ -131,7 +131,7 @@ function DetailCard({ course_id }) {
   const isFree = CourseDoc.course_price === 0;
 
   return (
-    <div className="rounded-lg w-full max-w-[430px] shadow-xl px-8 py-6 select-none bg-white">
+    <div className={`rounded-lg w-full ${window.innerWidth <= 1023 ? "max-w-[100%]" : "max-w-[430px]"} shadow-xl px-8 py-6 select-none bg-white`}>
       <div className="flex flex-col items-center gap-3">
         <p className="text-xl font-bold text-black">Gói</p>
         <div className="flex items-center gap-2">

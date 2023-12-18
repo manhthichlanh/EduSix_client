@@ -82,7 +82,9 @@ const formatDuration = (durationInSeconds) => {
       {certificateData ? (
      <div className="relative aspect-w-16 aspect-h-9 overflow-hidden">
      <div className="bg-gradient-to-r from-blue-400 to-green-500 p-8 mx-auto w-full rounded-lg shadow-md flex flex-col overflow-x-auto">
-       <div  ref={certificateRef} className="bg-yellow-50 p-8 min-w-[800px] mx-auto max-w-3xl rounded-lg shadow-md flex flex-col relative mt-3 mb-3">
+       <div  ref={certificateRef}  style={{
+    background: 'linear-gradient(-50deg, rgb(254, 254, 192), #fff, rgb(254, 254, 192), #fff, rgb(254, 254, 192), #fff, rgb(254, 254, 192), #fff)',
+  }} className="bg-yellow-50 p-8 min-w-[800px] mx-auto max-w-3xl rounded-lg shadow-md flex flex-col relative mt-3 mb-3">
             <img
               className="w-auto h-8 absolute top-3 left-2"
               src="/images/logo.png"
