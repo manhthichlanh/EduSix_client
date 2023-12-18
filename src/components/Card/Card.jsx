@@ -16,15 +16,16 @@ function Card(props) {
   } = props;
 
   // console.log(categoryData);
-  const categoryColors = {
-    2: { backgroundColor: "#EFEFFD", color: "#5C59E8" },
-    3: { backgroundColor: "#FDF1E8", color: "#D3620F" },
-    4: { backgroundColor: "#F0F1F3", color: "#667085" },
-    5: { backgroundColor: "#E7F4EE", color: "#15711F" },
-    6: { backgroundColor: "#ECEFFF", color: "#4462FE" },
-    7: { backgroundColor: "#FEEDEC", color: "#882929" },
-  };
-  const colors = categoryColors[cateId] || {};
+  const categoryColors = [
+    { backgroundColor: "#EFEFFD", color: "#5C59E8" },
+    { backgroundColor: "#FDF1E8", color: "#D3620F" },
+    { backgroundColor: "#F0F1F3", color: "#667085" },
+    { backgroundColor: "#E7F4EE", color: "#15711F" },
+    { backgroundColor: "#ECEFFF", color: "#4462FE" },
+    { backgroundColor: "#FEEDEC", color: "#882929" },
+  ];
+  
+  const colors = categoryColors[cateId - 1] || {};
 
   const [categoryName, setCategoryName] = useState('');
 
