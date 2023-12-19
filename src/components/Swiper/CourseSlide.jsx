@@ -10,6 +10,8 @@ import ChevronRight from "./../commom/icons/ChevronRight"; // Import ChevronRigh
 import { map } from "lodash";
 
 export default function CourseSlide({ prefixAction, data }) {
+  const slicedData = data?.slice(0, 8);
+
   return (
     <div className={`z-10 relative group ${prefixAction}`}>
       <Swiper
@@ -36,7 +38,7 @@ export default function CourseSlide({ prefixAction, data }) {
           nextEl: `.${prefixAction} > .${prefixAction}-next`,
         }}
       >
-        {map(data, (item, index) => (
+        {map(slicedData, (item, index) => (
           <SwiperSlide key={index}>
             <Card
               course_id={item.course_id}

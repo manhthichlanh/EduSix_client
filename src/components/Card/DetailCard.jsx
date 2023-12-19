@@ -96,8 +96,7 @@ function DetailCard({ course_id }) {
   }
 
   const { SectionDoc, CourseDoc } = courseData.data;
-
-  if (!SectionDoc || isEmpty(SectionDoc)) {
+  if (!SectionDoc || isEmpty(SectionDoc) || SectionDoc.every(section => isEmpty(section.lessons))) {
     return <div>Bài học chưa được tải lên.</div>;
   }
 

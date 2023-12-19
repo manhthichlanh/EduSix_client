@@ -18,11 +18,12 @@ export default function Account() {
   
   const [menuItems] = useState([
     {
-      name: "Thông tin",
+      name: "Thông tin của tôi",
       href: "/account/profile",
       current: true,
     },
-    { name: "Khóa học", href: "/account/course", current: false },
+    { name: "Thông báo của tôi", href: "/account/notification", current: false },
+    { name: "Khóa học đã đăng kí", href: "/account/course", current: false },
     { name: "Chứng chỉ của tôi", href: "/account/certification", current: false },
     { name: "Blog", href: "/account/blog", current: false },
     {
@@ -49,7 +50,8 @@ export default function Account() {
           // Optionally, you can also update the local user data
           setTimeout(() => {
             window.location.reload();
-          }, 5000);
+          }, 4000);
+        
   
         } else {
           ToastMessage('Đã xảy ra lỗi khi cập nhật ảnh đại diện').warn();
@@ -87,7 +89,7 @@ export default function Account() {
                 className="w-[60px] h-[60px] rounded-full cursor-pointer object-cover"
                 src={ avatarUrl }
                 alt=""
-                onClick={() => inputFileRef.current.click()}
+                onClick={() => inputFileRef}
               />
               <input
                 type="file"

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { NavLink, useSearchParams, useNavigate } from "react-router-dom";
+import { NavLink, useSearchParams, useNavigate, Link } from "react-router-dom";
 import "./CourseVideo.scss";
 import ChevronLeft from "../../components/commom/icons/ChevronLeft";
 import ChevronRight from "../../components/commom/icons/ChevronRight";
@@ -20,6 +20,7 @@ import {
   faBars,
 } from "@fortawesome/free-solid-svg-icons";
 import ReactPlayer from "react-player";
+import { FiAward } from "react-icons/fi";
 // import CommentReply from './CommentReply';
 const VideoWrapper = styled.div`
   position: relative;
@@ -69,6 +70,7 @@ const CourseVideo = () => {
   const [questionIndex, setQuestionIndex] = useState(0);
   const [completedLessons, setCompletedLessons] = useState([]);
   const [selectedAnswersByQuestion, setSelectedAnswersByQuestion] = useState({});
+  const [subIds, setSubIds] = useState([]);
   const { user, handleLogout } = useUser();
   const users = user?.userDetails || {};
   const user_id = users.user_id;
@@ -271,8 +273,24 @@ const CourseVideo = () => {
 
 
 
+  const { data: certificateData } = useQuery(
+    ['certificateData', user_id],
+    () => apiServer.get(`/certificate/byUser/${user_id}`),
+    { enabled: !!user_id }
+  );
+  useEffect(() => {
+    if (certificateData && certificateData.data) {
+      const currentCourseCertificates = certificateData.data.filter(
+        (certificate) => certificate.course.course_id === +courseId
+      );
 
+      // Extract sub_id values from the filtered certificates
+      const extractedSubIds = currentCourseCertificates.map((certificate) => certificate.sub_id);
 
+      // Set the sub_id values in the component state
+      setSubIds(extractedSubIds);
+    }
+  }, [certificateData, courseId]);
 
 
 
@@ -626,6 +644,7 @@ const CourseVideo = () => {
   };
 
 
+ 
 
   return (
     <>
@@ -917,6 +936,20 @@ const CourseVideo = () => {
             </>
           )}
         </div>
+        <div className="certificate">
+        {certificateData ? (
+          <>
+            {subIds.map((subId) => (
+              <Link key={subId} to={`/certification/${subId}`}>
+                {/* Replace the button with the custom certificate icon */}
+                <FiAward className="icon" />
+              </Link>
+            ))}
+          </>
+        ) : (
+          <p></p>
+        )}
+      </div>
       </div>
 
       {/* <div className="footer">
