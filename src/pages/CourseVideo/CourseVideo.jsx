@@ -14,7 +14,7 @@ import { useUser } from '../../utils/UserAPI';
 import styled from "styled-components";
 import { apiServer, serverEndpoint } from "../../utils/http";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
+import { useSocket } from "../../services/SocketService";
 import {
   faXmark, // Add FontAwesome icons for hiding and showing the menu
   faBars,
@@ -74,6 +74,7 @@ const CourseVideo = () => {
   const { user, handleLogout } = useUser();
   const users = user?.userDetails || {};
   const user_id = users.user_id;
+  const { socket } = useSocket()
   // const saveProgressToLocalStorage = (lessonId) => {
   //   const savedProgress = localStorage.getItem('userProgress');
 
@@ -228,38 +229,43 @@ const CourseVideo = () => {
       const allLessonsFinished = ProgressData?.s_doc?.[0]?.section_progresses.every(sectionProgress =>
         sectionProgress.lesson_progresses.every(lessonProgress => lessonProgress.is_finish)
       );
-  
+
       if (allLessonsFinished) {
         alert("Đã hoàn thành tất cả các bài học trong khóa học này.");
       }
       //  else {
       //   alert("Bạn đã hoàn thành tất cả bài học có sẵn, nhưng vẫn còn bài học chưa hoàn thành.");
       // }
-  
+
       // If all lessons are finished, do not make the API call
       if (!allLessonsFinished) {
         const allLessons = SectionDoc.map(section => section.lessons).flat();
         const currentIndex = allLessons.findIndex(lesson => lesson.lesson_id === selectedLesson.lesson_id);
         setCompletedLessons(prev => [...prev, selectedLesson.lesson_id]);
-  
+
         if (currentIndex >= 0 && currentIndex < allLessons.length - 1) {
           const nextLesson = allLessons[currentIndex + 1];
           setSelectedLesson(nextLesson);
           setSelectedVideo(nextLesson.videos?.[0]?.file_videos || null);
           setSelectedQuiz(nextLesson.quizzs || []);
           setQuestionIndex(0);
-  
+
           navigate(`/course-video?courseId=${courseId}&lessonId=${nextLesson.lesson_id}`);
         }
-  
+
         // Make the API call to update progress
+        const headers = {
+          'Socket-ID': socket.id
+        }
         await apiServer.post("/admin-query/updateProgress", {
           course_id: courseId,
           user_id: user_id,
           section_id: selectedLesson.section_id,
           lesson_id: selectedLesson.lesson_id,
+        }, headers && {
+          headers: headers
         });
-  
+
         // Refetch the progress data after updating
         refetchProgressData();
       }
@@ -267,7 +273,7 @@ const CourseVideo = () => {
       console.error("Error handling video end:", error);
     }
   };
-  
+
 
 
 
@@ -663,9 +669,9 @@ const CourseVideo = () => {
               </div>
             </div>
 
-              <div className="name_course">
-                <p>{CourseDoc.name}</p>
-              </div>
+            <div className="name_course">
+              <p>{CourseDoc.name}</p>
+            </div>
           </div>
           <div className="progress">
             <strong>
