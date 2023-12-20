@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import PlayCircleFill from "../commom/icons/PlayCircleFill";
 import { useQuery } from "react-query";
-import { apiServer } from "../../utils/http";
+import { apiServer, serverEndpoint } from "../../utils/http";
 import { isEmpty } from "lodash";
 import BatteryEmpty from "./../commom/icons/BatteryEmpty";
 import Award from "./../commom/icons/Award";
@@ -12,6 +12,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useUser } from '../../utils/UserAPI';
 import ToastMessage from "../../utils/alert";
 
+
 function DetailCard({ course_id }) {
   const navigate = useNavigate();
   const { user } = useUser();
@@ -20,7 +21,22 @@ function DetailCard({ course_id }) {
 
   const [active, setActive] = useState(null);
   const [isUserEnrolled, setIsUserEnrolled] = useState(false);
-
+  const [hasPurchased, setHasPurchased] = useState(false);
+  useEffect(() => {
+    const checkPurchaseStatus = async () => {
+      try {
+        if (user_id && course_id) {
+          const response = await apiServer.get(`/order/check-purchase/${user_id}/${course_id}`);
+          setHasPurchased(response.data.hasPurchased);
+        }
+      } catch (error) {
+        console.error("Error checking purchase status", error);
+      }
+    };
+    
+    checkPurchaseStatus();
+  }, [user_id, course_id]);
+  
   const { data: courseData, isLoading, isError } = useQuery(
     ["courseData", course_id],
     () => apiServer.get(`/admin-query/getAllLessonQuizzVideo/${course_id}`),
@@ -53,7 +69,7 @@ function DetailCard({ course_id }) {
       setActive(firstLessonId);
     }
   }, [courseData]);
-
+  
   const navigateToCourse = () => {
     if (user_id && active !== null) {
       navigate(`/course-video?courseId=${course_id}&lessonId=${active}`);
@@ -63,7 +79,24 @@ function DetailCard({ course_id }) {
       // Add logic to redirect to the login page if needed
     }
   };
-
+  
+  const handlePurchase = () => {
+    if (!user_id) {
+      ToastMessage("Vui lòng đăng nhập để thực hiện mua khóa học").warn();
+      navigate("/login");
+      return;
+    }
+    navigate("/payment", {
+      state: {
+        courseId: CourseDoc.course_id,
+        courseName: CourseDoc.name,
+        coursePrice: CourseDoc.course_price,
+        courseThumbnail: thumbnailUrl
+      }
+    });
+    
+  };
+  
   const handleEnrollment = async () => {
     if (!user_id) {
       ToastMessage("Vui lòng đăng nhập để đăng ký khóa học").warn();
@@ -94,7 +127,6 @@ function DetailCard({ course_id }) {
         user_id: user_id,
         course_id: course_id,
       });
-  
       ToastMessage("Đăng kí khóa học thành công").success();
       setIsUserEnrolled(true);
       return enrollmentResponse.data.message;
@@ -132,8 +164,10 @@ function DetailCard({ course_id }) {
   if (!SectionDoc || isEmpty(SectionDoc) || SectionDoc.every(section => isEmpty(section.lessons))) {
     return <div>Bài học chưa được tải lên.</div>;
   }
-
-
+  const thumbnailUrl = CourseDoc.thumbnail ? `${serverEndpoint}course/thumbnail/${CourseDoc.thumbnail}` : 'đường_dẫn_hình_ảnh_mặc_định';
+  console.log(thumbnailUrl);
+  console.log(CourseDoc);
+  console.log(CourseDoc.thumbnail);
   function calculateTotalDuration(sections) {
     let totalDurationInSeconds = 0;
 
@@ -220,13 +254,13 @@ function DetailCard({ course_id }) {
           />
         ) : (
           <Button
-            onClick={isUserEnrolled ? navigateToCourse : handleEnrollment}
+          onClick={ hasPurchased ? navigateToCourse : handlePurchase}
             Class={`w-full rounded-lg p-3 mt-4 text-lg ${
               isFree
                 ? "bg-[#FFEEE8] text-[#FF6636] font-medium"
                 : "bg-[your-button-color] text-[your-text-color]"
             }`}
-            text={isUserEnrolled ? "Vào khóa học" : enrollmentData?.isUserEnrollmentCourse ? "Vào khóa học" : "Mua ngay"}
+            text={hasPurchased ? "Vào khóa học" : "Mua ngay"}
           />
         )}
       </div>

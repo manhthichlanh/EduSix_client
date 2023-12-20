@@ -22,7 +22,8 @@ export default function CourseDetail() {
   const location = useLocation();
   const course_id = new URLSearchParams(location.search).get("courseId");
   const [isBoxCro, setIsBoxCro] = useState(true);
-
+  
+  
   useEffect(() => {
 
     window.addEventListener("scroll", handleScroll);
