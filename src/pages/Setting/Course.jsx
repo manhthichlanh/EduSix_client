@@ -40,16 +40,21 @@ function AccountCourse() {
             return null;
           }
         });
-        
+  
         const resolvedCourseDetails = (await Promise.all(courseDetailsPromises)).filter(Boolean);
-        setCourseDetails(resolvedCourseDetails);
+  
+        // Assuming 'course_id' is a numeric value, use a compare function to sort by 'course_id' in descending order
+        const sortedCourseDetails = resolvedCourseDetails.sort((a, b) => b.course_id - a.course_id);
+  
+        setCourseDetails(sortedCourseDetails);
       } catch (error) {
         console.error('Error fetching course details:', error);
       }
     };
-
+  
     fetchCourseDetails();
   }, [courseProgresses]);
+  
 
   return (
     <div className="flex flex-col items-center justify-between col-span-12 lg:col-span-9">

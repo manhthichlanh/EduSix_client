@@ -5,24 +5,26 @@ import classNames from "classnames";
 import { useUser } from '../../utils/UserAPI'; 
 import { apiServer, serverEndpoint } from "../../utils/http";
 import ToastMessage from "../../utils/alert";
+import { useNotificationProvider } from '../../utils/NotificationApi';
 export default function Account() {
   const inputFileRef = useRef(null);
   const imageRef = useRef(null);
   const location = useLocation();
   const { user, isLoading, error, handleLogout } = useUser();
 
- 
-
+  const { unreadCount } = useNotificationProvider();
+console.log(unreadCount);
   // Ensure user data is available before accessing properties
   const userDetails = user?.userDetails || {};
   
-  const [menuItems] = useState([
+  const [menuItems, setMenuItems] = useState([
     {
-      name: "Thông tin",
+      name: "Thông tin của tôi",
       href: "/account/profile",
       current: true,
     },
-    { name: "Khóa học", href: "/account/course", current: false },
+    { name: `Thông báo của tôi (${unreadCount})`, href: "/account/notification", current: false },
+    { name: "Khóa học đã đăng kí ", href: "/account/course", current: false },
     { name: "Chứng chỉ của tôi", href: "/account/certification", current: false },
     { name: "Blog", href: "/account/blog", current: false },
     {
@@ -30,8 +32,21 @@ export default function Account() {
       href: "/account/purchase-history",
       current: false,
     },
-    
   ]);
+
+  useEffect(() => {
+    // Update the menu item with the correct unreadCount when it changes
+    setMenuItems(prevMenuItems => {
+      const updatedMenuItems = [...prevMenuItems];
+      const notificationMenuItem = updatedMenuItems.find(item => item.href === "/account/notification");
+
+      if (notificationMenuItem) {
+        notificationMenuItem.name = `Thông báo của tôi (${unreadCount})`;
+      }
+
+      return updatedMenuItems;
+    });
+  }, [unreadCount]);
 
   const handleImageChange = async (event) => {
     const file = event.target.files[0];
@@ -49,7 +64,8 @@ export default function Account() {
           // Optionally, you can also update the local user data
           setTimeout(() => {
             window.location.reload();
-          }, 5000);
+          }, 4000);
+        
   
         } else {
           ToastMessage('Đã xảy ra lỗi khi cập nhật ảnh đại diện').warn();
@@ -87,7 +103,7 @@ export default function Account() {
                 className="w-[60px] h-[60px] rounded-full cursor-pointer object-cover"
                 src={ avatarUrl }
                 alt=""
-                onClick={() => inputFileRef.current.click()}
+                onClick={() => inputFileRef}
               />
               <input
                 type="file"

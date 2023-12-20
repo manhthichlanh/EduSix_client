@@ -103,22 +103,54 @@ function DetailCard({ course_id }) {
       navigate("/login");
       return;
     }
-
+  
+    // Check if the user is already enrolled
+    if (isUserEnrolled) {
+      ToastMessage("Bạn đã đăng ký khóa học này").warn();
+      navigateToCourse();
+      return;
+    }
+  
     try {
-      const response = await apiServer.post("/admin-query/enrollmentCourse", {
+      // Check user progress before enrollment
+      const progressResponse = await apiServer.get(`/admin-query/getAllProgress?user_id=${user_id}&course_id=${course_id}`);
+  
+      // If there is progress data, user has already started the course
+      if (progressResponse.data && progressResponse.data.s_doc.length > 0) {
+        ToastMessage("Bạn đã bắt đầu khóa học này").success();
+        navigateToCourse();
+        return;
+      }
+  
+      // If no progress data, proceed with enrollment
+      const enrollmentResponse = await apiServer.post("/admin-query/enrollmentCourse", {
         user_id: user_id,
         course_id: course_id,
       });
-      
       ToastMessage("Đăng kí khóa học thành công").success();
       setIsUserEnrolled(true);
-      return response.data.message;
+      return enrollmentResponse.data.message;
     } catch (error) {
-      setIsUserEnrolled(true);
-      navigateToCourse();
-      // console.error("Error during enrollment:", error.response.data);
+      // Handle errors
+      if (error.response?.data?.message === "Cannot read properties of null (reading 'enrollment_id')") {
+        // Immediately proceed with the enrollment API call
+        const enrollmentResponse = await apiServer.post("/admin-query/enrollmentCourse", {
+          user_id: user_id,
+          course_id: course_id,
+        });
+  
+        ToastMessage("Đăng kí khóa học thành công").success();
+        setIsUserEnrolled(true);
+        return enrollmentResponse.data.message;
+      } else {
+        console.error('Error during enrollment:', error.response?.data || error.message);
+        navigateToCourse();
+      }
     }
   };
+  
+  
+  
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -129,8 +161,7 @@ function DetailCard({ course_id }) {
   }
 
   const { SectionDoc, CourseDoc } = courseData.data;
-
-  if (!SectionDoc || isEmpty(SectionDoc)) {
+  if (!SectionDoc || isEmpty(SectionDoc) || SectionDoc.every(section => isEmpty(section.lessons))) {
     return <div>Bài học chưa được tải lên.</div>;
   }
   const thumbnailUrl = CourseDoc.thumbnail ? `${serverEndpoint}course/thumbnail/${CourseDoc.thumbnail}` : 'đường_dẫn_hình_ảnh_mặc_định';
