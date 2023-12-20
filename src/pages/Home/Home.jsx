@@ -9,6 +9,10 @@ import { apiServer } from "../../utils/http";
 import { filter, map, orderBy, slice } from "lodash";
 import CateSlide from "../../components/Swiper/CateSlide";
 // import { useEffect } from "react";
+const categoryColors = [
+  "#FF6633", "#FFB399", "#FF33FF", "#6666FF", "#B399FF",
+  "#FF3366", "#99FF99", "#FF9933", "#FFCC33", "#FF9999"
+];
 
 const blog = [
   {
@@ -80,6 +84,7 @@ const getCourseData = async () => {
 export default function Home() {
   const { data: courseData } = useQuery("courseData", getCourseData);
   const { data: categoryData } = useQuery("categoryData", getCategoryData);
+  // console.log(categoryData);
   const sortedByOustanding = courseData;
   const sortedByNewest = orderBy(
     slice(courseData, 0, 8),
@@ -171,59 +176,29 @@ export default function Home() {
             </div>
             <CateSlide data={categoryData} prefixAction={"cate"} />
           </div>
-          <div className="my-20 lg:col-span-4 md:col-span-12">
-            <div className="flex items-end justify-between py-10 ">
-              <p className="font-semibold text-[24px]">KHÓA HỌC MỚI NHẤT</p>
-              <Button
-                text="Xem thêm"
-                Class={
-                  "text-sm font-medium py-2 px-8 rounded-[4px] shadow-md leading-6 hover:shadow-xl"
-                }
-              ></Button>
-            </div>
-            <div className="">
-              <CourseSlide prefixAction={"newest"} data={sortedByNewest} />
-            </div>
-          </div>
-          <div className="my-20 lg:col-span-4 md:col-span-12">
-            <div className="flex items-end justify-between py-10 ">
-              <p className="font-semibold text-[24px] uppercase">
-                Khóa học <span className="text-[#882929]">Photography</span>
-              </p>
-              <Button
-                text="Xem thêm"
-                Class={
-                  "text-sm font-medium py-2 px-8 rounded-[4px] shadow-md leading-6 hover:shadow-xl whitespace-nowrap"
-                }
-              ></Button>
-            </div>
-            <div className="">
-              <CourseSlide
-                prefixAction={"marketing"}
-                data={sortedByMarketing}
 
-              />
-            </div>
+          {categoryData && categoryData.map((category, index) => (
+        <div key={index} className="my-20 lg:col-span-4 md:col-span-12">
+          <div className="flex items-end justify-between py-10 ">
+            <p className="font-semibold text-[24px] uppercase">
+            Khóa học <span style={{ color: categoryColors[index % categoryColors.length] }}>{category.cate_name}</span>
+            </p>
+            <Button
+              text="Xem thêm"
+              Class={
+                "text-sm font-medium py-2 px-8 rounded-[4px] shadow-md leading-6 hover:shadow-xl whitespace-nowrap"
+              }
+            ></Button>
           </div>
-          <div className="my-20 lg:col-span-4 md:col-span-12">
-            <div className="flex items-end justify-between py-10 ">
-              <p className="font-semibold text-[24px] uppercase">
-                Khóa học <span className="text-[#D3620F]">Lập trình</span>
-              </p>
-              <Button
-                text="Xem thêm"
-                Class={
-                  "text-sm font-medium py-2 px-8 rounded-[4px] shadow-md leading-6 hover:shadow-xl whitespace-nowrap"
-                }
-              ></Button>
-            </div>
-            <div className="">
-              <CourseSlide
-                prefixAction={"programming"}
-                data={sortedByPrograming}
-              />
-            </div>
+          <div className="">
+           
+            <CourseSlide
+              prefixAction={category.slug}  
+              data={filter(courseData, (course) => course.category_id === category.category_id)}
+            />
           </div>
+        </div>
+      ))}
 
           <div className="my-20 lg:col-span-4 md:col-span-12">
             <div className="flex items-end justify-between py-10 ">

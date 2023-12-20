@@ -8,7 +8,7 @@ import Card from "../../components/Card/Card";
 import { Disclosure } from "@headlessui/react";
 import Slider from "rc-slider";
 import ChecvronUp from "../../components/commom/icons/ChevronUp";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import StarFill from "../../components/commom/icons/StarFill";
 import Button from "../../components/button/Button";
 import { useQuery } from "react-query";
@@ -17,34 +17,47 @@ import { apiServer } from "../../utils/http";
 import { Link } from "react-router-dom";
 import { convertViToEn } from "../../utils/helper";
 
-const filterItems = [
-  {
-    id: 1,
-    title: "Giá: từ thấp đến cao",
-  },
-  {
-    id: 2,
-    title: "Giá: từ cao đến thấp",
-  },
-  {
-    id: 3,
-    title: "Từ A - Z",
-  },
-  {
-    id: 4,
-    title: "Từ Z - A",
-  },
-  {
-    id: 5,
-    title: "Mới nhất",
-  },
-  { id: 6, title: "Cũ nhất" },
-];
-const PriceSlider = () => {
-  const [range, setRange] = useState([0, 100]);
+const PriceSlider = ({ range, setRange }) => {
+
+  const [focusedInput, setFocusedInput] = useState(null);
+  const inputRefs = {
+    min: useRef(null),
+    max: useRef(null),
+  };
 
   const handleSliderChange = (newRange) => {
     setRange(newRange);
+  };
+
+  const handleInputFocus = (inputName) => {
+    setFocusedInput(inputName);
+  };
+
+  const handleInputBlur = () => {
+    setFocusedInput(null);
+  };
+
+  const handleInputChange = (inputName, value) => {
+    // Allow only digits
+    const newValue = value.replace(/\D/g, '');
+
+    // Parse the value; if empty, set to null
+    const intValue = newValue === '' ? null : parseInt(newValue);
+
+    setRange((prevRange) => {
+      const newRange = [...prevRange];
+      newRange[inputName === 'min' ? 0 : 1] = intValue;
+      return newRange;
+    });
+  };
+
+  // Use a setTimeout to restore focus after state is updated
+  const restoreFocus = () => {
+    if (focusedInput && inputRefs[focusedInput]?.current) {
+      setTimeout(() => {
+        inputRefs[focusedInput]?.current.focus();
+      }, 0);
+    }
   };
 
   return (
@@ -52,7 +65,7 @@ const PriceSlider = () => {
       <Slider
         range
         min={0}
-        max={1000}
+        max={5000000}
         step={10}
         value={range}
         onChange={handleSliderChange}
@@ -81,33 +94,40 @@ const PriceSlider = () => {
           <span className="absolute flex items-center mx-3 mb-1">
             <div className="w-5 h-5 fill-slate-300">$</div>
           </span>
-          <Input
+          <input
+            ref={inputRefs.min}
             type="number"
             className={"w-full outline-none border border-[#E9EAF0] py-3 pl-6"}
             name="min"
             placeholder={"min:"}
             id=""
+
             value={range[0]}
-            onChange={(e) => {
-              setRange([parseInt(e.target.value), range[1]]);
-            }}
-          ></Input>
+            onChange={(e) => handleInputChange('min', e.target.value)}
+            onFocus={() => handleInputFocus('min')}
+            onBlur={handleInputBlur}
+            autoFocus={focusedInput === 'min'}
+            onKeyDown={restoreFocus}
+          />
         </label>
         <label className="relative flex items-center w-full">
           <span className="absolute flex items-center mx-3 mb-1">
             <div className="w-5 h-5 fill-slate-300">$</div>
           </span>
-          <Input
+          <input
+            ref={inputRefs.max}
             type="number"
             name="max"
             className={"w-full outline-none border border-[#E9EAF0] py-3 pl-6"}
             placeholder={"max:"}
             id=""
             value={range[1]}
-            onChange={(e) => {
-              setRange([range[0], parseInt(e.target.value)]);
-            }}
-          ></Input>
+            onChange={(e) => handleInputChange('max', e.target.value)}
+            onFocus={() => handleInputFocus('max')}
+            onBlur={handleInputBlur}
+            autoFocus={focusedInput === 'max'}
+            onKeyDown={restoreFocus}
+          />
         </label>
       </div>
     </div>
@@ -115,52 +135,33 @@ const PriceSlider = () => {
 };
 
 export default function Course() {
-  const getCourseData = async () => {
-    try {
-      const response = await apiServer.get("/course");
-      return response.data;
-    } catch (error) {
-      throw new Error("Error fetching course data");
-    }
-  };
-
-  const {
-    data: courseData,
-    isLoading,
-    isError,
-  } = useQuery("courseData", getCourseData);
-
-  // course
-  const getCategoryData = async () => {
-    try {
-      const response = await apiServer.get("/category");
-      return response.data;
-    } catch (error) {
-      throw new Error("Error fetching course data");
-    }
-  };
-
-  const {
-    data: categoryData,
-    cateisLoading,
-    cateisError,
-  } = useQuery("categoryData", getCategoryData);
-
-  const [checkboxes, setCheckboxes] = useState([false, false]);
+  const [checkboxes, setCheckboxes] = useState([true, true]); // Show all by default
   const checkboxLabels = ["Có phí", "Miễn phí"];
+  // const [searchQuery, setSearchQuery] = useState("");
+  const [range, setRange] = useState([0, 5000000]);
+  const [selectedCategories, setSelectedCategories] = useState({});
+  const [checkedItems, setCheckedItems] = useState({});
+  const [selectedRatings, setSelectedRatings] = useState([false, false, false, false, false]);
+  const [loadMore, setLoadMore] = useState(6);
+  const [selectedSorting, setSelectedSorting] = useState("");
+  const handleSortingChange = (e) => {
+    setSelectedSorting(e.target.value);
+  };
   const handlePriceChange = (index) => {
     setCheckboxes((prevState) =>
       prevState.map((value, i) => (i === index ? !value : value))
     );
   };
 
-  const [checkedItems, setCheckedItems] = useState({});
-  const handleCateChange = (categoryId) => {
-    setCheckedItems((prevCheckedItems) => ({
-      ...prevCheckedItems,
-      [categoryId]: !prevCheckedItems[categoryId],
-    }));
+
+
+
+
+  const handleLoadMore = () => {
+    setLoadMore((prevLoadMore) => prevLoadMore + 6);
   };
+  
+
 
   const [checkRating, setCheckRating] = useState([
     false,
@@ -213,6 +214,92 @@ export default function Course() {
     setSelectedFilter(event.target.value);
   };
 
+  const {
+    data: courseData,
+    isLoading,
+    isError,
+  } = useQuery("courseData", getCourseData);
+
+  // category
+  const getCategoryData = async () => {
+    try {
+      const response = await apiServer.get("/category");
+      return response.data;
+    } catch (error) {
+      throw new Error("Error fetching course data");
+    }
+  };
+
+  const {
+    data: categoryData,
+    cateisLoading,
+    cateisError,
+  } = useQuery("categoryData", getCategoryData);
+
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+
+  const handleCateChange = (categoryId) => {
+    setCheckedItems((prevCheckedItems) => ({
+      ...prevCheckedItems,
+      [categoryId]: !prevCheckedItems[categoryId],
+    }));
+    setSelectedCategories((prevSelectedCategories) => ({
+      ...prevSelectedCategories,
+      [categoryId]: !prevSelectedCategories[categoryId],
+    }));
+  };
+  const filteredAndSortedCourses = courseData
+    ? courseData
+      .filter((course) => course.course_price >= range[0] && course.course_price <= range[1])
+      .filter((course) =>
+        course.name.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+      .filter((course) => {
+        const meetsPriceCriteria =
+          (checkboxes[0] && course.course_price > 0) ||
+          (checkboxes[1] && course.course_price === 0);
+        return meetsPriceCriteria;
+      })
+      .filter((course) => {
+        const meetsCategoryCriteria =
+          Object.keys(selectedCategories).length === 0 ||
+          selectedCategories[course.category_id];
+        return meetsCategoryCriteria;
+      })
+      .filter((course) => {
+        const meetsRatingCriteria =
+          checkRating.every((isChecked, index) =>
+            isChecked ? course.rating === 5 - index : true
+          );
+        return meetsRatingCriteria;
+      })
+      .sort((a, b) => {
+        switch (selectedSorting) {
+          case "mn":
+            return b.course_id - a.course_id;
+          case "asc":
+            return a.course_price - b.course_price;
+          case "desc":
+            return b.course_price - a.course_price;
+          case "az":
+            return a.name.localeCompare(b.name);
+          case "za":
+            return b.name.localeCompare(a.name);
+          default:
+            return 0; // Default sorting or no sorting
+        }
+      })
+    : [];
+
+
+
+    const remainingCourses = filteredAndSortedCourses.length - loadMore;
+
+
+
   return (
     <>
       <div className="w-full">
@@ -221,10 +308,10 @@ export default function Course() {
             <div className="pb-6 text-sm breadcrumbs">
               <ul>
                 <li>
-                  <a>Home</a>
+                  <Link>Home</Link>
                 </li>
                 <li>
-                  <a>Documents</a>
+                  <Link>Documents</Link>
                 </li>
                 <li>Add Document</li>
               </ul>
@@ -261,7 +348,7 @@ export default function Course() {
                     "text-[16px] leading-6 border w-full rounded-lg border-gray-200 py-3 px-3 hover:border-gray-300 focus:outline-none focus:border-[#ff6636] transition-colors "
                   }
                   value={searchQuery}
-                  onChange={handleSearchInputChange}
+                  onChange={handleSearch}
                 />
                 <button className="absolute block w-8 h-8 my-auto text-center top-2 right-2">
                   <Search width={20} height={20} />
@@ -272,15 +359,15 @@ export default function Course() {
               <p className="whitespace-nowrap">Lọc theo</p>
               <select
                 className="block w-full p-3 text-base text-gray-900 border border-gray-200 rounded-lg outline-none focus:border-[#FF6636]"
-                value={selectedFilter}
-                onChange={handleFilterChange}
+                value={selectedSorting}
+                onChange={handleSortingChange}
               >
-                <option value="">Mặc định</option>
-                {map(filterItems, (item) => (
-                  <option value={item.id} key={item.id}>
-                    {item.title}
-                  </option>
-                ))}
+                <option value="">Tất cả</option>
+                <option value="mn">Mới nhất</option>
+                <option value="asc">Từ thấp tới cao</option>
+                <option value="desc">Từ cao tới thấp</option>
+                <option value="az">Từ A - Z</option>
+                <option value="za">Từ Z - A</option>
               </select>
             </div>
           </div>
@@ -306,25 +393,20 @@ export default function Course() {
                           </p>
                         </div>
                         <ChecvronUp
-                          className={`${
-                            open ? "rotate-180 transform" : ""
-                          } h-5 w-5`}
+                          className={`${open ? "rotate-180 transform" : ""
+                            } h-5 w-5`}
                         />
                       </Disclosure.Button>
                       <div
-                        className={`${
-                          open ? "block" : "hidden"
-                        } h-[1px] w-full bg-[#E9EAF0]`}
+                        className={`${open ? "block" : "hidden"
+                          } h-[1px] w-full bg-[#E9EAF0]`}
                       />
                       <Disclosure.Panel className="flex flex-col gap-6 py-4 mx-4">
-                        <PriceSlider></PriceSlider>
+                        <PriceSlider range={range} setRange={setRange} />
 
-                        <div className=" flex flex-col gap-[10px]">
+                        <div className="flex flex-col gap-[10px]">
                           {checkboxLabels.map((label, index) => (
-                            <div
-                              key={index}
-                              className="flex items-center justify-between"
-                            >
+                            <div key={index} className="flex items-center justify-between">
                               <div className="flex items-center">
                                 <input
                                   type="checkbox"
@@ -337,24 +419,27 @@ export default function Course() {
                                 <label htmlFor={`checkbox-${index}`}>
                                   <span
                                     id=""
-                                    className={`ml-2 text-sm font-medium ${
-                                      checkboxes[index]
+                                    className={`ml-2 text-sm font-medium ${checkboxes[index]
                                         ? "text-[#FF6636] font-medium"
                                         : "text-[#4E5566] font-normal"
-                                    }`}
+                                      }`}
                                   >
                                     {label}
                                   </span>
                                 </label>
                               </div>
                               <div
-                                className={`text-xs font-medium ${
-                                  checkboxes[index]
+                                className={`text-xs font-medium ${checkboxes[index]
                                     ? "text-[#4E5566] font-medium"
                                     : "text-[#8C94A3] font-normal"
-                                }`}
+                                  }`}
                               >
-                                12345
+                                {filteredAndSortedCourses.filter((course) => {
+                                  const meetsPriceCriteria =
+                                    (index === 0 && course.course_price > 0) ||
+                                    (index === 1 && course.course_price === 0);
+                                  return meetsPriceCriteria;
+                                }).length}
                               </div>
                             </div>
                           ))}
@@ -382,15 +467,13 @@ export default function Course() {
                           </p>
                         </div>
                         <ChecvronUp
-                          className={`${
-                            open ? "rotate-180 transform" : ""
-                          } h-5 w-5`}
+                          className={`${open ? "rotate-180 transform" : ""
+                            } h-5 w-5`}
                         />
                       </Disclosure.Button>
                       <div
-                        className={`${
-                          open ? "block" : "hidden"
-                        } h-[1px] w-full bg-[#E9EAF0]`}
+                        className={`${open ? "block" : "hidden"
+                          } h-[1px] w-full bg-[#E9EAF0]`}
                       />
                       <Disclosure.Panel className="flex py-4 mx-4">
                         <div className=" flex flex-col gap-[10px]">
@@ -411,11 +494,10 @@ export default function Course() {
                                 }
                               />
                               <span
-                                className={`text-sm font-medium ${
-                                  checkedItems[category.id]
-                                    ? "text-[#FF6636] font-medium"
-                                    : "text-[#4E5566] font-normal"
-                                }`}
+                                className={`text-sm font-medium ${checkedItems[category.id]
+                                  ? "text-[#FF6636] font-medium"
+                                  : "text-[#4E5566] font-normal"
+                                  }`}
                               >
                                 {category.cate_name}
                               </span>
@@ -445,15 +527,13 @@ export default function Course() {
                           </p>
                         </div>
                         <ChecvronUp
-                          className={`${
-                            open ? "rotate-180 transform" : ""
-                          } h-5 w-5`}
+                          className={`${open ? "rotate-180 transform" : ""
+                            } h-5 w-5`}
                         />
                       </Disclosure.Button>
                       <div
-                        className={`${
-                          open ? "block" : "hidden"
-                        } h-[1px] w-full bg-[#E9EAF0]`}
+                        className={`${open ? "block" : "hidden"
+                          } h-[1px] w-full bg-[#E9EAF0]`}
                       />
                       <Disclosure.Panel className="flex flex-col gap-[10px] pt-4 mx-4">
                         <div className=" flex flex-col gap-[10px] pb-11">
@@ -472,21 +552,19 @@ export default function Course() {
                                 />
                                 <StarFill width={20} height={20}></StarFill>
                                 <span
-                                  className={`text-sm font-medium ${
-                                    checkRating[index]
-                                      ? "text-[#FF6636] font-medium"
-                                      : "text-[#4E5566] font-normal"
-                                  }`}
+                                  className={`text-sm font-medium ${checkRating[index]
+                                    ? "text-[#FF6636] font-medium"
+                                    : "text-[#4E5566] font-normal"
+                                    }`}
                                 >
                                   {label}
                                 </span>
                               </div>
                               <p
-                                className={`text-xs font-medium ${
-                                  checkRating[index]
-                                    ? "text-[#4E5566] font-medium"
-                                    : "text-[#8C94A3] font-normal"
-                                }`}
+                                className={`text-xs font-medium ${checkRating[index]
+                                  ? "text-[#4E5566] font-medium"
+                                  : "text-[#8C94A3] font-normal"
+                                  }`}
                               >
                                 12345
                               </p>
@@ -502,32 +580,32 @@ export default function Course() {
           </div>
           <div className="flex flex-col items-center justify-between col-span-12 lg:col-span-9">
             <div className="grid grid-cols-12 gap-6">
-              {map(filteredCourses, (item) => (
-                <div
-                  className="col-span-12 lg:col-span-4 md:col-span-6"
-                  key={item?.course_id}
-                >
-                  <Link to={`/course-detail?courseId=${item.course_id}`}>
-                    <Card
-                      course_id={item.course_id}
-                      thumbnail={item.thumbnail}
-                      category={item.cate_name}
-                      cateId={item.category_id}
-                      price={item.course_price}
-                      name={item.name}
-                      rating={item.rating}
-                      joiner={item.joiner}
-                    />
-                  </Link>
+              {map(filteredAndSortedCourses.slice(0, loadMore), (item) => (
+                <div className="col-span-12 lg:col-span-4 md:col-span-6" key={item?.course_id}>
+                  <Card
+                    course_id={item.course_id}
+                    thumbnail={item.thumbnail}
+                    category={item.cate_name}
+                    cateId={item.category_id}
+                    price={item.course_price}
+                    name={item.name}
+                    rating={item.rating}
+                    joiner={item.joiner}
+                  />
                 </div>
               ))}
             </div>
-            <Button
-              text="Xem thêm"
-              Class={
-                "text-[18px] leading-6 text-[#ff6636] font-medium mt-10 mb-[100px] bg-[#ffeee8] px-[42px] py-4 rounded-md"
-              }
-            />
+
+            {loadMore < filteredAndSortedCourses.length && (
+              <Button
+                text={`Xem thêm (${remainingCourses} kết quả)`}
+                Class={
+                  "text-[15px] leading-6 text-[#ff6636] font-medium mt-10 mb-[100px] bg-[#ffeee8] px-[42px] py-4 rounded-md"
+                }
+                onClick={handleLoadMore}
+                disabled={remainingCourses <= 0} // Disable the button when there are no more courses
+              />
+            )}
           </div>
         </div>
       </div>

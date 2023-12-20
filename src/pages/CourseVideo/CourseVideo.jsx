@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { NavLink, useSearchParams, useNavigate  } from "react-router-dom";
+import { useState, useEffect, useRef } from "react";
+import { NavLink, useSearchParams, useNavigate } from "react-router-dom";
 import "./CourseVideo.scss";
 import ChevronLeft from "../../components/commom/icons/ChevronLeft";
 import ChevronRight from "../../components/commom/icons/ChevronRight";
@@ -10,6 +10,7 @@ import Button from "../../components/button/Button";
 import Input from "../../components/input/Input";
 import { useQuery } from "react-query";
 // import Footer from "../../Layout/Footer";
+import { useUser } from '../../utils/UserAPI';
 import styled from "styled-components";
 import { apiServer, serverEndpoint } from "../../utils/http";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -38,7 +39,24 @@ const VideoWrapper = styled.div`
 
 
 
+// function useInterval(callback, delay) {
+//   const savedCallback = useRef();
 
+//   useEffect(() => {
+//     savedCallback.current = callback;
+//   }, [callback]);
+
+//   useEffect(() => {
+//     function tick() {
+//       savedCallback.current();
+//     }
+
+//     if (delay !== null) {
+//       const id = setInterval(tick, delay);
+//       return () => clearInterval(id);
+//     }
+//   }, [delay]);
+// }
 
 const CourseVideo = () => {
   const navigate = useNavigate();
@@ -51,19 +69,55 @@ const CourseVideo = () => {
   const [questionIndex, setQuestionIndex] = useState(0);
   const [completedLessons, setCompletedLessons] = useState([]);
   const [selectedAnswersByQuestion, setSelectedAnswersByQuestion] = useState({});
+  const { user, handleLogout } = useUser();
+  const users = user?.userDetails || {};
+  const user_id = users.user_id;
+  // const saveProgressToLocalStorage = (lessonId) => {
+  //   const savedProgress = localStorage.getItem('userProgress');
 
+  //   let progressData;
+  //   if (savedProgress) {
+  //     progressData = JSON.parse(savedProgress);
 
+  //     // Check if userId or courseId has changed
+  //     if (progressData.userId !== user_id || progressData.courseId !== courseId) {
+  //       // Create a new entry
+  //       progressData = {
+  //         userId: user_id,
+  //         courseId: courseId,
+  //         lessonId: lessonId,
+  //       };
+  //     } else {
+  //       // Update lessonId in the existing entry
+  //       progressData.lessonId = lessonId;
+  //     }
+  //   } else {
+  //     // If no progress data exists, create a new entry
+  //     progressData = {
+  //       userId: user_id,
+  //       courseId: courseId,
+  //       lessonId: lessonId,
+  //     };
+  //   }
 
+  //   localStorage.setItem('userProgress', JSON.stringify(progressData));
+  // };
+
+  // useEffect(() => {
+  //   const savedProgress = localStorage.getItem('userProgress');
+  //   if (savedProgress) {
+  //     const progressData = JSON.parse(savedProgress);
+  //     // Use progressData.userId, progressData.courseId, and progressData.lessonId as needed
+  //   }
+  // }, [user_id, courseId]); // Add user_id and courseId to the dependency array
   const videoURL = `${serverEndpoint}video/stream/${selectedVideo}`;
-  console.log(videoURL);
-  console.log(courseId);
+  // console.log(videoURL);
+  // console.log(courseId);
 
   const [isAnHienSubMenu1, setIsAnHienSubMenu1] = useState(false);
   const [isAnHienSubMenu, setIsAnHienSubMenu] = useState(
     window.innerWidth > 1000
   );
-  // Sử dụng React Query để gọi API và lấy dữ liệu từ máy chủ
-
 
   const toggleAnHienSubMenu = () => {
     setIsAnHienSubMenu(!isAnHienSubMenu);
@@ -77,17 +131,12 @@ const CourseVideo = () => {
       setIsAnHienSubMenu(window.innerWidth > 1000);
     };
 
-    // Add event listener for window resize
     window.addEventListener("resize", handleResize);
 
-    // Clean up the event listener when the component unmounts
     return () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
-
-
-
 
   const updateCompletedLessons = (lesson) => {
     setCompletedLessons((prevCompletedLessons) => {
@@ -96,11 +145,12 @@ const CourseVideo = () => {
       return Array.from(newCompletedLessons);
     });
   };
+
   const { data: courseData, isLoading, isError } = useQuery(
     ["courseData", courseId],
     () => apiServer.get(`/admin-query/getAllLessonQuizzVideo/${+courseId}`),
     {
-      enabled: !!courseId, // Không thực hiện gọi API nếu courseId không tồn tại
+      enabled: !!courseId,
     }
   );
   const handleGoBack = () => {
@@ -112,6 +162,7 @@ const CourseVideo = () => {
       setQuestionIndex(questionIndex + 1);
     }
   };
+
   const handlePreviousQuestion = () => {
     if (questionIndex > 0) {
       setQuestionIndex(questionIndex - 1);
@@ -121,58 +172,117 @@ const CourseVideo = () => {
   if (courseData && courseData.data.success) {
     const { SectionDoc } = courseData.data;
 
-    // Iterate through sections
     SectionDoc.forEach((section) => {
       section.lessons.forEach((lesson) => {
         lesson.quizzs.forEach((quizz) => {
           const { question, answers } = quizz;
 
-          // Now you have the question and its answers
-          // console.log('Question:', question);
-          // console.log('Answers:', answers);
-
-          // You can further iterate through the answers if needed
           answers.forEach((answer) => {
-            // console.log('Answer:', answer.answer);
-            // console.log('Is Correct:', answer.isCorrect);
-            // console.log('Explanation:', answer.explain);
+            // ...
           });
         });
       });
     });
   }
 
-
   const markLessonAsCompleted = (completedLessonId) => {
-    setCompletedLessons(prevCompletedLessons => {
+    setCompletedLessons((prevCompletedLessons) => {
       const newCompletedLessons = new Set([...prevCompletedLessons, completedLessonId]);
       return Array.from(newCompletedLessons);
     });
   };
-  
 
-  const handleVideoEnd = () => {
-    const allLessons = SectionDoc.map(section => section.lessons).flat();
-    const currentIndex = allLessons.findIndex(lesson => lesson.lesson_id === selectedLesson.lesson_id);
-    setCompletedLessons(prev => [...prev, selectedLesson.lesson_id]);
-    if (currentIndex >= 0 && currentIndex < allLessons.length - 1) {
-      const nextLesson = allLessons[currentIndex + 1];
-      setSelectedLesson(nextLesson);
-      setSelectedVideo(nextLesson.videos?.[0]?.file_videos || null);
-      setSelectedQuiz(nextLesson.quizzs || []);
-      setQuestionIndex(0);
-      navigate(`/course-video?courseId=${courseId}&lessonId=${nextLesson.lesson_id}`);
+  const { data: progressData, refetch: refetchProgressData } = useQuery(
+    ['progressData', user_id, courseId],
+    () => apiServer.get(`/admin-query/getAllProgress`, { params: { user_id, course_id: courseId } }),
+    { enabled: !!courseId && !!user_id }
+  );
+
+  useEffect(() => {
+    if (progressData && progressData.data) {
+      let lessonsProgress = [];
+
+      if (Array.isArray(progressData.data)) {
+        lessonsProgress = progressData.data.flatMap((section) =>
+          section.section_progresses.flatMap((lesson) =>
+            lesson.lesson_progresses.map((lp) => lp.lesson_id)
+          )
+        );
+      }
+
+      setCompletedLessons(lessonsProgress);
     } else {
-      alert("Đã hoàn thành tất cả các bài học trong khóa học này.");
+      // console.log('progressData or progressData.data is undefined');
+    }
+  }, [progressData, refetchProgressData]);
+
+  const ProgressData = progressData?.data;
+  // console.log(ProgressData);
+
+
+  const handleVideoEnd = async () => {
+    try {
+      // Check if all lessons are finished
+      const allLessonsFinished = ProgressData?.s_doc?.[0]?.section_progresses.every(sectionProgress =>
+        sectionProgress.lesson_progresses.every(lessonProgress => lessonProgress.is_finish)
+      );
+  
+      if (allLessonsFinished) {
+        alert("Đã hoàn thành tất cả các bài học trong khóa học này.");
+      }
+      //  else {
+      //   alert("Bạn đã hoàn thành tất cả bài học có sẵn, nhưng vẫn còn bài học chưa hoàn thành.");
+      // }
+  
+      // If all lessons are finished, do not make the API call
+      if (!allLessonsFinished) {
+        const allLessons = SectionDoc.map(section => section.lessons).flat();
+        const currentIndex = allLessons.findIndex(lesson => lesson.lesson_id === selectedLesson.lesson_id);
+        setCompletedLessons(prev => [...prev, selectedLesson.lesson_id]);
+  
+        if (currentIndex >= 0 && currentIndex < allLessons.length - 1) {
+          const nextLesson = allLessons[currentIndex + 1];
+          setSelectedLesson(nextLesson);
+          setSelectedVideo(nextLesson.videos?.[0]?.file_videos || null);
+          setSelectedQuiz(nextLesson.quizzs || []);
+          setQuestionIndex(0);
+  
+          navigate(`/course-video?courseId=${courseId}&lessonId=${nextLesson.lesson_id}`);
+        }
+  
+        // Make the API call to update progress
+        await apiServer.post("/admin-query/updateProgress", {
+          course_id: courseId,
+          user_id: user_id,
+          section_id: selectedLesson.section_id,
+          lesson_id: selectedLesson.lesson_id,
+        });
+  
+        // Refetch the progress data after updating
+        refetchProgressData();
+      }
+    } catch (error) {
+      console.error("Error handling video end:", error);
     }
   };
   
-  
-  
-  
-  
-  
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+  useEffect(() => {
+    // Your code here
+  }, [courseId, lessonId]);
   useEffect(() => {
     if (courseData && courseData.data.success) {
       // Access the data from the response
@@ -180,11 +290,11 @@ const CourseVideo = () => {
       const { sectionCount, LessonCount, TotalTime } = Course_Info;
 
       // Do something with the data...
-      console.log('Section Count:', sectionCount);
-      console.log('Lesson Count:', LessonCount);
-      console.log('Total Time:', TotalTime);
-      console.log('Course Doc:', CourseDoc);
-      console.log('Section Doc:', SectionDoc);
+      // console.log('Section Count:', sectionCount);
+      // console.log('Lesson Count:', LessonCount);
+      // console.log('Total Time:', TotalTime);
+      // console.log('Course Doc:', CourseDoc);
+      // console.log('Section Doc:', SectionDoc);
     }
     if (courseData && courseData.data.success) {
       const firstLesson = courseData.data.SectionDoc[0]?.lessons[0];
@@ -194,20 +304,19 @@ const CourseVideo = () => {
         setSelectedQuiz(firstLesson.quizzs || []);
         setQuestionIndex(0);
         const lesson = SectionDoc
-        .map(section => section.lessons)
-        .flat()
-        .find(lesson => lesson.lesson_id.toString() === lessonId);
-  
-      if (lesson) {
-        setSelectedLesson(lesson);
-        setSelectedVideo(lesson.videos?.[0]?.file_videos || null);
-        setSelectedQuiz(lesson.quizzs || []);
-        setQuestionIndex(0);
+          .map(section => section.lessons)
+          .flat()
+          .find(lesson => lesson.lesson_id.toString() === lessonId);
+
+        if (lesson) {
+          setSelectedLesson(lesson);
+          setSelectedVideo(lesson.videos?.[0]?.file_videos || null);
+          setSelectedQuiz(lesson.quizzs || []);
+          setQuestionIndex(0);
+        }
       }
     }
-  }
   }, [courseData, lessonId]);
-
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -222,125 +331,153 @@ const CourseVideo = () => {
 
   const { Course_Info, SectionDoc, CourseDoc } = courseData.data;
   const sortedSectionDoc = SectionDoc.sort((a, b) => a.section_id - b.section_id);
- // Inside the handleLessonSelect function in CourseVideo component
-const handleLessonSelect = (lesson) => {
-  setSelectedLesson(lesson);
-  setSelectedVideo(
-    lesson.isQuiz
-      ? lesson.quizzs?.[0]?.file_videos || null
-      : lesson.videos?.[0]?.file_videos || null
-  );
-  setSelectedQuiz(lesson.quizzs || []);
-  setQuestionIndex(0);
+  // Inside the handleLessonSelect function in CourseVideo component
 
-  // Cập nhật URL với lessonId mới
-  const newURL = `/course-video?courseId=${courseId}&lessonId=${lesson.lesson_id}`;
-  window.history.pushState({}, '', newURL);
-  
-};
+  const handleLessonSelect = (lesson) => {
+    setSelectedLesson(lesson);
+    setSelectedVideo(
+      lesson.isQuiz
+        ? lesson.quizzs?.[0]?.file_videos || null
+        : lesson.videos?.[0]?.file_videos || null
+    );
+    setSelectedQuiz(lesson.quizzs || []);
+    setQuestionIndex(0);
 
-  
-
-
-const isFirstLesson = () => {
-  if (!selectedLesson) {
-    return false; // or handle the case where selectedLesson is null
-  }
-
-  const allLessons = SectionDoc.map((section) => section.lessons).flat();
-  const currentIndex = allLessons.findIndex((lesson) => lesson.lesson_id === selectedLesson.lesson_id);
-  return currentIndex === 0;
-};
+    // Cập nhật URL với lessonId mới
+    const newURL = `/course-video?courseId=${courseId}&lessonId=${lesson.lesson_id}`;
+    window.history.pushState({}, '', newURL);
+    navigate(newURL);
+    // saveProgressToLocalStorage(lesson.lesson_id);
+    // Mở khóa các bài học đã hoàn thành
+    const lessonProgress = progressData?.s_doc?.[0]?.section_progresses.find(sectionProgress => sectionProgress.section_id === lesson.section_id);
+    const completedLessonIds = lessonProgress?.lesson_progresses.filter(lp => lp.is_finish).map(lp => lp.lesson_id) || [];
+    setCompletedLessons(completedLessonIds);
+  };
 
 
-const isLastLesson = () => {
-  if (!selectedLesson) {
-    return false; // or handle the case where selectedLesson is null
-  }
-
-  const allLessons = SectionDoc.map((section) => section.lessons).flat();
-  const currentIndex = allLessons.findIndex((lesson) => lesson.lesson_id === selectedLesson.lesson_id);
-
-  if (currentIndex < allLessons.length - 1) {
-    const nextLesson = allLessons[currentIndex + 1];
-    return nextLesson && nextLesson.lesson_id === null; // Adjust this condition based on your data
-  }
-
-  return true; // Handle the case when there is no next lesson
-};
 
 
-const isPreviousLessonCompleted = () => {
-  if (!selectedLesson) {
-    return false; // or handle the case where selectedLesson is null
-  }
 
-  const allLessons = SectionDoc.map((section) => section.lessons).flat();
-  const currentIndex = allLessons.findIndex((lesson) => lesson.lesson_id === selectedLesson.lesson_id);
+  const isFirstLesson = () => {
+    if (!selectedLesson) {
+      return false; // or handle the case where selectedLesson is null
+    }
 
-  if (currentIndex > 0) {
+    const allLessons = SectionDoc.map((section) => section.lessons).flat();
+    const currentIndex = allLessons.findIndex((lesson) => lesson.lesson_id === selectedLesson.lesson_id);
+    return currentIndex === 0;
+  };
+
+
+  const isLastLesson = () => {
+    if (!selectedLesson) {
+      return false; // or handle the case where selectedLesson is null
+    }
+
+    const allLessons = SectionDoc.map((section) => section.lessons).flat();
+    const currentIndex = allLessons.findIndex((lesson) => lesson.lesson_id === selectedLesson.lesson_id);
+
+    if (currentIndex < allLessons.length - 1) {
+      const nextLesson = allLessons[currentIndex + 1];
+      return nextLesson && nextLesson.lesson_id === null; // Adjust this condition based on your data
+    }
+
+    return true; // Handle the case when there is no next lesson
+  };
+
+
+  const isPreviousLessonCompleted = () => {
+    if (!selectedLesson) {
+      return false; // or handle the case where selectedLesson is null
+    }
+
+    const allLessons = SectionDoc.map((section) => section.lessons).flat();
+    const currentIndex = allLessons.findIndex((lesson) => lesson.lesson_id === selectedLesson.lesson_id);
+
+    if (currentIndex > 0) {
+      const previousLesson = allLessons[currentIndex - 1];
+      return previousLesson && previousLesson.completed; // Check if previousLesson is not null before accessing completed
+    }
+
+    return false; // Handle the case when there is no previous lesson
+  };
+
+  const isNextLessonCompleted = () => {
+    if (!selectedLesson) {
+      return false; // or handle the case where selectedLesson is null
+    }
+
+    const allLessons = SectionDoc.map((section) => section.lessons).flat();
+    const currentIndex = allLessons.findIndex((lesson) => lesson.lesson_id === selectedLesson.lesson_id);
+
+    if (currentIndex < allLessons.length - 1) {
+      const nextLesson = allLessons[currentIndex + 1];
+      return nextLesson && nextLesson.lesson_id === null; // Adjust this condition based on your data
+    }
+
+    return false; // Handle the case when there is no next lesson
+  };
+
+
+  const handlePreviousLesson = () => {
+    const allLessons = SectionDoc.map((section) => section.lessons).flat();
+    const currentIndex = allLessons.findIndex(
+      (lesson) => lesson.lesson_id === selectedLesson.lesson_id
+    );
     const previousLesson = allLessons[currentIndex - 1];
-    return previousLesson && previousLesson.completed; // Check if previousLesson is not null before accessing completed
-  }
 
-  return false; // Handle the case when there is no previous lesson
-};
+    if (previousLesson) {
+      const isNextLessonCompleted = completedLessons.includes(previousLesson.lesson_id.toString());
 
-const isNextLessonCompleted = () => {
-  if (!selectedLesson) {
-    return false; // or handle the case where selectedLesson is null
-  }
 
-  const allLessons = SectionDoc.map((section) => section.lessons).flat();
-  const currentIndex = allLessons.findIndex((lesson) => lesson.lesson_id === selectedLesson.lesson_id);
 
-  if (currentIndex < allLessons.length - 1) {
+      const lessonProgress = ProgressData.s_doc[0]?.section_progresses.find(sectionProgress => sectionProgress.section_id === previousLesson.section_id);
+      const isLessonLocked = lessonProgress?.lesson_progresses.find(lp => lp.lesson_id === previousLesson.lesson_id && lp.is_lock);
+      // console.log('Is Next Lesson Locked:', isLessonLocked);
+
+      if (isLessonLocked) {
+        alert('Bạn cần hoàn thành bài học trước đó trước khi tiếp tục!');
+        // console.log('Is Next Lesson Locked:', isLessonLocked);
+        return;
+      }
+
+      const newURL = `/course-video?courseId=${courseId}&lessonId=${previousLesson.lesson_id}`;
+      window.history.pushState({}, '', newURL);
+      navigate(newURL);
+    }
+  };
+
+
+  const handleNextLesson = () => {
+    const allLessons = SectionDoc.map((section) => section.lessons).flat();
+    const currentIndex = allLessons.findIndex(
+      (lesson) => lesson.lesson_id === selectedLesson.lesson_id
+    );
     const nextLesson = allLessons[currentIndex + 1];
-    return nextLesson && nextLesson.lesson_id === null; // Adjust this condition based on your data
-  }
 
-  return false; // Handle the case when there is no next lesson
-};
+    if (nextLesson) {
 
 
-const handlePreviousLesson = () => {
-  const allLessons = SectionDoc.map((section) => section.lessons).flat();
-  const currentIndex = allLessons.findIndex(
-    (lesson) => lesson.lesson_id === selectedLesson.lesson_id
-  );
-  const previousLesson = allLessons[currentIndex - 1];
+      const nextLessonProgress = ProgressData.s_doc?.[0]?.section_progresses.find(sectionProgress => sectionProgress.section_id === nextLesson.section_id);
+      const isNextLessonLocked = nextLessonProgress?.lesson_progresses.find(lp => lp.lesson_id === nextLesson.lesson_id && lp.is_lock);
 
-  if (previousLesson) {
-    const isNextLessonCompleted = completedLessons.includes(previousLesson.lesson_id);
+      // console.log('Is Next Lesson Locked:', isNextLessonLocked);
 
-    if (!isNextLessonCompleted) {
-      alert('Hãy hoàn thành bài học sau đó!');
-      return;
+      if (isNextLessonLocked) {
+        alert('Bạn cần hoàn thành bài học trước đó trước khi tiếp tục!');
+        return;
+      }
+
+      const newURL = `/course-video?courseId=${courseId}&lessonId=${nextLesson.lesson_id}`;
+      window.history.pushState({}, '', newURL);
+
+      // Chuyển đến bài học tiếp theo
+      navigate(newURL);
+      // saveProgressToLocalStorage(nextLesson.lesson_id);
     }
-
-    navigate(`/course-video?courseId=${courseId}&lessonId=${previousLesson.lesson_id}`);
-  }
-};
+  };
 
 
-const handleNextLesson = () => {
-  const allLessons = SectionDoc.map((section) => section.lessons).flat();
-  const currentIndex = allLessons.findIndex(
-    (lesson) => lesson.lesson_id === selectedLesson.lesson_id
-  );
-  const nextLesson = allLessons[currentIndex + 1];
-
-  if (nextLesson) {
-    const isPreviousLessonCompleted = completedLessons.includes(selectedLesson.lesson_id);
-    
-    if (!isPreviousLessonCompleted) {
-      alert('Hãy hoàn thành bài học trước đó!');
-      return;
-    }
-
-    navigate(`/course-video?courseId=${courseId}&lessonId=${nextLesson.lesson_id}`);
-  }
-};
 
 
 
@@ -454,40 +591,40 @@ const handleNextLesson = () => {
     selectedQuiz[questionIndex]?.answers?.filter((answer) => answer.isCorrect).length > 1;
 
 
-    const handleSaveAnswers = () => {
-      let correctAnswersCount = 0;
-    
-      selectedQuiz.forEach((question) => {
-        const userAnswers = selectedAnswersByQuestion[question.id] || [];
-        const correctAnswers = question.answers.filter((a) => a.isCorrect).map((a, index) => index);
-    
-        if (JSON.stringify(userAnswers.sort()) === JSON.stringify(correctAnswers.sort())) {
-          correctAnswersCount++;
-        }
-      });
-    
-      const isAllCorrect = correctAnswersCount === selectedQuiz.length;
-    
-      if (isAllCorrect) {
-        // Hiển thị thông báo chúc mừng
-        alert("Chúc mừng bạn đã hoàn thành 100% câu hỏi.");
-    
-        // Chuyển hướng sau một khoảng thời gian ngắn
-        setTimeout(() => {
-          handleVideoEnd(); // Hàm này nên được cập nhật để chuyển đến bài học tiếp theo
-        }, 2000); // Đợi 2 giây trước khi chuyển hướng
-      } else {
-        // Hiển thị thông báo lỗi
-        alert(`Bạn đã trả lời sai ${selectedQuiz.length - correctAnswersCount} câu hỏi. Vui lòng xem lại.`);
+  const handleSaveAnswers = () => {
+    let correctAnswersCount = 0;
+
+    selectedQuiz.forEach((question) => {
+      const userAnswers = selectedAnswersByQuestion[question.id] || [];
+      const correctAnswers = question.answers.filter((a) => a.isCorrect).map((a, index) => index);
+
+      if (JSON.stringify(userAnswers.sort()) === JSON.stringify(correctAnswers.sort())) {
+        correctAnswersCount++;
       }
-    };
-    
-    const isAllQuestionsAnswered = () => {
-      return selectedQuiz.every(question => 
-        selectedAnswersByQuestion.hasOwnProperty(question.id)
-      );
-    };
-    
+    });
+
+    const isAllCorrect = correctAnswersCount === selectedQuiz.length;
+
+    if (isAllCorrect) {
+      // Hiển thị thông báo chúc mừng
+      alert("Chúc mừng bạn đã hoàn thành 100% câu hỏi.");
+
+      // Chuyển hướng sau một khoảng thời gian ngắn
+      setTimeout(() => {
+        handleVideoEnd(); // Hàm này nên được cập nhật để chuyển đến bài học tiếp theo
+      }, 2000); // Đợi 2 giây trước khi chuyển hướng
+    } else {
+      // Hiển thị thông báo lỗi
+      alert(`Bạn đã trả lời sai ${selectedQuiz.length - correctAnswersCount} câu hỏi. Vui lòng xem lại.`);
+    }
+  };
+
+  const isAllQuestionsAnswered = () => {
+    return selectedQuiz.every(question =>
+      selectedAnswersByQuestion.hasOwnProperty(question.id)
+    );
+  };
+
 
 
   return (
@@ -496,7 +633,7 @@ const handleNextLesson = () => {
         <div className="Header">
           <div className="directional">
             <div className="return">
-             <div className="ChevronLeft"  onClick={handleGoBack}>
+              <div className="ChevronLeft" onClick={handleGoBack}>
                 <ChevronLeft
                   width={28}
                   height={28}
@@ -504,13 +641,29 @@ const handleNextLesson = () => {
                   className="icon-link"
                 />
                 <p>Trở lại</p>
-                </div>
+              </div>
             </div>
-            <div className="name_course">
-              <p>{CourseDoc.name}</p>
-            </div>
+
+              <div className="name_course">
+                <p>{CourseDoc.name}</p>
+              </div>
           </div>
+          <div className="progress">
+            <strong>
+              {ProgressData && ProgressData.course_info
+                ? `${Math.round(ProgressData.course_info.progress * 100)}%`
+                : 'N/A'}
+            </strong>
+            <p>
+              {ProgressData && ProgressData.course_info
+                ? `${ProgressData.course_info.totalLessons.current}/${ProgressData.course_info.totalLessons.total} bài học`
+                : 'N/A'}
+            </p>
+          </div>
+
+
         </div>
+
         <div className="Content_CourseVideo">
           <div className="CourseVideo_Left">
             {selectedVideo && (
@@ -543,19 +696,19 @@ const handleNextLesson = () => {
                         </p>
 
                         <Input
-  className="InputQuestions"
-  type="text"
-  placeholder={selectedQuiz[questionIndex]?.question ? `${selectedQuiz[questionIndex].question}?` : ""}
-  disabled
-/>
+                          className="InputQuestions"
+                          type="text"
+                          placeholder={selectedQuiz[questionIndex]?.question ? `${selectedQuiz[questionIndex].question}?` : ""}
+                          disabled
+                        />
 
                         <div className="Answer">
                           {selectedQuiz[questionIndex]?.answers?.map((answer, answerIndex) => (
                             <div
                               key={answerIndex}
                               className={`AnswerOption ${selectedAnswersByQuestion[selectedQuiz[questionIndex]?.id]?.includes(answerIndex)
-                                  ? "selected"
-                                  : ""
+                                ? "selected"
+                                : ""
                                 }`}
                               onClick={() => handleAnswerSelect(answerIndex, answer.isCorrect)}
                             >
@@ -564,8 +717,8 @@ const handleNextLesson = () => {
                               </span>
                               <p
                                 className={`InputAnswer ${selectedAnswersByQuestion[selectedQuiz[questionIndex]?.id]?.includes(answerIndex)
-                                    ? "selected"
-                                    : ""
+                                  ? "selected"
+                                  : ""
                                   }`}
                               >
                                 {answer.answer}
@@ -586,15 +739,15 @@ const handleNextLesson = () => {
                   {questionIndex < selectedQuiz.length - 1 && (
                     <Button Class="continue" text="Tiếp tục" onClick={handleNextQuestion}></Button>
                   )}
-         {isAllQuestionsAnswered() && (
-  <Button 
-    Class="save-answers" 
-    text="Lưu Đáp Án" 
-    onClick={handleSaveAnswers}
-  />
-)}
+                  {isAllQuestionsAnswered() && (
+                    <Button
+                      Class="save-answers"
+                      text="Lưu Đáp Án"
+                      onClick={handleSaveAnswers}
+                    />
+                  )}
                 </div>
-             
+
               </div>
             )}
 
@@ -731,6 +884,7 @@ const handleNextLesson = () => {
                     <Button text="Xem thêm" Class="Button"></Button>
                   </div>
                 </div>
+
               </div>
             </div>
           </div>
@@ -746,16 +900,17 @@ const handleNextLesson = () => {
                     Nội dung khóa học
                   </h2>
                   <div className="dropdownMenu">
-                  <Dropdown
-  SectionDoc={sortedSectionDoc}
-  handleSelectLesson={handleLessonSelect}
-  completedLessons={completedLessons}
-  setCompletedLessons={setCompletedLessons}
-  defaultOpen={true} // Thêm prop defaultOpen
-  courseId={courseId} // Truyền courseId
-  
-  
-/>
+                    <Dropdown
+                      SectionDoc={sortedSectionDoc}
+                      handleSelectLesson={handleLessonSelect}
+                      completedLessons={completedLessons}
+                      setCompletedLessons={setCompletedLessons}
+                      defaultOpen={true} // Thêm prop defaultOpen
+                      courseId={courseId}
+                      progressData={ProgressData}// Truyền courseId
+
+
+                    />
                   </div>
                 </div>
               </div>
@@ -763,6 +918,7 @@ const handleNextLesson = () => {
           )}
         </div>
       </div>
+
       {/* <div className="footer">
                 <Footer></Footer>
             </div> */}
@@ -774,27 +930,26 @@ const handleNextLesson = () => {
           </button>
         </div>
         <div className="next_page">
-        <div className="knot">
-  <ChevronLeft width={28} height={28} fill="#FF6636" className="icon-link" />
-  <Button
-    text="Bài trước"
-    Class="Button"
-    onClick={handlePreviousLesson}
-    disabled={isFirstLesson() || !isPreviousLessonCompleted()}
-  />
+          <div className="knot" onClick={handlePreviousLesson}>
+            <ChevronLeft width={28} height={28} fill="#FF6636" className="icon-link" />
+            <Button
+              text="Bài trước"
+              Class="Button"
+              disabled={isFirstLesson() || !isPreviousLessonCompleted()}
+            />
 
-</div>
-<div className="knot">
-  <Button
-    text="Bài sau"
-    Class="Button"
-    onClick={handleNextLesson}
-    disabled={isLastLesson() || !isNextLessonCompleted()}
-  />
-  <ChevronRight width={28} height={28} fill="#FF6636" className="icon-link" />
-</div>
+          </div>
+          <div className="knot" onClick={handleNextLesson}>
+            <Button
+              text="Bài sau"
+              Class="Button"
+              disabled={isLastLesson() || !isNextLessonCompleted()}
+            />
+            <ChevronRight width={28} height={28} fill="#FF6636" className="icon-link" />
+          </div>
         </div>
       </div>
+
     </>
   );
 };

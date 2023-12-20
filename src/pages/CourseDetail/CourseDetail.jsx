@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useQuery } from "react-query";
-import { apiServer } from "../../utils/http";
+import { apiServer, serverEndpoint } from "../../utils/http";
 import { filter, slice } from "lodash";
 import ArcordionItem from "../../components/Dropdown/Arcordion";
 import DetailCard from "../../components/Card/DetailCard";
 import Vector from "../../components/commom/icons/Vector";
 import Button from "../../components/button/Button";
 import CourseSlide from "../../components/Swiper/CourseSlide";
+// import { useUser } from '../../utils/UserAPI';
 const getCourseData = async () => {
   try {
     const response1 = await apiServer.get("/course");
@@ -23,22 +24,35 @@ export default function CourseDetail() {
   const [isBoxCro, setIsBoxCro] = useState(true);
 
   useEffect(() => {
+
     window.addEventListener("scroll", handleScroll);
+    window.addEventListener("resize", handleScroll); // Listen for resize events
     return () => {
       window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleScroll); // Clean up resize event listener
     };
   }, []);
   const handleScroll = () => {
     const element = document.getElementById("box-list-course");
-    const triggerPosition = element.getBoundingClientRect().top;
-    const viewportHeight = window.innerHeight;
 
-    if (triggerPosition <= viewportHeight) {
-      setIsBoxCro(false);
-    } else {
-      setIsBoxCro(true);
+    // Check if the element exists before trying to access its properties
+    if (element) {
+      const triggerPosition = element.getBoundingClientRect().top;
+      const viewportHeight = window.innerHeight;
+      const isSmallScreen = window.innerWidth <= 1023;
+
+      if (isSmallScreen && triggerPosition > 0) {
+        setIsBoxCro(false);
+      } else if (triggerPosition <= viewportHeight) {
+        setIsBoxCro(false);
+      }
+      else {
+        setIsBoxCro(true);
+      }
+
     }
   };
+
   const { data: courseData } = useQuery("courseData", getCourseData);
   const {
     data: courseDetails,
@@ -70,9 +84,9 @@ export default function CourseDetail() {
 
   return (
     <>
-      <div className="px-20">
+      <div className="md:px-20 px-5">
         <div className="relative grid justify-between gap-6 lg:grid-cols-12">
-          <div className="relative lg:col-span-8 md:col-span-12">
+          <div className="relative lg:col-span-8 col-span-12">
             <div className="py-5 text-sm breadcrumbs">
               <ul>
                 <li>
@@ -86,11 +100,11 @@ export default function CourseDetail() {
             </div>
             <div className="">
               <img
-                className="w-full h-[420px] rounded-xl"
-                src={`http://14.225.198.206:8080/course/thumbnail/${thumbnail}`}
+                className="w-full rounded-xl"
+                src={`${serverEndpoint}course/thumbnail/${thumbnail}`}
                 alt=""
               />
-              <div className="absolute inline-flex items-end z-10 mt-[-50px] pl-20">
+              <div className="absolute inline-flex items-end z-1 mt-[-50px] pl-10">
                 <img
                   className="w-[100px] h-[100px] border-8 border-white rounded-lg"
                   src="/course.png"
@@ -117,14 +131,15 @@ export default function CourseDetail() {
           </div>
           <div
             id="box"
-            className={`${
-              isBoxCro
-                ? "pt-[60px] fixed col-span-4 right-20 bottom-[-20]"
-                : "pt-[60px] absolute col-span-4 right-0 bottom-0 "
-            }`}
+            className={`${isBoxCro
+                ? "pt-[60px] fixed col-span-4 right-20 bottom-[-20] bg-white"
+                : `pt-[60px] ${window.innerWidth <= 1023 ? "relative" : "absolute"} col-span-12  right-0 bottom-0 bg-white`
+              }`}
           >
             <DetailCard course_id={course_id} isFree={true}></DetailCard>
           </div>
+
+
         </div>
         <div
           id="box-list-course"
@@ -139,7 +154,7 @@ export default function CourseDetail() {
               }
             ></Button>
           </div>
-          <div className="">
+          <div className="m-5">
             <CourseSlide prefixAction={"details"} data={sortedBySameCateID} />
           </div>
         </div>

@@ -12,7 +12,7 @@
             display: flex;
             align-items: center;
             padding: 10px;
-
+           
             .return {
                 display: flex;
                 align-items: center;
@@ -25,6 +25,8 @@
                 }
                 .ChevronLeft{
                     cursor: pointer;
+                    z-index: 3;
+                    color: rgb(255, 97, 61);
                 }
             }
 
@@ -32,14 +34,43 @@
                 margin: 0; // Loại bỏ margin mặc định của các đoạn văn bản
                 float: left;
                 color: #fff;
+                
             }
-
             .name_course {
+                width: 200px; /* Chiều rộng của phần tử cha */
+                overflow: hidden;
+              z-index: 1;
+              
+            p {
                 padding-left: 20px;
+                width: 100%; /* Chiều rộng của phần tử con, có thể là 100% hoặc giá trị cố định khác */
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        }
+        }
+        .progress {
+            // background-color: #29303b;
+            position: absolute;
+            top: 0px;
+            right: 20px; /* Adjust the right position */
+            color: #fff;
+            height: 100%;
+            display: flex;
+            justify-content: end;
+            gap: 10px;
+            align-items: center;
+            font-size: 13px;
+            strong{
+                border: 1px solid #fff;
+                padding: 5px;
+                border-radius: 5px;
+                color: orange;
             }
         }
     }
-
+   
     .Content_CourseVideo {
         padding: 50px 10px 20px 10px;
         display: flex;
@@ -54,10 +85,10 @@
                 width: 100%;
                 
                 max-height: 580px;
-                background-color: #8D8D8D;
+                background-color: #000000;
                 border-radius: 5px;
                 top: 50px;
-                
+                overflow: hidden;
                 
                 .custom-video {
                     width: 100%;
@@ -309,7 +340,6 @@
                                 min-width: 50px;
                                 height: 50px;
                                 margin-right: 20px;
-
                                 img {
 
                                     border-radius: 50%;
@@ -448,9 +478,9 @@
                 width: 30%;
                 position: fixed;
                 .dropdownMenu{
-                    max-height: 75vh;
+                    max-height: 72vh;
                     overflow: auto;
-                    
+                
                 }
 
             }
@@ -495,6 +525,7 @@
             display: flex;
             border-radius: 5px;
             border: 2px solid rgb(238, 96, 14);
+            cursor: pointer;
             .icon-link {
                 margin-top: 10px;
                margin-right: 3px;

@@ -1,8 +1,8 @@
-/* eslint-disable react/prop-types */
-import { Link } from "react-router-dom";
-import StarFill from "./../commom/icons/StarFill";
-// import { serverEndpoint } from "../../utils/http";
 
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import StarFill from './../commom/icons/StarFill';
+import { serverEndpoint, apiServer } from '../../utils/http';
 function Card(props) {
   const {
     thumbnail,
@@ -16,51 +16,66 @@ function Card(props) {
   } = props;
 
   // console.log(categoryData);
-  const categoryColors = {
-    2: { backgroundColor: "#EFEFFD", color: "#5C59E8" },
-    3: { backgroundColor: "#FDF1E8", color: "#D3620F" },
-    4: { backgroundColor: "#F0F1F3", color: "#667085" },
-    5: { backgroundColor: "#E7F4EE", color: "#15711F" },
-    6: { backgroundColor: "#ECEFFF", color: "#4462FE" },
-    7: { backgroundColor: "#FEEDEC", color: "#882929" },
-  };
-  const colors = categoryColors[cateId] || {};
+  const categoryColors = [
+    { backgroundColor: "#EFEFFD", color: "#5C59E8" },
+    { backgroundColor: "#FDF1E8", color: "#D3620F" },
+    { backgroundColor: "#F0F1F3", color: "#667085" },
+    { backgroundColor: "#E7F4EE", color: "#15711F" },
+    { backgroundColor: "#ECEFFF", color: "#4462FE" },
+    { backgroundColor: "#FEEDEC", color: "#882929" },
+  ];
+  
+  const colors = categoryColors[cateId - 1] || {};
 
+  const [categoryName, setCategoryName] = useState('');
+
+  useEffect(() => {
+    const fetchCategoryName = async () => {
+      try {
+        const response = await apiServer.get(`/category/${cateId}`);
+        setCategoryName(response.data.cate_name);
+      } catch (error) {
+        console.error('Error fetching category name:', error);
+      }
+    };
+
+    fetchCategoryName();
+  }, [cateId]);
   return (
+    <Link
+    to={`/course-detail?courseId=${course_id}`}
+    className="block w-full mb-4 overflow-hidden rounded h-fit"
+    state={{ course_id }}
+  >
     <div className="rounded-lg w-full border border-[#e8e8e8] p-2 pb-3 select-none">
       {/* thumbnail */}
-      <Link
-        to={`/course-detail?courseId=${course_id}`}
-        className="block w-full mb-4 overflow-hidden rounded h-fit"
-        state={{ course_id }}
-      >
+    
         <img
           className="object-cover w-full h-full"
-          src={`${`http://14.225.198.206:8080/`}course/thumbnail/${thumbnail}`}
+          src={`${serverEndpoint}course/thumbnail/${thumbnail}`}
           alt={thumbnail}
         />
-      </Link>
+     
       {/* meta */}
       <div className="flex items-center justify-between mb-2">
-        <Link
-          to="/"
+        <div
           className="rounded py-1 px-3 text-xs font-semibold leading-[16px] tracking-[0.5%]"
           style={{
             backgroundColor: colors.backgroundColor,
             color: colors.color,
           }}
         >
-          {category}
-        </Link>
+          {categoryName}
+        </div>
         <p className="text-base font-semibold text-[#FF6636]">
           {price === 0 ? "Miễn phí" : price?.toLocaleString("vi-VN") + "đ"}
         </p>
       </div>
       {/* name */}
       <h4 className="capitalize text-normal font-medium text-[#1D2026] overflow-hidden">
-        <Link to="/" className="transition hover:text-primary-500 line-clamp-2">
+        <div className="transition hover:text-primary-500 line-clamp-2">
           {name}
-        </Link>
+        </div>
       </h4>
       <span className="block w-full h-px my-2 bg-gray-200" />
       <div className="flex items-center justify-between">
@@ -82,6 +97,7 @@ function Card(props) {
         </p>
       </div>
     </div>
+    </Link>
   );
 }
 

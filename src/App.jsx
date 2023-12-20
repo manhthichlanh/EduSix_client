@@ -20,13 +20,22 @@ import Account from "./pages/Setting/Account";
 import About from "./pages/About/About";
 import Blog from "./pages/Blog/Blog";
 import Payment from "./pages/Payment/Payment";
-import AccountCourse from "./pages/Setting/Course";
-// import Login from "./pages/Login/Login";
+import Oauth from "./pages/OAuth/Oauth";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import AccountProfile from "./pages/Setting/Profile";
+import AccountCourse from "./pages/Setting/Course";
+import AccountCertification from "./pages/Setting/Certification/Certification";
 import AccountBlog from "./pages/Setting/Blog";
 import AccountPurchaseHistory from "./pages/Setting/History";
+import CourseList from "./pages/CourseList/CourseList";
+import CertificateDetails from "./pages/CertificateDetails/CertificateDetails";
+// import Login from "./pages/Login/Login";
+//||Components
+
 function App() {
   return (
+    <>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Layout />}>
@@ -38,16 +47,20 @@ function App() {
           <Route path="/blog" element={<Blog />} />
           <Route path="/create-bLog" element={<CreateBLog />} />
           <Route path="/blog-detail" element={<BlogDetail />} />
+          <Route path="/course-search" element={<CourseList />} />
+           <Route path="/certification/:id" element={<CertificateDetails />} />
+          {/* <Route path="/account/*" element={<Account />} /> */}
+          <Route path="/payment" element={<Payment />} />
           <Route path="account" element={<Account />}>
             <Route path="profile" element={<AccountProfile />} />
             <Route path="course" element={<AccountCourse />} />
+            <Route path="certification" element={<AccountCertification />} />
             <Route path="blog" element={<AccountBlog />} />
             <Route
               path="purchase-history"
               element={<AccountPurchaseHistory />}
             />
           </Route>
-          <Route path="/payment" element={<Payment />} />
         </Route>
         <Route path="/course-video" element={<CourseVideo />} />
         <Route path="/login" element={<Login />} />
@@ -55,8 +68,12 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/confirm-otp" element={<ConfirmOtp />} />
+        <Route path="popup/oauth" element={<Oauth/>} />
+
       </Routes>
     </BrowserRouter>
+      <ToastContainer />
+    </>
   );
 }
 export default App;

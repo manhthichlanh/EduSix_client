@@ -47,6 +47,38 @@ export default function Payment() {
       title: "Sản phẩm mới nhất",
     },
   ];
+  const getCourseData = async () => {
+    try {
+      const response1 = await apiServer.get("/course");
+      const course = response1.data;
+      return course;
+    } catch (error) {
+      throw new Error("Error fetching course data");
+    }
+  };
+
+  // const { data: courseData } = useQuery("courseData", getCourseData);
+  // const {
+  //   data: courseDetails,
+  //   isError,
+  //   isLoading,
+  // } = useQuery(
+  //   ["courseDetails", course_id],
+  //   () => apiServer.get(`/course/${course_id}`),
+  //   {
+  //     enabled: !!course_id,
+  //   }
+  // );
+
+  // if (isLoading) {
+  //   return <div>Loading...</div>;
+  // }
+
+  // if (isError) {
+  //   return <div>Error fetching course details.</div>;
+  // }
+
+  // const { name, content, thumbnail, category_id } = courseDetails.data;
 
   return (
     <div className="w-full bg-white">

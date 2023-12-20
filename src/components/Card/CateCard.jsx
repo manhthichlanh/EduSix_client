@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+
 // import { serverEndpoint } from "../../utils/http";
 export default function CateCard(props) {
   // eslint-disable-next-line react/prop-types
