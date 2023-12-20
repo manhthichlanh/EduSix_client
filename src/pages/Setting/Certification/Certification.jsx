@@ -51,20 +51,25 @@ const Certification = () => {
     const fetchData = async () => {
       try {
         const response = await apiServer.get(`/certificate/byUser/${user_id}`);
-        console.log({ data: response.data })
-        setCertificateData(response.data); // Assuming the response data is an array
+        console.log({ data: response.data });
+  
+        // Assuming 'certificate_id' is a numeric value, use a compare function to sort by 'certificate_id' in descending order
+        const sortedData = response.data.sort((a, b) => b.certificate_id - a.certificate_id);
+  
+        setCertificateData(sortedData);
       } catch (error) {
         console.error('Error fetching certificate data:', error);
       }
     };
-
+  
     fetchData(); // Call the fetchData function
-
+  
     // Cleanup function (optional)
     return () => {
       // Cleanup code, if needed (e.g., aborting ongoing requests)
     };
   }, [user_id]); // Dependency array to re-run the effect when user_id changes
+  
 
   return (
     <div className="flex flex-col items-center justify-between col-span-12 lg:col-span-9">

@@ -5,25 +5,26 @@ import classNames from "classnames";
 import { useUser } from '../../utils/UserAPI'; 
 import { apiServer, serverEndpoint } from "../../utils/http";
 import ToastMessage from "../../utils/alert";
+import { useNotificationProvider } from '../../utils/NotificationApi';
 export default function Account() {
   const inputFileRef = useRef(null);
   const imageRef = useRef(null);
   const location = useLocation();
   const { user, isLoading, error, handleLogout } = useUser();
 
- 
-
+  const { unreadCount } = useNotificationProvider();
+console.log(unreadCount);
   // Ensure user data is available before accessing properties
   const userDetails = user?.userDetails || {};
   
-  const [menuItems] = useState([
+  const [menuItems, setMenuItems] = useState([
     {
       name: "Thông tin của tôi",
       href: "/account/profile",
       current: true,
     },
-    { name: "Thông báo của tôi", href: "/account/notification", current: false },
-    { name: "Khóa học đã đăng kí", href: "/account/course", current: false },
+    { name: `Thông báo của tôi (${unreadCount})`, href: "/account/notification", current: false },
+    { name: "Khóa học đã đăng kí ", href: "/account/course", current: false },
     { name: "Chứng chỉ của tôi", href: "/account/certification", current: false },
     { name: "Blog", href: "/account/blog", current: false },
     {
@@ -31,8 +32,21 @@ export default function Account() {
       href: "/account/purchase-history",
       current: false,
     },
-    
   ]);
+
+  useEffect(() => {
+    // Update the menu item with the correct unreadCount when it changes
+    setMenuItems(prevMenuItems => {
+      const updatedMenuItems = [...prevMenuItems];
+      const notificationMenuItem = updatedMenuItems.find(item => item.href === "/account/notification");
+
+      if (notificationMenuItem) {
+        notificationMenuItem.name = `Thông báo của tôi (${unreadCount})`;
+      }
+
+      return updatedMenuItems;
+    });
+  }, [unreadCount]);
 
   const handleImageChange = async (event) => {
     const file = event.target.files[0];

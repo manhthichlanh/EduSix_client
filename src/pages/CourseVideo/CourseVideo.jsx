@@ -15,14 +15,13 @@ import styled from "styled-components";
 import { apiServer, serverEndpoint } from "../../utils/http";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useSocket } from "../../services/SocketService";
+import ToastMessage from "../../utils/alert";
 import {
   faXmark, // Add FontAwesome icons for hiding and showing the menu
   faBars,
 } from "@fortawesome/free-solid-svg-icons";
 import ReactPlayer from "react-player";
 import { FiAward } from "react-icons/fi";
-import { useMemo } from "react";
-import { useCallback } from "react";
 // import CommentReply from './CommentReply';
 const VideoWrapper = styled.div`
   position: relative;
@@ -76,9 +75,7 @@ const CourseVideo = () => {
   const { user, handleLogout } = useUser();
   const users = user?.userDetails || {};
   const user_id = users.user_id;
-  const { socket } = useSocket();
-
-  
+  const { socket } = useSocket()
   // const saveProgressToLocalStorage = (lessonId) => {
   //   const savedProgress = localStorage.getItem('userProgress');
 
@@ -235,11 +232,11 @@ const CourseVideo = () => {
       );
 
       if (allLessonsFinished) {
-        alert("Đã hoàn thành tất cả các bài học trong khóa học này.");
+        ToastMessage("Đã hoàn thành tất cả các bài học trong khóa học này.").success();
       }
-      //  else {
-      //   alert("Bạn đã hoàn thành tất cả bài học có sẵn, nhưng vẫn còn bài học chưa hoàn thành.");
-      // }
+       else {
+        ToastMessage("Tiếp tục đến bài học tiếp theo").success();
+      }
 
       // If all lessons are finished, do not make the API call
       if (!allLessonsFinished) {
@@ -290,21 +287,20 @@ const CourseVideo = () => {
   );
   useEffect(() => {
     if (certificateData && certificateData.data) {
-      console.log({ certificateData, courseId })
       const currentCourseCertificates = certificateData.data.filter(
-        (certificate) => certificate?.course ? certificate.course_id === +courseId : false
+        (certificate) => certificate ? certificate.course.course_id === +courseId : false
       );
-      console.log(currentCourseCertificates)
-      // // Extract sub_id values from the filtered certificates
-      // const extractedSubIds = currentCourseCertificates.map((certificate) => certificate.sub_id);
 
-      // // Set the sub_id values in the component state
-      // setSubIds(extractedSubIds);
+      // Extract sub_id values from the filtered certificates
+      const extractedSubIds = currentCourseCertificates.map((certificate) => certificate.sub_id);
+
+      // Set the sub_id values in the component state
+      setSubIds(extractedSubIds);
     }
   }, [certificateData, courseId]);
 
 
-
+ 
 
 
 
@@ -655,7 +651,7 @@ const CourseVideo = () => {
   };
 
 
-
+ 
 
   return (
     <>
@@ -948,19 +944,19 @@ const CourseVideo = () => {
           )}
         </div>
         <div className="certificate">
-          {certificateData ? (
-            <>
-              {subIds.map((subId) => (
-                <Link key={subId} to={`/certification/${subId}`}>
-                  {/* Replace the button with the custom certificate icon */}
-                  <FiAward className="icon" />
-                </Link>
-              ))}
-            </>
-          ) : (
-            <p></p>
-          )}
-        </div>
+        {certificateData ? (
+          <>
+            {subIds.map((subId) => (
+              <Link key={subId} to={`/certification/${subId}`}>
+                {/* Replace the button with the custom certificate icon */}
+                <FiAward className="icon" />
+              </Link>
+            ))}
+          </>
+        ) : (
+          <p></p>
+        )}
+      </div>
       </div>
 
       {/* <div className="footer">
