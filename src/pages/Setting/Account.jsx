@@ -13,7 +13,7 @@ export default function Account() {
   const { user, isLoading, error, handleLogout } = useUser();
 
   const { unreadCount } = useNotificationProvider();
-console.log(unreadCount);
+
   // Ensure user data is available before accessing properties
   const userDetails = user?.userDetails || {};
   

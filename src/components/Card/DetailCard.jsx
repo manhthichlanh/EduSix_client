@@ -22,21 +22,27 @@ function DetailCard({ course_id }) {
   const [active, setActive] = useState(null);
   const [isUserEnrolled, setIsUserEnrolled] = useState(false);
   const [hasPurchased, setHasPurchased] = useState(false);
+  const [enrollmentAttempted, setEnrollmentAttempted] = useState(false);
   useEffect(() => {
     const checkPurchaseStatus = async () => {
       try {
         if (user_id && course_id) {
           const response = await apiServer.get(`/order/check-purchase/${user_id}/${course_id}`);
           setHasPurchased(response.data.hasPurchased);
+
+          // If the user has purchased the course and enrollment hasn't been attempted, enroll them
+          if (response.data.hasPurchased && !enrollmentAttempted) {
+            
+            setEnrollmentAttempted(true); // Set the flag to true after the first attempt
+          }
         }
       } catch (error) {
         console.error("Error checking purchase status", error);
       }
     };
-    
+
     checkPurchaseStatus();
-  }, [user_id, course_id]);
-  
+  }, [user_id, course_id, enrollmentAttempted]);
   const { data: courseData, isLoading, isError } = useQuery(
     ["courseData", course_id],
     () => apiServer.get(`/admin-query/getAllLessonQuizzVideo/${course_id}`),
@@ -111,6 +117,13 @@ function DetailCard({ course_id }) {
       return;
     }
   
+    // Check if the user has already purchased the course
+    if (hasPurchased) {
+      ToastMessage("Bạn đã mua khóa học này").success();
+      navigateToCourse();
+      return;
+    }
+  
     try {
       // Check user progress before enrollment
       const progressResponse = await apiServer.get(`/admin-query/getAllProgress?user_id=${user_id}&course_id=${course_id}`);
@@ -122,13 +135,14 @@ function DetailCard({ course_id }) {
         return;
       }
   
-      // If no progress data, proceed with enrollment
+      // If no progress data and not purchased, proceed with enrollment
       const enrollmentResponse = await apiServer.post("/admin-query/enrollmentCourse", {
         user_id: user_id,
         course_id: course_id,
       });
       ToastMessage("Đăng kí khóa học thành công").success();
       setIsUserEnrolled(true);
+      setEnrollmentAttempted(true); // Set the flag to true after the first attempt
       return enrollmentResponse.data.message;
     } catch (error) {
       // Handle errors
@@ -141,6 +155,7 @@ function DetailCard({ course_id }) {
   
         ToastMessage("Đăng kí khóa học thành công").success();
         setIsUserEnrolled(true);
+        setEnrollmentAttempted(true); // Set the flag to true after the first attempt
         return enrollmentResponse.data.message;
       } else {
         console.error('Error during enrollment:', error.response?.data || error.message);
@@ -148,6 +163,7 @@ function DetailCard({ course_id }) {
       }
     }
   };
+  
   
   
   
@@ -248,20 +264,20 @@ function DetailCard({ course_id }) {
             Class={`w-full rounded-lg p-3 mt-4 text-lg ${
               isFree
                 ? "bg-[#FFEEE8] text-[#FF6636] font-medium"
-                : "bg-[your-button-color] text-[your-text-color]"
+                : "bg-[#e8f0ff] text-[#36a1ff] font-medium"
             }`}
             text={isUserEnrolled ? "Vào khóa học" : enrollmentData?.isUserEnrollmentCourse ? "Vào khóa học" : "Đăng kí"}
           />
         ) : (
           <Button
-          onClick={ hasPurchased ? navigateToCourse : handlePurchase}
-            Class={`w-full rounded-lg p-3 mt-4 text-lg ${
-              isFree
-                ? "bg-[#FFEEE8] text-[#FF6636] font-medium"
-                : "bg-[your-button-color] text-[your-text-color]"
-            }`}
-            text={hasPurchased ? "Vào khóa học" : "Mua ngay"}
-          />
+  onClick={isUserEnrolled ? navigateToCourse : (hasPurchased ? handleEnrollment : handlePurchase)}
+  Class={`w-full rounded-lg p-3 mt-4 text-lg ${
+    isFree
+      ? "bg-[#FFEEE8] text-[#FF6636] font-medium"
+      : "bg-[#e8f0ff] text-[#36a1ff] font-medium"
+  }`}
+  text={isUserEnrolled ? "Vào khóa học" : (hasPurchased ? "Vào khóa học" : "Mua ngay")}
+/>
         )}
       </div>
 

@@ -114,9 +114,10 @@ export default function Payment() {
                       alt="Thumbnail"
                     />
                   </div>
-                  <p className="pl-3">Thanh toán cho khóa học:</p>
-                  <p className="pl-1 text-[20px] font-semibold line-clamp-2"> {courseName}</p>
-                </div> </div>
+                 <div><p className="pl-3">Thanh toán cho khóa học:</p>
+                  <p className="pl-3 text-[20px] font-semibold line-clamp-2"> {courseName}</p></div>
+                </div>  
+                </div>
               <div className="col-span-3 flex items-center justify-end">
                 <p className="text-[20px]">
                 {coursePrice.toLocaleString("vi-VN") + "đ"}
