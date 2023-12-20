@@ -1,4 +1,4 @@
-import { Fragment, useState, useEffect } from 'react';
+import { Fragment, useState, useEffect, useContext } from 'react';
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { NavLink, Link, useNavigate } from "react-router-dom";
@@ -7,6 +7,8 @@ import Search from "../components/commom/icons/Search";
 import { useSearchCourse } from '../utils/searchApi';
 import { serverEndpoint } from "../utils/http";
 import { useUser } from '../utils/UserAPI';
+import { useNotificationProvider } from '../utils/NotificationApi';
+
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
@@ -16,6 +18,7 @@ export default function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState('');
   const { user, isLoading, handleLogout } = useUser();
+  const {unreadCount} = useNotificationProvider();
 
   const { isLoading: isSearchLoading, searchCourse } = useSearchCourse();
 
@@ -94,11 +97,15 @@ export default function Header() {
                 <span className="absolute -inset-1.5" />
                 <span className="sr-only">Open user menu</span>
                 <img
-                  className="w-full h-full rounded-full p-0.5"
+                  className="min-w-full h-full rounded-full p-0.5"
                   src={avatarUrl}
                   alt=""
                 />
-                <span className='bg-red-500 px-1.5 pb-0.5 text-white rounded-3xl text-xs'>99+</span>
+               { unreadCount ? (
+                <span className='bg-red-500 px-1.5 pb-0.5 text-white rounded-3xl text-xs'>{unreadCount > 99 ? '99+' : unreadCount}</span>
+                ) : (
+                  <p></p>
+                )}
               </Menu.Button>
             </div>
             <Transition
@@ -148,6 +155,24 @@ export default function Header() {
                     >
                       Thông tin cá nhân
                     </NavLink>
+                  )}
+                </Menu.Item>
+                <Menu.Item>
+                  {({ active }) => (
+                    <NavLink
+                      to="/account/notification"
+                      className={classNames(
+                        active ? "bg-gray-100" : "",
+                        "block px-4 py-2 text-sm text-gray-700"
+                      )}
+                    >
+                      Thông báo của tôi
+                      { unreadCount ? (
+                      <span className='bg-red-500 px-1.5  pb-0.5 ml-3 text-white rounded-3xl text-xs'>{unreadCount > 99 ? '99+' : unreadCount}</span>
+                      ) : (
+                        <p></p>
+                      )}
+                      </NavLink>
                   )}
                 </Menu.Item>
                 <Menu.Item>

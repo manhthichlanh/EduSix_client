@@ -51,19 +51,25 @@ const Certification = () => {
     const fetchData = async () => {
       try {
         const response = await apiServer.get(`/certificate/byUser/${user_id}`);
-        setCertificateData(response.data); // Assuming the response data is an array
+        console.log({ data: response.data });
+  
+        // Assuming 'certificate_id' is a numeric value, use a compare function to sort by 'certificate_id' in descending order
+        const sortedData = response.data.sort((a, b) => b.certificate_id - a.certificate_id);
+  
+        setCertificateData(sortedData);
       } catch (error) {
         console.error('Error fetching certificate data:', error);
       }
     };
-
+  
     fetchData(); // Call the fetchData function
-
+  
     // Cleanup function (optional)
     return () => {
       // Cleanup code, if needed (e.g., aborting ongoing requests)
     };
   }, [user_id]); // Dependency array to re-run the effect when user_id changes
+  
 
   return (
     <div className="flex flex-col items-center justify-between col-span-12 lg:col-span-9">
@@ -76,12 +82,16 @@ const Certification = () => {
                 className="block w-full mx-2 mb-4 overflow-hidden rounded shadow-lg transition duration-300 transform hover:scale-105"
               >
                 <div className="rounded-lg p-2 pb-2">
-                  <img
-                    className="object-cover w-full h-32"
-                    src={`${serverEndpoint}course/thumbnail/${certificate.course.thumbnail}`}
-                    alt={certificate.course.thumbnail}
-                  />
-                  <h2 className="mt-2 text-lg font-semibold">{certificate.course.name}</h2>
+                  {
+                    certificate?.course &&
+                    <img
+                      className="object-cover w-full h-32"
+                      src={certificate?.course?.thumbnail.includes("https://") ? certificate?.course?.thumbnail : `${serverEndpoint}course/thumbnail/${certificate.course.thumbnail}`}
+                      alt={certificate.course.thumbnail}
+                    />
+                  }
+
+                  <h2 className="mt-2 text-lg font-semibold">{certificate?.course?.name}</h2>
                   {certificate.total_duration > 0 && (
                     <p className="text-xs text-gray-600 text-orange-600">
                       Thời gian: {formatDuration(certificate.total_duration)}

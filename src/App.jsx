@@ -27,9 +27,11 @@ import AccountProfile from "./pages/Setting/Profile";
 import AccountCourse from "./pages/Setting/Course";
 import AccountCertification from "./pages/Setting/Certification/Certification";
 import AccountBlog from "./pages/Setting/Blog";
+import Notification from "./pages/Setting/Notification/Notification";
 import AccountPurchaseHistory from "./pages/Setting/History";
 import CourseList from "./pages/CourseList/CourseList";
 import CertificateDetails from "./pages/CertificateDetails/CertificateDetails";
+
 // import Login from "./pages/Login/Login";
 //||Components
 
@@ -54,6 +56,7 @@ function App() {
           <Route path="account" element={<Account />}>
             <Route path="profile" element={<AccountProfile />} />
             <Route path="course" element={<AccountCourse />} />
+            <Route path="notification" element={<Notification />} />
             <Route path="certification" element={<AccountCertification />} />
             <Route path="blog" element={<AccountBlog />} />
             <Route

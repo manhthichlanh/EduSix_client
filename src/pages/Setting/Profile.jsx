@@ -214,8 +214,8 @@ useEffect(() => {
 }, [users]);
 
 
-
-  
+const subIdToHidePasswordChange = "direct"; 
+const shouldHidePasswordChange = users.sub_id && users.sub_id.startsWith(subIdToHidePasswordChange);
 
 
   return (
@@ -259,6 +259,8 @@ useEffect(() => {
           disabled
         />
       </div>
+      {shouldHidePasswordChange && (
+
       <div className="col-span-12 md:col-span-6">
       <p className="text-base font-medium mb-2 text-black text-opacity-70">
           Đổi mật khẩu:
@@ -270,6 +272,7 @@ useEffect(() => {
     {showPasswordForm ? "Hủy Đổi Mật Khẩu" : "Đổi Mật Khẩu"}
   </button>
   </div>
+   )}
       <>
       
       <div className="col-span-12">
