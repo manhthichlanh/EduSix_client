@@ -32,8 +32,9 @@ function DetailCard({ course_id }) {
 
           // If the user has purchased the course and enrollment hasn't been attempted, enroll them
           if (response.data.hasPurchased && !enrollmentAttempted) {
-            
-            setEnrollmentAttempted(true); // Set the flag to true after the first attempt
+          
+            setEnrollmentAttempted(true);
+            // Set the flag to true after the first attempt
           }
         }
       } catch (error) {
@@ -86,22 +87,45 @@ function DetailCard({ course_id }) {
     }
   };
   
-  const handlePurchase = () => {
+  const handlePurchase = async () => {
     if (!user_id) {
       ToastMessage("Vui lòng đăng nhập để thực hiện mua khóa học").warn();
       navigate("/login");
       return;
     }
-    navigate("/payment", {
-      state: {
-        courseId: CourseDoc.course_id,
-        courseName: CourseDoc.name,
-        coursePrice: CourseDoc.course_price,
-        courseThumbnail: thumbnailUrl
+  
+    if (isFree) {
+      // For free courses, directly proceed with enrollment
+      await handleEnrollment();
+    } else {
+      try {
+        if (user_id && course_id) {
+        // Check purchase status for paid courses
+        const response = await apiServer.get(`/order/check-purchase/${user_id}/${course_id}`);
+        setHasPurchased(response.data.hasPurchased);
+  
+        // If the user has purchased the course and enrollment hasn't been attempted, enroll them
+        if (response.data.hasPurchased && !enrollmentAttempted) {
+          setEnrollmentAttempted(true);
+          await handleEnrollment(); // Proceed with enrollment
+          return;
+        }
       }
-    });
-    
+        // If the course is not free, navigate to the payment page
+        navigate("/payment", {
+          state: {
+            courseId: CourseDoc.course_id,
+            courseName: CourseDoc.name,
+            coursePrice: CourseDoc.course_price,
+            courseThumbnail: thumbnailUrl
+          }
+        });
+      } catch (error) {
+        console.error("Error checking purchase status", error);
+      }
+    }
   };
+  
   
   const handleEnrollment = async () => {
     if (!user_id) {
@@ -109,62 +133,52 @@ function DetailCard({ course_id }) {
       navigate("/login");
       return;
     }
-  
-    // Check if the user is already enrolled
-    if (isUserEnrolled) {
-      ToastMessage("Bạn đã đăng ký khóa học này").warn();
-      navigateToCourse();
-      return;
-    }
-  
+   
     // Check if the user has already purchased the course
     if (hasPurchased) {
       ToastMessage("Bạn đã mua khóa học này").success();
       navigateToCourse();
-      return;
+    
     }
+      try {
+        const progressResponse = await apiServer.get(`/admin-query/getAllProgress?user_id=${user_id}&course_id=${course_id}`);
   
-    try {
-      // Check user progress before enrollment
-      const progressResponse = await apiServer.get(`/admin-query/getAllProgress?user_id=${user_id}&course_id=${course_id}`);
+        // If there is progress data, user has already started the course
+        if (progressResponse.data && progressResponse.data.s_doc.length > 0) {
+          ToastMessage("Bạn đã bắt đầu khóa học này").success();
+          navigateToCourse();
+          return;
+        }
   
-      // If there is progress data, user has already started the course
-      if (progressResponse.data && progressResponse.data.s_doc.length > 0) {
-        ToastMessage("Bạn đã bắt đầu khóa học này").success();
-        navigateToCourse();
-        return;
-      }
-  
-      // If no progress data and not purchased, proceed with enrollment
-      const enrollmentResponse = await apiServer.post("/admin-query/enrollmentCourse", {
-        user_id: user_id,
-        course_id: course_id,
-      });
-      ToastMessage("Đăng kí khóa học thành công").success();
-      setIsUserEnrolled(true);
-      setEnrollmentAttempted(true); // Set the flag to true after the first attempt
-      return enrollmentResponse.data.message;
-    } catch (error) {
-      // Handle errors
-      if (error.response?.data?.message === "Cannot read properties of null (reading 'enrollment_id')") {
-        // Immediately proceed with the enrollment API call
+        // Proceed with enrollment
         const enrollmentResponse = await apiServer.post("/admin-query/enrollmentCourse", {
           user_id: user_id,
           course_id: course_id,
         });
-  
         ToastMessage("Đăng kí khóa học thành công").success();
         setIsUserEnrolled(true);
         setEnrollmentAttempted(true); // Set the flag to true after the first attempt
         return enrollmentResponse.data.message;
-      } else {
-        console.error('Error during enrollment:', error.response?.data || error.message);
-        navigateToCourse();
+      } catch (error) {
+        // Handle errors
+        if (error.response?.data?.message === "Cannot read properties of null (reading 'enrollment_id')") {
+          // Immediately proceed with the enrollment API call
+          const enrollmentResponse = await apiServer.post("/admin-query/enrollmentCourse", {
+            user_id: user_id,
+            course_id: course_id,
+          });
+  
+          ToastMessage("Đăng kí khóa học thành công").success();
+          setIsUserEnrolled(true);
+          setEnrollmentAttempted(true); // Set the flag to true after the first attempt
+          return enrollmentResponse.data.message;
+        } else {
+          console.error('Error during enrollment:', error.response?.data || error.message);
+          navigateToCourse();
+        }
       }
-    }
+    
   };
-  
-  
   
   
 
@@ -276,7 +290,7 @@ function DetailCard({ course_id }) {
       ? "bg-[#FFEEE8] text-[#FF6636] font-medium"
       : "bg-[#e8f0ff] text-[#36a1ff] font-medium"
   }`}
-  text={isUserEnrolled ? "Vào khóa học" : (hasPurchased ? "Vào khóa học" : "Mua ngay")}
+  text={isUserEnrolled ? "Đã mở khóa" : (hasPurchased ? "Vào khóa học" : "Mua ngay")}
 />
         )}
       </div>
