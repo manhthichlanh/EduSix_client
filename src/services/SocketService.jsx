@@ -14,6 +14,7 @@ export const SocketProvider = ({ children }) => {
   const [certificateMessage, setCertificateMessage] = useState([]);
   const [allMessage, setAllMessage] = useState([]);
   useEffect(() => {
+    !socket.hasListeners("connect") &&
     socket.on('connect', () => {
       console.log(socket)
       setIsSocketConnected(true)
@@ -21,15 +22,18 @@ export const SocketProvider = ({ children }) => {
     });
 
     // Bắt sự kiện khi mất kết nối và cố gắng kết nối lại
+    !socket.hasListeners("disconnect") &&
     socket.on('disconnect', () => {
       setIsSocketConnected(false)
       console.log('Disconnected from server, attempting to reconnect...');
     });
 
     // Bắt sự kiện khi kết nối lại thành công
+    !socket.hasListeners("reconnect") &&
     socket.on('reconnect', (attemptNumber) => {
       console.log(`Reconnected to server after ${attemptNumber} attempts`);
     });
+
   }
   )
   // useEffect(() => {
@@ -57,9 +61,7 @@ export const SocketProvider = ({ children }) => {
   const value = useMemo(() => ({
     socket,
     isSocketConnected,
-    allMessage,
-    certificateMessage
-  }), [isSocketConnected, allMessage, certificateMessage]
+  }), [isSocketConnected]
   )
   return <SocketContext.Provider value={value}>{children}</SocketContext.Provider>
 }
