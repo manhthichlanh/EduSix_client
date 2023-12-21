@@ -26,6 +26,7 @@ import "react-toastify/dist/ReactToastify.css";
 import AccountProfile from "./pages/Setting/Profile";
 import AccountCourse from "./pages/Setting/Course";
 import AccountCertification from "./pages/Setting/Certification/Certification";
+import PurchaseCourse from "./pages/Setting/PurchaseCourse/PurchaseCourse";
 import AccountBlog from "./pages/Setting/Blog";
 import Notification from "./pages/Setting/Notification/Notification";
 import AccountPurchaseHistory from "./pages/Setting/History";
@@ -56,6 +57,7 @@ function App() {
           <Route path="account" element={<Account />}>
             <Route path="profile" element={<AccountProfile />} />
             <Route path="course" element={<AccountCourse />} />
+            <Route path="purchasecourse" element={<PurchaseCourse />} />
             <Route path="notification" element={<Notification />} />
             <Route path="certification" element={<AccountCertification />} />
             <Route path="blog" element={<AccountBlog />} />

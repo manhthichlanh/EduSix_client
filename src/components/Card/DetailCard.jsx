@@ -133,52 +133,60 @@ function DetailCard({ course_id }) {
       navigate("/login");
       return;
     }
-   
-    // Check if the user has already purchased the course
-    if (hasPurchased) {
-      ToastMessage("Bạn đã mua khóa học này").success();
-      navigateToCourse();
-    
-    }
-      try {
-        const progressResponse = await apiServer.get(`/admin-query/getAllProgress?user_id=${user_id}&course_id=${course_id}`);
   
-        // If there is progress data, user has already started the course
-        if (progressResponse.data && progressResponse.data.s_doc.length > 0) {
-          ToastMessage("Bạn đã bắt đầu khóa học này").success();
-          navigateToCourse();
-          return;
-        }
+    try {
+      const progressResponse = await apiServer.get(`/admin-query/getAllProgress?user_id=${user_id}&course_id=${course_id}`);
   
-        // Proceed with enrollment
+      if (hasPurchased) {
+        ToastMessage("Chào mừng bạn vào khóa học trả phí của chúng tôi").success();
+        setIsUserEnrolled(true);
+        setEnrollmentAttempted(true);
+        navigateToCourse();
+        return;
+      }
+  
+      // If there is progress data, the user has already started the course
+      if (progressResponse.data && progressResponse.data.s_doc.length > 0) {
+        ToastMessage("Chào mừng bạn vào khóa học miễn phí của chúng tôi").success();
+        setIsUserEnrolled(true);
+        setEnrollmentAttempted(true);
+        navigateToCourse();
+        return;
+      }
+  
+      // Proceed with enrollment
+      const enrollmentResponse = await apiServer.post("/admin-query/enrollmentCourse", {
+        user_id: user_id,
+        course_id: course_id,
+      });
+  
+      ToastMessage("Đăng ký khóa học thành công").success();
+      setIsUserEnrolled(true);
+      setEnrollmentAttempted(true);
+  
+      return enrollmentResponse.data.message;
+  
+    } catch (error) {
+      // Handle errors
+      if (error.response?.data?.message === "Cannot read properties of null (reading 'enrollment_id')") {
+        // Immediately proceed with the enrollment API call
         const enrollmentResponse = await apiServer.post("/admin-query/enrollmentCourse", {
           user_id: user_id,
           course_id: course_id,
         });
-        ToastMessage("Đăng kí khóa học thành công").success();
+  
+        ToastMessage("Đăng ký khóa học thành công").success();
         setIsUserEnrolled(true);
         setEnrollmentAttempted(true); // Set the flag to true after the first attempt
+        navigateToCourse();
         return enrollmentResponse.data.message;
-      } catch (error) {
-        // Handle errors
-        if (error.response?.data?.message === "Cannot read properties of null (reading 'enrollment_id')") {
-          // Immediately proceed with the enrollment API call
-          const enrollmentResponse = await apiServer.post("/admin-query/enrollmentCourse", {
-            user_id: user_id,
-            course_id: course_id,
-          });
-  
-          ToastMessage("Đăng kí khóa học thành công").success();
-          setIsUserEnrolled(true);
-          setEnrollmentAttempted(true); // Set the flag to true after the first attempt
-          return enrollmentResponse.data.message;
-        } else {
-          console.error('Error during enrollment:', error.response?.data || error.message);
-          navigateToCourse();
-        }
+      } else {
+        console.error('Error during enrollment:', error.response?.data || error.message);
+        navigateToCourse();
       }
-    
+    }
   };
+  
   
   
 
@@ -284,14 +292,25 @@ function DetailCard({ course_id }) {
           />
         ) : (
           <Button
-  onClick={isUserEnrolled ? navigateToCourse : (hasPurchased ? handleEnrollment : handlePurchase)}
-  Class={`w-full rounded-lg p-3 mt-4 text-lg ${
-    isFree
-      ? "bg-[#FFEEE8] text-[#FF6636] font-medium"
-      : "bg-[#e8f0ff] text-[#36a1ff] font-medium"
-  }`}
-  text={isUserEnrolled ? "Đã mở khóa" : (hasPurchased ? "Vào khóa học" : "Mua ngay")}
-/>
+          onClick={async () => {
+            if (isUserEnrolled) {
+              navigateToCourse();
+            } else {
+              if (hasPurchased) {
+                await handleEnrollment();
+              } else {
+                await handlePurchase();
+              }
+            }
+          }}
+          Class={`w-full rounded-lg p-3 mt-4 text-lg ${
+            isFree
+              ? "bg-[#FFEEE8] text-[#FF6636] font-medium"
+              : "bg-[#e8f0ff] text-[#36a1ff] font-medium"
+          }`}
+          text={isUserEnrolled ? "Vào khóa học" : (hasPurchased ? "Vào khóa học" : "Mua ngay")}
+        />
+        
         )}
       </div>
 

@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useUser } from '../../utils/UserAPI';
 import { apiServer } from '../../utils/http';
 import Card from "../../components/Card/Card";
-
 function AccountCourse() {
   const { user } = useUser();
   const users = user?.userDetails || {};
@@ -10,7 +9,6 @@ function AccountCourse() {
 
   const [courseProgresses, setCourseProgresses] = useState([]);
   const [courseDetails, setCourseDetails] = useState([]);
-
   useEffect(() => {
     const fetchCourseProgresses = async () => {
       try {
@@ -82,6 +80,8 @@ function AccountCourse() {
           <i>Không có khóa học nào đã đăng kí</i>
         )}
     </div>
+
+    
   );
 }
 

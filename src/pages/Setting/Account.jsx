@@ -25,6 +25,7 @@ export default function Account() {
     },
     { name: `Thông báo của tôi (${unreadCount})`, href: "/account/notification", current: false },
     { name: "Khóa học đã đăng kí ", href: "/account/course", current: false },
+    { name: "Khóa học đã mua ", href: "/account/purchasecourse", current: false },
     { name: "Chứng chỉ của tôi", href: "/account/certification", current: false },
     { name: "Blog", href: "/account/blog", current: false },
     {
