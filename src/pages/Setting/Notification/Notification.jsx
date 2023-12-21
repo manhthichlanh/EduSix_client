@@ -2,11 +2,21 @@ import { useEffect, useCallback, useState } from 'react';
 import { useNotificationProvider } from '../../../utils/NotificationApi';
 import { apiServer, serverEndpoint } from '../../../utils/http';
 import { Link } from 'react-router-dom';
-
+import { useSocket } from '../../../services/SocketService';
 const Notification = () => {
     const { notifications, setNotifications } = useNotificationProvider();
     const [courseData, setCourseData] = useState(null);
+    const { socket, isSocketConnected } = useSocket()
 
+    //Nhận data gửi về khi hoàn thành chứng chỉ socket;
+    useEffect(() => {
+      if (!socket.hasListeners("learner-get-message")) {
+        socket.on("learner-get-message", ({readLoad}) => {
+          if (readLoad) console.log("hãy cập nhật lại dữ liệu")
+        }
+        );
+      }
+    }, [socket, isSocketConnected])
     const handleNotificationClick = useCallback(async (notification_id) => {
         const clickedNotification = notifications.find(
             (notification) => notification.notification_id === notification_id
