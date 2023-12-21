@@ -1,9 +1,10 @@
 import { useEffect, useCallback, useState } from 'react';
 import { useNotificationProvider } from '../../../utils/NotificationApi';
 import { apiServer, serverEndpoint } from '../../../utils/http';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Notification = () => {
+  const navigate = useNavigate();
     const { notifications, setNotifications } = useNotificationProvider();
     const [courseData, setCourseData] = useState(null);
 
@@ -22,26 +23,27 @@ const Notification = () => {
             });
 
             const updatedNotifications = notifications.map((notification) =>
-                notification.notification_id === notification_id
-                    ? { ...notification, is_read: true }
-                    : notification
-            );
-
-            setNotifications(updatedNotifications);
+            notification.notification_id === notification_id
+              ? { ...notification, is_read: true }
+              : notification
+          );
+      
+          setNotifications(updatedNotifications);
 
             const clickedNotificationUpdated = updatedNotifications.find(
                 (notification) => notification.notification_id === notification_id
             );
 
             if (clickedNotificationUpdated && clickedNotificationUpdated.message) {
-                // Set the courseData in the component state
+              
                 setCourseData(clickedNotificationUpdated.message);
             }
+            navigate(`/${clickedNotificationUpdated.link}`);
         } catch (error) {
             console.error('Error updating notification status:', error.response?.data || error.message);
-            // Handle the error if needed
+           
         }
-    }, [notifications, setNotifications]);
+    }, [notifications, setNotifications, navigate]);
 
     useEffect(() => {
         if (notifications.length > 0) {
@@ -120,16 +122,15 @@ const Notification = () => {
           {notifications.length > 0 ? (
             <>
               {notifications.map((notification, index) => (
-                <Link to={`/${notification.link}`} key={notification.notification_id}>
+                <>
                   {courseData && courseData[index] ? (
                     <div
-                    onClick={() =>
-                        handleNotificationClick(notification.notification_id)
-                      }
-                      className={`mb-4  shadow-lg p-3 rounded relative ${
-                        notification.is_read == 0 ? 'bg-green-100' : 'bg-white' // Apply background color based on read status
-                      }`}
-                    >
+                    key={notification.notification_id}
+                    onClick={() => handleNotificationClick(notification.notification_id)}
+                    className={`mb-4 shadow-lg p-3 rounded relative cursor-pointer ${
+                      notification.is_read == 0 ? 'bg-green-100' : 'bg-white'
+                    }`}
+                  >
                       <div className="text-left">
                         <div className="flex justify-between">
                           <div
@@ -205,7 +206,7 @@ const Notification = () => {
                       </div>
                     </div>
                   )}
-                </Link>
+             </>
               ))}
             </>
           ) : (

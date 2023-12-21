@@ -11,28 +11,27 @@ export const useNotificationProvider = () => {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const fetchNotifications = async () => {
+    try {
+      setLoading(true);
+      const response = await apiServer.get(`/notification/getNotification?who=client&receiver=${user_id}`);
+      const allNotifications = response.data;
+      const filteredNotifications = allNotifications.filter(notification => notification.type === 1);
 
+   
+      const unreadNotifications = filteredNotifications.filter(notification => !notification.is_read);
+
+      setNotifications(filteredNotifications);
+      setUnreadCount(unreadNotifications.length);
+    } catch (error) {
+      setError(error.message || 'Error fetching notifications');
+    } finally {
+      setLoading(false);
+    }
+  };
+  
   useEffect(() => {
-    const fetchNotifications = async () => {
-      try {
-        setLoading(true);
-        const response = await apiServer.get(`/notification/getNotification?who=client&receiver=${user_id}`);
-        const allNotifications = response.data;
-
-       
-        const filteredNotifications = allNotifications.filter(notification => notification.type === 1);
-
-     
-        const unreadNotifications = filteredNotifications.filter(notification => !notification.is_read);
-
-        setNotifications(filteredNotifications);
-        setUnreadCount(unreadNotifications.length);
-      } catch (error) {
-        setError(error.message || 'Error fetching notifications');
-      } finally {
-        setLoading(false);
-      }
-    };
+  
 
     const handleLocationChange = () => {
      
