@@ -75,7 +75,19 @@ const CourseVideo = () => {
   const { user, handleLogout } = useUser();
   const users = user?.userDetails || {};
   const user_id = users.user_id;
-  const { socket } = useSocket()
+  const { socket, isSocketConnected } = useSocket()
+
+  //Nhận data gửi về khi hoàn thành chứng chỉ socket;
+  useEffect(() => {
+    if (!socket.hasListeners("learner-get-certificate-message")) {
+      socket.on("learner-get-certificate-message", (data) => {
+        console.log({ certificateData: data })
+        alert("Chúc mừng bạn có chứng chỉ");
+      }
+      );
+    }
+  }, [socket, isSocketConnected])
+
   // const saveProgressToLocalStorage = (lessonId) => {
   //   const savedProgress = localStorage.getItem('userProgress');
 
@@ -241,7 +253,7 @@ const CourseVideo = () => {
       if (allLessonsFinished) {
         ToastMessage("Đã hoàn thành tất cả các bài học trong khóa học này.").success();
       }
-       else {
+      else {
         ToastMessage("Tiếp tục đến bài học tiếp theo").success();
       }
 
@@ -295,7 +307,7 @@ const CourseVideo = () => {
   useEffect(() => {
     if (certificateData && certificateData.data) {
       const currentCourseCertificates = certificateData.data.filter(
-        (certificate) => certificate ? certificate.course.course_id === +courseId : false
+        (certificate) => certificate ? certificate?.course?.course_id === +courseId : false
       );
 
       // Extract sub_id values from the filtered certificates
@@ -307,7 +319,7 @@ const CourseVideo = () => {
   }, [certificateData, courseId]);
 
 
- 
+
 
 
 
@@ -658,7 +670,7 @@ const CourseVideo = () => {
   };
 
 
- 
+
 
   return (
     <>
@@ -953,19 +965,19 @@ const CourseVideo = () => {
           )}
         </div>
         <div className="certificate">
-        {certificateData ? (
-          <>
-            {subIds.map((subId) => (
-              <Link key={subId} to={`/certification/${subId}`}>
-                {/* Replace the button with the custom certificate icon */}
-                <FiAward className="icon" />
-              </Link>
-            ))}
-          </>
-        ) : (
-          <p></p>
-        )}
-      </div>
+          {certificateData ? (
+            <>
+              {subIds.map((subId) => (
+                <Link key={subId} to={`/certification/${subId}`}>
+                  {/* Replace the button with the custom certificate icon */}
+                  <FiAward className="icon" />
+                </Link>
+              ))}
+            </>
+          ) : (
+            <p></p>
+          )}
+        </div>
       </div>
 
       {/* <div className="footer">
