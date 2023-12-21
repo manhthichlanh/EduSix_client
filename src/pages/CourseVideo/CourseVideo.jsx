@@ -150,13 +150,20 @@ const CourseVideo = () => {
     });
   };
 
-  const { data: courseData, isLoading, isError } = useQuery(
+  const { data: courseData, isLoading, isError, isFetching } = useQuery(
     ["courseData", courseId],
     () => apiServer.get(`/admin-query/getAllLessonQuizzVideo/${+courseId}`),
     {
       enabled: !!courseId,
     }
   );
+  useEffect(() => {
+    // Check if data is being fetched
+    if (isFetching) {
+      // You can perform actions while data is being fetched
+      console.log('Fetching data...');
+    }
+  }, [isFetching]);
   const handleGoBack = () => {
     navigate(`/course-detail?courseId=${courseId}`);
   };
@@ -820,10 +827,97 @@ const CourseVideo = () => {
                 </div>
                 <div className="comment" id="comments-section">
                   <h2>Bình Luận</h2>
-                 
                   <div className="fb-comments" data-href={window.location.toString()} data-numposts="5" data-width="100%" data-order-by="reverse_time" data-mobile="auto"></div>
 
-                  
+                  {/* <div className="Content">
+                    <div className="post_Comments">
+                      <div className="avatar">
+                        <img
+                          src="https://vsm.vn/wp-content/uploads/2022/04/nhung-mau-anh-avatar-nam-lam-dai-dien-facebook-dep-nhat-1.png"
+                          alt=""
+                        />
+                      </div>
+                      <div className="input_comments">
+                        <Messages
+                          width={20}
+                          height={20}
+                          fill="#fff"
+                          className="icon_Messages"
+                        />
+                        <input type="text" placeholder="Nhập bình luận..." />
+                      </div>
+                      <div className="Button_Comment">
+                        <Button text="Bình luận" Class="Button"></Button>
+                      </div>
+                    </div>
+                    <div className="commented_Content">
+                      {comments.map((comment, commentIndex) => (
+                        <div key={commentIndex} className="boxCommented">
+                          <div className="commented">
+                            <div className="avatar">
+                              <img src={comment.avatarUrl} alt="" />
+                            </div>
+                            <div className="comment_Information">
+                              <div className="User">
+                                <div className="name">{comment.name}</div>
+                                <div className="time">{comment.time}</div>
+                              </div>
+                              <div className="content">
+                                <p>{comment.content}</p>
+                              </div>
+                              <div className="Reply">
+                                <div className="Messages">
+                                  <Messages
+                                    width={20}
+                                    height={20}
+                                    fill="#fff"
+                                  />
+                                </div>
+                                <div className="title">
+                                  <p>Trả lời</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          {comment.replies.map((reply, replyIndex) => (
+                            <div
+                              className="commented commentReply"
+                              key={replyIndex}
+                            >
+                              <div className="avatar">
+                                <img src={reply.avatarUrl} alt="" />
+                              </div>
+                              <div className="comment_Information">
+                                <div className="User">
+                                  <div className="name">{reply.name}</div>
+                                  <div className="time">{reply.time}</div>
+                                </div>
+                                <div className="content">
+                                  <p>{reply.content}</p>
+                                </div>
+                                <div className="Reply">
+                                  <div className="Messages">
+                                    <Messages
+                                      width={20}
+                                      height={20}
+                                      fill="#fff"
+                                    />
+                                  </div>
+                                  <div className="title">
+                                    <p>Trả lời</p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="see_More">
+                    <Button text="Xem thêm" Class="Button"></Button>
+                  </div> */}
                 </div>
 
               </div>
