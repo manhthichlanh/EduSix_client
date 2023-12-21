@@ -128,14 +128,14 @@ const Notification = () => {
 
 
     return (
-        <div className="mx-auto max-w-xl">
+<div className="mx-auto max-w-xl  overflow-y-auto h-[400px]">
           {notifications.length > 0 ? (
             <>
               {notifications.map((notification, index) => (
-                <>
+                <div key={notification.notification_id}>
                   {courseData && courseData[index] ? (
                     <div
-                    key={notification.notification_id}
+                    
                     onClick={() => handleNotificationClick(notification.notification_id)}
                     className={`mb-4 shadow-lg p-3 rounded relative cursor-pointer ${
                       notification.is_read == 0 ? 'bg-green-100' : 'bg-white'
@@ -182,6 +182,7 @@ const Notification = () => {
                     </div>
                   ) : (
                     <div
+                   
                     onClick={() =>
                         handleNotificationClick(notification.notification_id)
                       }
@@ -216,7 +217,7 @@ const Notification = () => {
                       </div>
                     </div>
                   )}
-             </>
+             </div>
               ))}
             </>
           ) : (

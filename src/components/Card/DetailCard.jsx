@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import PlayCircleFill from "../commom/icons/PlayCircleFill";
 import { useQuery } from "react-query";
 import { apiServer, serverEndpoint } from "../../utils/http";
@@ -8,7 +8,7 @@ import Award from "./../commom/icons/Award";
 import Monitor from "../commom/icons/Monitor";
 import Button from "../button/Button";
 import VideoPlay from "../commom/icons/VideoPlay";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useUser } from '../../utils/UserAPI';
 import ToastMessage from "../../utils/alert";
 
@@ -203,9 +203,9 @@ function DetailCard({ course_id }) {
     return <div>Bài học chưa được tải lên.</div>;
   }
   const thumbnailUrl = CourseDoc.thumbnail ? `${serverEndpoint}course/thumbnail/${CourseDoc.thumbnail}` : 'đường_dẫn_hình_ảnh_mặc_định';
-  console.log(thumbnailUrl);
-  console.log(CourseDoc);
-  console.log(CourseDoc.thumbnail);
+  // console.log(thumbnailUrl);
+  // console.log(CourseDoc);
+  // console.log(CourseDoc.thumbnail);
   function calculateTotalDuration(sections) {
     let totalDurationInSeconds = 0;
 

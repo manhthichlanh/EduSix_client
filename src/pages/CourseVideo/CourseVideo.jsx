@@ -22,6 +22,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import ReactPlayer from "react-player";
 import { FiAward } from "react-icons/fi";
+import { confirmAlert } from 'react-confirm-alert';
 // import CommentReply from './CommentReply';
 const VideoWrapper = styled.div`
   position: relative;
@@ -76,17 +77,65 @@ const CourseVideo = () => {
   const users = user?.userDetails || {};
   const user_id = users.user_id;
   const { socket, isSocketConnected } = useSocket()
-
+ 
   //Nhận data gửi về khi hoàn thành chứng chỉ socket;
   useEffect(() => {
     if (!socket.hasListeners("learner-get-certificate-message")) {
       socket.on("learner-get-certificate-message", (data) => {
-        console.log({ certificateData: data })
-        alert("Chúc mừng bạn có chứng chỉ");
-      }
-      );
+        const extractedCertificateData = { certificateData: data };
+        // console.log({ certificateData: data });
+  
+        // Display the certificate message and a button to navigate
+        confirmAlert({
+          customUI: ({ onClose }) => {
+            const handleClickOutside = () => {
+              onClose();
+            };
+  
+            const handleNavigate = () => {
+              navigate(`/${extractedCertificateData?.certificateData?.link}`);
+              onClose();
+            };
+  
+            return (
+              <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center">
+                <div
+                  className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-50"
+                  onClick={handleClickOutside}
+                ></div>
+              <div className="max-w-2xl mx-auto p-4 text-center bg-white rounded-md z-50 m-3">
+  <p className="font-semibold text-lg mb-4">
+    Chúc mừng bạn đã nhận được chứng chỉ
+  </p>
+  <button
+    className="bg-orange-500 hover:bg-orange-700 text-white font-semibold  py-2 px-6 rounded mx-2"
+    onClick={handleNavigate}
+  >
+    Xem chi tiết
+  </button>
+  <button
+    className="bg-gray-500 hover:bg-gray-700 text-white font-semibold  py-2 px-6 rounded mx-2"
+    onClick={() => {
+      onClose();
+    }}
+  >
+    Đóng
+  </button>
+</div>
+
+              </div>
+            );
+          },
+        });
+      })
     }
-  }, [socket, isSocketConnected])
+  
+    // Cleanup the listener when the component unmounts
+    return () => {
+      socket.off("learner-get-certificate-message");
+    };
+  }, [socket, isSocketConnected, navigate]);
+  
 
   // const saveProgressToLocalStorage = (lessonId) => {
   //   const savedProgress = localStorage.getItem('userProgress');
@@ -173,7 +222,7 @@ const CourseVideo = () => {
     // Check if data is being fetched
     if (isFetching) {
       // You can perform actions while data is being fetched
-      console.log('Fetching data...');
+      // console.log('Fetching data...');
     }
   }, [isFetching]);
   const handleGoBack = () => {

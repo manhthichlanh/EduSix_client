@@ -54,8 +54,8 @@ const PurchaseAPI = () => {
   }, [user_id]);
   
   useEffect(() => {
-    console.log(purchaseData);
-    console.log(courseDataList);
+    // console.log(purchaseData);
+    // console.log(courseDataList);
   }, [purchaseData, courseDataList]);
   
   return { purchaseData, courseDataList, error };

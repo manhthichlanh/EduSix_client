@@ -51,7 +51,7 @@ const Certification = () => {
     const fetchData = async () => {
       try {
         const response = await apiServer.get(`/certificate/byUser/${user_id}`);
-        console.log({ data: response.data });
+        // console.log({ data: response.data });
   
         // Assuming 'certificate_id' is a numeric value, use a compare function to sort by 'certificate_id' in descending order
         const sortedData = response.data.sort((a, b) => b.certificate_id - a.certificate_id);
