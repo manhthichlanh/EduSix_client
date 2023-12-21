@@ -153,6 +153,7 @@ export default function Home() {
           </div>
         </div>
         <div className="px-10 lg:px-20 md:px-16 sm:px-10">
+        {sortedByOustanding?.length > 0 && (
           <div className="my-20 lg:col-span-4 md:col-span-12">
             <div className="flex items-end justify-between py-10">
               <p className="font-semibold text-[24px]">KHÓA HỌC NỔI BẬT</p>
@@ -170,6 +171,7 @@ export default function Home() {
               />
             </div>
           </div>
+           )}
           <div className="my-[100px] lg:col-span-4 md:col-span-12 ">
             <div className="flex items-end justify-between py-10">
               <p className="font-semibold text-[24px]">Danh mục</p>
@@ -182,7 +184,7 @@ export default function Home() {
         <div key={index} className="my-20 lg:col-span-4 md:col-span-12">
           <div className="flex items-end justify-between py-10 ">
             <p className="font-semibold text-[24px] uppercase">
-            Khóa học <span style={{ color: categoryColors[index % categoryColors.length] }}>{category.cate_name}</span>
+              Khóa học <span style={{ color: categoryColors[index % categoryColors.length] }}>{category.cate_name}</span>
             </p>
             <Button
               text="Xem thêm"
@@ -191,16 +193,16 @@ export default function Home() {
               }
             ></Button>
           </div>
-          <div className="">
-           
-            <CourseSlide
-              prefixAction={category.slug}  
-              data={filter(courseData, (course) => course.category_id === category.category_id)}
-            />
-          </div>
+          {courseData && courseData.some(course => course.category_id === category.category_id) && (
+            <div className="">
+              <CourseSlide
+                prefixAction={category.slug}  
+                data={filter(courseData, (course) => course.category_id === category.category_id)}
+              />
+            </div>
+          )}
         </div>
       ))}
-
           <div className="my-20 lg:col-span-4 md:col-span-12">
             <div className="flex items-end justify-between py-10 ">
               <p className="font-semibold text-[24px]">BÀI VIẾT NỔI BẬT</p>
