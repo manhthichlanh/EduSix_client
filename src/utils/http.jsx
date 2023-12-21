@@ -1,6 +1,8 @@
 import axios from "axios";
+
+const serverEndpoint = 'http://localhost:8080/';
 const apiServer = axios.create({
-  baseURL: "http://14.225.198.206:8080/",
+  baseURL: serverEndpoint,
 });
 
 const binanceApi = axios.create({
@@ -9,4 +11,4 @@ const binanceApi = axios.create({
 const cexApi = axios.create({
   baseURL: "https://api.plus.cex.io/rest-public",
 });
-export { apiServer, binanceApi, cexApi };
+export { apiServer, binanceApi, cexApi, serverEndpoint };

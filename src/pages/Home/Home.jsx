@@ -1,44 +1,17 @@
 import Button from "../../components/button/Button";
-import CateCard from "../../components/Card/CateCard";
+// import CateCard from "../../components/Card/CateCard";
 import CourseSlide from "../../components/Swiper/CourseSlide";
 import Input from "./../../components/input/Input";
 import classNames from "classnames";
 import BlogSlide from "../../components/Swiper/BlogSlide.";
 import { useQuery } from "react-query";
 import { apiServer } from "../../utils/http";
-import { map } from "lodash";
-// import { v4 } from "uuid";
-const cate = [
-  {
-    id: 1,
-    image: "images/05.png",
-    cateName: "Marketing",
-  },
-  {
-    id: 2,
-    image: "images/01.png",
-    cateName: "Lập trình",
-  },
-  {
-    id: 3,
-    image: "images/02.png",
-    cateName: "Thiết kế đồ họa",
-  },
-  {
-    id: 4,
-    image: "images/06.png",
-    cateName: "Ngôn ngữ",
-  },
-  {
-    id: 5,
-    image: "images/03.png",
-    cateName: "Tài chính",
-  },
-  {
-    id: 6,
-    image: "images/04.png",
-    cateName: "Photography",
-  },
+import { filter, map, orderBy, slice } from "lodash";
+import CateSlide from "../../components/Swiper/CateSlide";
+// import { useEffect } from "react";
+const categoryColors = [
+  "#FF6633", "#FFB399", "#FF33FF", "#6666FF", "#B399FF",
+  "#FF3366", "#99FF99", "#FF9933", "#FFCC33", "#FF9999"
 ];
 
 const blog = [
@@ -91,44 +64,44 @@ const blog = [
     category: "Photography",
   },
 ];
-
-// const filterPhography = data.filter((item) => item.cateId === 6);
 const getCategoryData = async () => {
   try {
     const response = await apiServer.get("/category");
-    console.log("cóa");
     return response.data;
   } catch (error) {
     throw new Error("Error fetching course data");
   }
 };
-// course
 const getCourseData = async () => {
   try {
-    const response1 = await apiServer.get("/course");
-    const course = response1.data;
-    return course;
+    const response = await apiServer.get("/course");
+    return response.data;
   } catch (error) {
     throw new Error("Error fetching course data");
   }
 };
-export default function Home() {
-  // Use React Query to fetch and manage course data
-  const {
-    data: courseData,
-    isLoading,
-    isError,
-  } = useQuery("courseData", getCourseData);
-  // cate
-  // Use React Query to fetch and manage course data
-  const {
-    data: categoryData,
-    isLoadingCategory,
-    isErrorCategory,
-  } = useQuery("categoryData", getCategoryData);
 
+export default function Home() {
+  const { data: courseData } = useQuery("courseData", getCourseData);
+  const { data: categoryData } = useQuery("categoryData", getCategoryData);
   // console.log(categoryData);
-  console.log(courseData);
+  const sortedByOustanding = courseData;
+  const sortedByNewest = orderBy(
+    slice(courseData, 0, 8),
+    ["created_at"],
+    ["desc"]
+  );
+  const sortedByMarketing = slice(
+    filter(courseData, (course) => course.category_id === 2),
+    0,
+    8
+  );
+  const sortedByPrograming = slice(
+    filter(courseData, (course) => course.category_id === 3),
+    0,
+    8
+  );
+
   return (
     <>
       <div className="w-full">
@@ -190,58 +163,44 @@ export default function Home() {
                 }
               ></Button>
             </div>
-
             <div className="">
-              <CourseSlide prefixAction={"trending"} data={courseData} />
+              <CourseSlide
+                prefixAction={"trending"}
+                data={sortedByOustanding}
+              />
             </div>
           </div>
           <div className="my-[100px] lg:col-span-4 md:col-span-12 ">
             <div className="flex items-end justify-between py-10">
               <p className="font-semibold text-[24px]">Danh mục</p>
             </div>
-            <div className="grid grid-cols-12 gap-6 lg:gap-6 md:gap-4">
-              {map(categoryData, (item, index) => (
-                <CateCard
-                  key={index}
-                  image={item.logo_cate}
-                  cateName={item.cate_name}
-                />
-              ))}
-            </div>
+
+            <CateSlide data={categoryData} prefixAction={"cate"} />
           </div>
-          <div className="my-20 lg:col-span-4 md:col-span-12">
-            <div className="flex items-end justify-between py-10 ">
-              <p className="font-semibold text-[24px]">KHÓA HỌC MỚI NHẤT</p>
-              <Button
-                text="Xem thêm"
-                Class={
-                  "text-sm font-medium py-2 px-8 rounded-[4px] shadow-md leading-6 hover:shadow-xl"
-                }
-              ></Button>
-            </div>
-            <div className="">
-              {/* <CourseSlide prefixAction={"newest"} data={data} /> */}
-            </div>
+
+          {categoryData && categoryData.map((category, index) => (
+        <div key={index} className="my-20 lg:col-span-4 md:col-span-12">
+          <div className="flex items-end justify-between py-10 ">
+            <p className="font-semibold text-[24px] uppercase">
+            Khóa học <span style={{ color: categoryColors[index % categoryColors.length] }}>{category.cate_name}</span>
+            </p>
+            <Button
+              text="Xem thêm"
+              Class={
+                "text-sm font-medium py-2 px-8 rounded-[4px] shadow-md leading-6 hover:shadow-xl whitespace-nowrap"
+              }
+            ></Button>
           </div>
-          <div className="my-20 lg:col-span-4 md:col-span-12">
-            <div className="flex items-end justify-between py-10 ">
-              <p className="font-semibold text-[24px] uppercase">
-                Khóa học <span className="text-[#882929]">Photography</span>
-              </p>
-              <Button
-                text="Xem thêm"
-                Class={
-                  "text-sm font-medium py-2 px-8 rounded-[4px] shadow-md leading-6 hover:shadow-xl whitespace-nowrap"
-                }
-              ></Button>
-            </div>
-            <div className="">
-              {/* <CourseSlide
-                prefixAction={"photography"}
-                data={filterPhography}
-              /> */}
-            </div>
+          <div className="">
+           
+            <CourseSlide
+              prefixAction={category.slug}  
+              data={filter(courseData, (course) => course.category_id === category.category_id)}
+            />
           </div>
+        </div>
+      ))}
+
           <div className="my-20 lg:col-span-4 md:col-span-12">
             <div className="flex items-end justify-between py-10 ">
               <p className="font-semibold text-[24px]">BÀI VIẾT NỔI BẬT</p>
@@ -257,7 +216,7 @@ export default function Home() {
           </div>
         </div>
         <div className="grid grid-cols-12 gap-6 py-20  px-10 lg:px-20 md:px-16 sm:px-10 bg-[url('images/bg.png')]">
-          <div className="lg:col-span-7 col-span-12 my-auto md:col-span-12 sm:col-span-12">
+          <div className="col-span-12 my-auto lg:col-span-7 md:col-span-12 sm:col-span-12">
             <div className="pb-10">
               <p className="text-[40px] font-semibold leading-[48px] pb-4">
                 Tham gia khóa học{" "}

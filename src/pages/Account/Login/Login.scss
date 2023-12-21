@@ -144,7 +144,7 @@
     transform: translateX(-50%);
     z-index: 1;
     img{
-        width: 80%;
+        width: 100%;
     }
 }
 
@@ -161,6 +161,9 @@
             .contentLoginLeft{
                 align-items: start;
                 min-height: 30vh;
+            }
+            .logo{
+               width: 120px; 
             }
         }
         .LoginRight{
