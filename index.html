@@ -5,6 +5,12 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite + React</title>
+    <!-- Thêm một script để tạo nonce -->
+    <script>
+      document.nonce = Math.random().toString(36).substring(2, 15);
+    </script>
+    <!-- Sử dụng nonce trong script của Facebook SDK -->
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v11.0" nonce={document.nonce}></script>
   </head>
   <body>
     <div id="root" data-theme="light"></div>

@@ -308,7 +308,7 @@ export default function Header() {
 
 
                     <input
-                      type="search"
+                      type="text"
                       name="search"
                       value={searchKeyword}
                       onChange={handleSearchChange}
@@ -354,7 +354,7 @@ export default function Header() {
                     </Link>
                   ))
                 ) : (
-                  <>
+                  <div>
                     {menuItems.map((item, index) => (
                       <Link
                         key={item.name}
@@ -371,11 +371,11 @@ export default function Header() {
                         {item.name}
                       </Link>
                     ))}
-                  </>
+                  </div>
                 )}
-                <div className="relative text-gray-600 mx-auto w-max sm:hidden pt-3 lg:pt-0 md:pt-0 sm:pt-3">
+                <div className="relative text-gray-600 mx-auto w-max sm:hidden mt-3 lg:pt-0 md:pt-0 sm:pt-3">
                   <input
-                    type="search"
+                    type="text"
                     name="search"
                     value={searchKeyword}
                     onChange={handleSearchChange}
@@ -383,7 +383,7 @@ export default function Header() {
                     placeholder="Tìm kiếm khóa học"
                     className="bg-white h-10 px-4 pr-40 rounded-full border border-[#8d8d8d] text-sm focus:outline-none"
                   />
-                  <button type="button" onClick={handleSearchSubmit} className="absolute right-0 top-0 mt-2.5 mr-3">
+                  <button type="button" onClick={handleSearchSubmit} className="absolute right-0 top-0 py-2.5 mr-3">
                     <Search width={20} height={20}></Search>
                   </button>
                 </div>
