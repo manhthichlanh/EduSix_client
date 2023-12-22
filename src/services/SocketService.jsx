@@ -8,7 +8,7 @@ const socket = connect(serverEndpoint, {
   reconnect: true,
   autoConnect: true
 });
-
+socket.emit("client-connect")
 export const SocketProvider = ({ children }) => {
   const [isSocketConnected, setIsSocketConnected] = useState(false);
   const [certificateMessage, setCertificateMessage] = useState([]);
