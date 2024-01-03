@@ -51,7 +51,7 @@ function Card(props) {
       {/* thumbnail */}
     
         <img
-          className="object-cover w-full h-full"
+          className="object-cover w-full h-[180px]"
           src={`${serverEndpoint}course/thumbnail/${thumbnail}`}
           alt={thumbnail}
         />

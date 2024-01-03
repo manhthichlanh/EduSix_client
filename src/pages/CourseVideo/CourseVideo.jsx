@@ -847,7 +847,7 @@ const CourseVideo = () => {
 
 
             <div className="scrollBar">
-              <div className="mini_menu">
+              {/* <div className="mini_menu">
                 <NavLink onClick={handleScrollToOverview}>
                   <p>Tổng quan</p>
                 </NavLink>
@@ -860,7 +860,7 @@ const CourseVideo = () => {
                 <NavLink>
                   <p>Đánh giá</p>
                 </NavLink>
-              </div>
+              </div> */}
               <div className="information">
                 <div className="overview_CourseVideo" id="overview-section">
                   <h1>{CourseDoc.name}</h1>
@@ -869,7 +869,7 @@ const CourseVideo = () => {
                   </p>
                 </div>
 
-                <div className="question_CourseVideo" id="question-section">
+                {/* <div className="question_CourseVideo" id="question-section">
                   <h2>Bạn sẽ học được gì?</h2>
                   <div className="questionsmall">
                     {benefit.map((benefit, benefitIndex) => (
@@ -885,9 +885,9 @@ const CourseVideo = () => {
                       </div>
                     ))}
                   </div>
-                </div>
+                </div> */}
                 <div className="comment" id="comments-section">
-                  <h2>Bình Luận</h2>
+                  {/* <h2>Bình Luận</h2> */}
                   <div className="fb-comments" data-href={window.location.toString()} data-numposts="5" data-width="100%" data-order-by="reverse_time" data-mobile="auto"></div>
 
                   {/* <div className="Content">

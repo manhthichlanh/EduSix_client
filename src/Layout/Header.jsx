@@ -254,11 +254,13 @@ export default function Header() {
                 </div>
                 <div className="flex items-center justify-center sm:items-stretch sm:justify-start">
                   <div className="justify-center hidden lg:flex lg:items-center">
+                    <Link to={"/"}>
                     <img
                       className="w-auto h-8"
                       src="/images/logo.png"
                       alt="Logo"
                     />
+                    </Link>
                   </div>
                   <div className="hidden pl-4 lg:block">
                     <div className="flex gap-4">
@@ -330,11 +332,13 @@ export default function Header() {
             <Disclosure.Panel className="lg:hidden">
               <div className="px-2 pt-2 pb-3 space-y-1">
                 <div className="flex justify-center py-2">
-                  <img
-                    className="w-auto h-8"
-                    src="/images/logo.png"
-                    alt="Logo"
-                  />
+                <Link to={"/"}>
+                    <img
+                      className="w-auto h-8"
+                      src="/images/logo.png"
+                      alt="Logo"
+                    />
+                    </Link>
                 </div>
                 {isLoggedIn && user ? (
                   menuItems.map((item, index) => (

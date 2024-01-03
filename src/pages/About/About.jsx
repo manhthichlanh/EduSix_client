@@ -16,10 +16,10 @@ const content = [
 ];
 
 const team = [
+  { name: "Lê Đình Đài", position: "CO-FOUNDER" },
   { name: "Văn Mạnh", position: "LEADER" },
   { name: "Thủy Đan", position: "Designer" },
   { name: "Huy Đức", position: "Member" },
-  { name: "Đình Đài", position: "Member" },
   { name: "Văn Hải", position: "Member" },
   { name: "Đạt", position: "MEMBER" },
 ];
@@ -46,7 +46,7 @@ export default function About() {
             </div>
             <div className="flex flex-col gap-[10px] lg:text-left text-center">
               <p className="text-[#29281E] text-base text-opacity-80 font-medium">
-                Cái tên TELOS bắt nguồn từ khái niệm tiếng Hy Lạp “τέλος” có
+                Cái tên EDUSIX bắt nguồn từ khái niệm tiếng Hy Lạp “τέλος” có
                 nghĩa là mục đích cốt lõi. Mỗi tổ chức, doanh nghiệp một khi
                 sinh ra đều đã mang trong mình những sứ mệnh, mục tiêu và những
                 giá trị đẹp đẽ của riêng mình.
@@ -179,13 +179,13 @@ export default function About() {
               </div>
               <div className="flex flex-col gap-[10px] lg:text-left text-center">
                 <p className="text-[#29281E] text-base text-opacity-80 font-medium">
-                  Điều định hình nên sự sáng tạo và tính cách đặc thù của TELOS
-                  chính là đội ngũ nhân sự - những con người TELOS.
+                  Điều định hình nên sự sáng tạo và tính cách đặc thù của EDUSIX
+                  chính là đội ngũ nhân sự - những con người EDUSIX.
                 </p>
                 <p className="text-[#29281E] text-base text-opacity-80 font-medium">
                   Phối trộn một cách kì lạ giữa những nghiêm túc chuyên môn,
                   những đam mê truy tầm kiến thức và những liên kết đầy sáng
-                  tạo, những con người TELOS đã tự mình kể ra một câu chuyện văn
+                  tạo, những con người EDUSIX đã tự mình kể ra một câu chuyện văn
                   hóa công ty đậm đà và những sản phẩm đầy giá trị cho khách
                   hàng.
                 </p>

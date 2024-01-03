@@ -8,9 +8,9 @@ export default function CateCard(props) {
     <div className="my-4">
       <div className="w-full py-10 shadow-md rounded-xl">
         <Link to="/">
-          <img
-            className="pb-6 mx-auto"
-            src={`${`http://14.225.198.206:8080/`}category/logo_cate/${image}`}
+          <img style={{borderRadius:"50%", width:"70px", height:"70px"}}
+            className="mx-auto mb-3"
+            src={`${image}`}
             alt=""
           />
         </Link>

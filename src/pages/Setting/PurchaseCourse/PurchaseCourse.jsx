@@ -26,7 +26,7 @@ const PurchaseCourse = () => {
         
         </div>
           ) : (
-            <i>Không có khóa học nào đã đăng kí</i>
+            <i>Không có khóa học nào đã mua</i>
           )}
       </div>
   
