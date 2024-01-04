@@ -93,7 +93,7 @@ const Certification = () => {
 
                   <h2 className="mt-2 text-lg font-semibold">{certificate?.course?.name}</h2>
                   {certificate.total_duration > 0 && (
-                    <p className="text-xs text-gray-600 text-orange-600">
+                    <p className="text-xs text-gray-600">
                       Thời gian: {formatDuration(certificate.total_duration)}
                     </p>
                   )}

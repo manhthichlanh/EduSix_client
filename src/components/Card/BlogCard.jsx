@@ -15,7 +15,7 @@ export default function BlogCard(props) {
   const { id, cateId, comment, image, title, category } = props;
   return (
     <div className="w-full">
-      <div className="" key={id}>
+      <div div className="" key={id}>
         <Link
           href="/"
           className="block w-full mb-3 overflow-hidden rounded-lg aspect-video"
